@@ -1,0 +1,1022 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "path": "/home/index",
+      "name": "home",
+      "component": "/home/index",
+      "meta": {
+        "icon": "HomeFilled",
+        "title": "首页",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": true,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/basic",
+      "name": "basic",
+      "redirect": "/basic/basicinfo/useProTable",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "基本信息",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/basic/basicinfo/index",
+          "name": "basic_basicinfo",
+          "component": "/basic/basicinfo/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [
+            {
+              "path": "/basic/basicinfo/useProTable/familyTree/:id",
+              "name": "useProTableDetailFamilyTree",
+              "component": "/basic/basicinfo/useProTable/familyTree",
+              "meta": {
+                "icon": "Collection",
+                "title": "草地档案",
+                "activeMenu": "/basic/basicinfo/useProTable",
+                "isLink": "",
+                "isHide": true,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
+          ]
+        },
+        {
+          "path": "/basic/manuinfo/index",
+          "name": "basic_manuinfo",
+          "component": "/basic/manuinfo/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地产地信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/basic/breederconditioninfo/index",
+          "name": "breederconditioninfo",
+          "component": "/basic/breederconditioninfo/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地健康状态",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/basic/cutinfo/index",
+          "name": "basic_cutinfo",
+          "component": "/basic/cutinfo/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "采收信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/basic/manureinfo/index",
+          "name": "basic_manureinfo",
+          "component": "/basic/manureinfo/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地养分信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/basic/sportsinfo/index",
+          "name": "basic_sportsinfo",
+          "component": "/basic/sportsinfo/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地生长监测",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/basic/milkperformance/index",
+          "name": "basic_milkperformance",
+          "component": "/basic/milkperformance/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地生长性能",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/colony",
+      "name": "colony",
+      "redirect": "/colony/colonyinfo/useProTable",
+      "meta": {
+        "icon": "Guide",
+        "title": "监测区域管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/colony/houseinfo/index",
+          "name": "colony_houseinfo",
+          "component": "/colony/houseinfo/useProTable/index",
+          "meta": {
+            "icon": "Guide",
+            "title": "监测站点管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/colony/hurdleinfo/index",
+          "name": "colony_hurdleinfo",
+          "component": "/colony/hurdleinfo/useProTable/index",
+          "meta": {
+            "icon": "Guide",
+            "title": "监测地块管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/colony/disinfectioninfo/index",
+          "name": "colony_disinfectioninfo",
+          "component": "/colony/disinfectioninfo/useProTable/index",
+          "meta": {
+            "icon": "Guide",
+            "title": "区域防疫处理信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/d_health",
+      "name": "d_health",
+      "redirect": "/d_health/d_healthinfo/useProTable",
+      "meta": {
+        "icon": "FirstAidKit",
+        "title": "卫生管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/d_health/immunizationinfo/index",
+          "name": "d_health_immunizationinfo",
+          "component": "/d_health/immunizationinfo/useProTable/index",
+          "meta": {
+            "icon": "FirstAidKit",
+            "title": "草地防护",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/d_health/drugbathinfo/index",
+          "name": "d_health_drugbathinfo",
+          "component": "/d_health/drugbathinfo/useProTable/index",
+          "meta": {
+            "icon": "FirstAidKit",
+            "title": "防护处理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/d_health/quarantineinfo/index",
+          "name": "d_health_quarantineinfo",
+          "component": "/d_health/quarantineinfo/useProTable/index",
+          "meta": {
+            "icon": "FirstAidKit",
+            "title": "检疫检验",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/d_health/nursinginfo/index",
+          "name": "d_health_nursinginfo",
+          "component": "/d_health/nursinginfo/useProTable/index",
+          "meta": {
+            "icon": "FirstAidKit",
+            "title": "护理信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/d_health/diseaseinfo/index",
+          "name": "d_health_diseaseinfo",
+          "component": "/d_health/diseaseinfo/useProTable/index",
+          "meta": {
+            "icon": "FirstAidKit",
+            "title": "疾病信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/d_health/deathinfo/index",
+          "name": "d_health_deathinfo",
+          "component": "/d_health/deathinfo/useProTable/index",
+          "meta": {
+            "icon": "FirstAidKit",
+            "title": "死亡信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/d_health/abortioninfo/index",
+          "name": "d_health_abortioninfo",
+          "component": "/d_health/abortioninfo/useProTable/index",
+          "meta": {
+            "icon": "FirstAidKit",
+            "title": "异常枯萎信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/e_breed",
+      "name": "e_breed",
+      "redirect": "/e_breed/rutinfo/useProTable",
+      "meta": {
+        "icon": "Female",
+            "title": "批次管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/e_breed/rutinfo/index",
+          "name": "e_breed_rutinfo",
+          "component": "/e_breed/rutinfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "草地生长状态",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/e_breed/semencollectinfo/index",
+          "name": "e_breed_semencollectinfo",
+          "component": "/e_breed/semencollectinfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "采样信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/e_breed/breedinginfo/index",
+          "name": "e_breed_breedinginfo",
+          "component": "/e_breed/breedinginfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "草地批次管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/e_breed/pregnantinfo/index",
+          "name": "e_breed_pregnantinfo",
+          "component": "/e_breed/pregnantinfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "生长周期监测",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/e_breed/postnatalinfo/index",
+          "name": "e_breed_postnatalinfo",
+          "component": "/e_breed/postnatalinfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "收割后信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/e_breed/artificialfeedinginfo/index",
+          "name": "e_breed_artificialfeedinginfo",
+          "component": "/e_breed/artificialfeedinginfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "人工养护",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/e_breed/weaninginfo/index",
+          "name": "e_breed_weaninginfo",
+          "component": "/e_breed/weaninginfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "阶段切换信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/e_breed/lambinfo/index",
+          "name": "e_breed_lambinfo",
+          "component": "/e_breed/lambinfo/useProTable/index",
+          "meta": {
+            "icon": "Female",
+            "title": "草地批次信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/h_store",
+      "name": "h_store",
+      "redirect": "/h_store/inventory/useProTable",
+      "meta": {
+        "icon": "House",
+        "title": "库存管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/h_store/inventoryIn/index",
+          "name": "h_store_inventory_in",
+          "meta": {
+            "icon": "Folder",
+            "title": "入库",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [
+            {
+              "path": "/h_store/vaccine_in/index",
+              "name": "h_store_vaccine_in",
+              "component": "/h_store/vaccine_in/useProTable/index",
+              "meta": {
+                "icon": "House",
+                "title": "防护物资入库信息",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
+              "path": "/h_store/feedingin/index",
+              "name": "h_store_feedingin",
+              "component": "/h_store/feedingin/useProTable/index",
+              "meta": {
+                "icon": "House",
+                "title": "草地投入入库信息",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
+          ]
+        },
+        {
+          "path": "/h_store/inventoryOut/index",
+          "name": "h_store_inventory_out",
+          "meta": {
+            "icon": "Folder",
+            "title": "出库",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [
+            {
+              "path": "/h_store/vaccine_out/index",
+              "name": "h_store_vaccine_out",
+              "component": "/h_store/vaccine_out/useProTable/index",
+              "meta": {
+                "icon": "House",
+                "title": "防护物资出库信息",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
+              "path": "/h_store/feeding_out/index",
+              "name": "h_store_feeding_out",
+              "component": "/h_store/feeding_out/useProTable/index",
+              "meta": {
+                "icon": "House",
+                "title": "草地投入出库信息",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
+          ]
+        },
+        {
+          "path": "/h_store/inventoryInfo/index",
+          "name": "h_store_inventory_info",
+          "meta": {
+            "icon": "Folder",
+            "title": "物资库存信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [
+            {
+              "path": "/h_store/inventoryDrug/index",
+              "name": "h_store_inventory_drug",
+              "component": "/h_store/inventoryDrug/useProTable/index",
+              "meta": {
+                "icon": "House",
+                "title": "防护物资库存信息",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
+              "path": "/h_store/inventoryForage/index",
+              "name": "h_store_inventory_forage",
+              "component": "/h_store/inventoryForage/useProTable/index",
+              "meta": {
+                "icon": "House",
+                "title": "草地投入库存信息",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/supply",
+      "name": "supply",
+      "redirect": "/supply/commodityinfo/index",
+      "meta": {
+        "icon": "Share",
+        "title": "供应管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/supply/v_suppliersinfo/index",
+          "name": "supply_v_suppliersinfo",
+          "component": "/supply/v_suppliersinfo/useProTable/index",
+          "meta": {
+            "icon": "Share",
+            "title": "防护物资厂商",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/supply/f_suppliersinfo/index",
+          "name": "supply_f_suppliersinfo",
+          "component": "/supply/f_suppliersinfo/useProTable/index",
+          "meta": {
+            "icon": "Share",
+            "title": "草地投入厂商信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/supply/insuranceinfo/index",
+          "name": "supply_insuranceinfo",
+          "component": "/supply/insuranceinfo/useProTable/index",
+          "meta": {
+            "icon": "Share",
+            "title": "保险公司信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/supply/commodityinfo/index",
+          "name": "supply_commodityinfo",
+          "component": "/supply/commodityinfo/useProTable/index",
+          "meta": {
+            "icon": "Share",
+            "title": "防护物资使用说明",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/w_information",
+      "name": "w_information",
+      "redirect": "/w_information/warninformation/useProTable",
+      "meta": {
+        "icon": "Warning",
+        "title": "预警信息",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/w_information/immunizationMessage/index",
+          "name": "w_information_immunizationMessage",
+          "component": "/w_information/immunizationMessage/useProTable/index",
+          "meta": {
+            "icon": "Warning",
+            "title": "病虫害预警",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/statistic",
+      "name": "statistic",
+      "redirect": "/statistic/basicinfo/useProTable",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地监测统计与报表管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/statistic/basicinfo/index",
+          "name": "statistic_basicinfo",
+          "component": "/statistic/basicinfo/useProTable/index",
+          "meta": {
+            "icon": "PieChart",
+            "title": "草地监测数据源",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [
+            {
+              "path": "/statistic/basicinfo/useProTable/familyTree/:id",
+              "name": "statisticuseProTableDetailFamilyTree",
+              "component": "/statistic/basicinfo/useProTable/familyTree",
+              "meta": {
+                "icon": "Collection",
+                "title": "草地档案",
+                "activeMenu": "/statistic/basicinfo/useProTable",
+                "isLink": "",
+                "isHide": true,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
+          ]
+        },
+        {
+          "path": "/statistic/xipu/index",
+          "name": "statistic_xipu",
+          "component": "/statistic/xipu/useProTable/index",
+          "meta": {
+            "icon": "PieChart",
+            "title": "草地档案",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [
+            {
+              "path": "/statistic/xipu/useProTable/familyTree/:id",
+              "name": "xipuuseProTableDetailFamilyTree",
+              "component": "/statistic/xipu/useProTable/familyTree",
+              "meta": {
+                "icon": "Collection",
+                "title": "草地档案",
+                "activeMenu": "/statistic/basicinfo/useProTable",
+                "isLink": "",
+                "isHide": true,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
+              "path": "/statistic/xipu/detail/index/:id",
+              "name": "xipuchakan",
+              "component": "/statistic/xipu/detail/index",
+              "meta": {
+                "icon": "Collection",
+                "title": "草地档案",
+                "activeMenu": "/statistic/basicinfo/useProTable",
+                "isLink": "",
+                "isHide": true,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
+          ]
+        },
+        {
+          "path": "/statistic/obsoletesheepinfo/index",
+          "name": "obsoletesheepinfo",
+          "component": "/statistic/obsoletesheepinfo/useProTable/index",
+          "meta": {
+            "icon": "Tickets",
+            "title": "地块退化记录",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/statistic/makecore/index",
+          "name": "xipu",
+          "component": "/statistic/makecore/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地健康评分标准",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/g_slaughter",
+      "name": "g_slaughter",
+      "redirect": "/g_slaughter/salesinfo/useProTable",
+      "meta": {
+        "icon": "Van",
+        "title": "产品加工销售管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/g_slaughter/s_salesinfo/index",
+          "name": "g_slaughter_s_salesinfo",
+          "component": "/g_slaughter/s_salesinfo/useProTable/index",
+          "meta": {
+            "icon": "Van",
+            "title": "草地销售",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/g_slaughter/g_salesinfo/index",
+          "name": "g_slaughter_g_salesinfo",
+          "component": "/g_slaughter/g_salesinfo/useProTable/index",
+          "meta": {
+            "icon": "Van",
+            "title": "草地副产品销售",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/analysis",
+      "name": "analysis",
+      "redirect": "/analysis/IaEdetails/useProTable",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地病虫害监测分析",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/analysis/IaEdetails/index",
+          "name": "analysis_IaEdetails",
+          "component": "/analysis/IaEdetails/",
+          "meta": {
+            "icon": "PieChart",
+            "title": "监测收支明细报表",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [
+            {
+              "path": "/analysis/daily_report/index",
+              "name": "analysis_daily_report",
+              "component": "/analysis/daily_report/useProTable/index",
+              "meta": {
+                "icon": "Tickets",
+                "title": "日防护投入报表",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
+              "path": "/analysis/daily_income/index",
+              "name": "menu222",
+              "component": "/analysis/daily_income/useProTable/index",
+              "meta": {
+                "icon": "Tickets",
+                "title": "日收益报表",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
+              "path": "/analysis/daily_sheep_asset/index",
+              "name": "daily_sheep_asset",
+              "component": "/analysis/daily_sheep_asset/useProTable/index",
+              "meta": {
+                "icon": "Tickets",
+                "title": "草地资产报表",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
+              "path": "/analysis/stock_asset/index",
+              "name": "stockasset",
+              "component": "/analysis/stock_asset/useProTable/index",
+              "meta": {
+                "icon": "MessageBox",
+                "title": "防护物资资产报表",
+                "isLink": "",
+                "isHide": false,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
+          ]
+        },
+        {
+          "path": "/analysis/s_salesinfo/index",
+          "name": "analysis_s_salesinfo",
+          "component": "/analysis/s_salesinfo/useProTable/index",
+          "meta": {
+            "icon": "Van",
+            "title": "草地销售",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/analysis/g_salesinfo/index",
+          "name": "analysis_g_salesinfo",
+          "component": "/analysis/g_salesinfo/useProTable/index",
+          "meta": {
+            "icon": "Van",
+            "title": "草地副产品销售",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/analysis/dataVisualize/index",
+          "name": "dataVisualize",
+          "component": "/analysis/dataVisualize/useProTable/index",
+          "meta": {
+            "icon": "Histogram",
+            "title": "数据可视化",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+
+        {
+          "path": "/analysis/sheep_asset/index",
+          "name": "asset",
+          "component": "/analysis/sheep_asset/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地资产",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/analysis/asset_standard/index",
+          "name": "asset_standard",
+          "component": "/analysis/asset_standard/useProTable/index",
+          "meta": {
+            "icon": "MessageBox",
+            "title": "草地资产评价标准",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    }
+  ],
+  "msg": "成功"
+}

@@ -1,0 +1,44 @@
+// import { PORT1 } from "@/api/config/servicePort";
+import http from "@/api";
+
+const PORT1 = "/basic";
+interface info_data {
+  list: Array<any>;
+  pageNum: number;
+  pageSize: number;
+  total: number;
+}
+// 获取记录列表
+export const getBreederConditionInfoList = params => {
+  const result = http.post<info_data>(PORT1 + `/breederconditioninfo`, params);
+  result.then(resp => console.log("返回的列表数据", resp));
+  return result;
+};
+
+// 新增记录
+export const addBreederConditionInfo = params => {
+  return http.post(PORT1 + `/breederconditioninfo/add`, params);
+};
+
+// 编辑记录
+export const editBreederConditionInfo = params => {
+  return http.post(PORT1 + `/breederconditioninfo/edit`, params);
+};
+
+// 删除
+export const delManu = params => {
+  return http.post(PORT1 + `/breederconditioninfo/del`, params);
+};
+//获取能添加种羊体况信息的好羊信息
+export const getGoodsheep = params => {
+  const result = http.post(PORT1 + `/breederconditioninfo/get_Goodsheep`, params);
+  result.then(resp => console.log("返回的列表数据", resp));
+  return result;
+};
+
+//获取同羔数
+export const getWith_births = params => {
+  const result = http.post(PORT1 + `/breederconditioninfo/getWith_births`, params);
+  result.then(resp => console.log("返回的列表数据", resp));
+  return result;
+};

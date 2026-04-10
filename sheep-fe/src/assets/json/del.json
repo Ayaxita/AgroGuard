@@ -1,0 +1,284 @@
+{
+  "path": "/data_analysis",
+  "name": "data_analysis",
+  "redirect": "/home/basic_basicinfo/index",
+  "meta": {
+    "icon": "PieChart",
+    "title": "草地监测统计及报表管理",
+    "isLink": "",
+    "isHide": false,
+    "isFull": false,
+    "isAffix": false,
+    "isKeepAlive": true
+  },
+  "children": [
+    {
+      "path": "/home/basic_basicinfo/index",
+      "name": "home_basic_basicinfo",
+      "component": "/home/basic_basicinfo/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地监测数据源",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/familytree_files/index",
+      "name": "home_familytree_files",
+      "component": "/home/familytree_files/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地档案",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/basic_capacity_ewes/index",
+      "name": "home_basic_capacity_ewes",
+      "component": "/home/basic_capacity_ewes/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地生长能力评价指标",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/basic_capacity_ewes_graph/index",
+      "name": "home_basic_capacity_ewes_graph",
+      "component": "/home/basic_capacity_ewes_graph/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地生长监测统计分析",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/basic_capacity_rams/index",
+      "name": "home_basic_capacity_rams",
+      "component": "/home/basic_capacity_rams/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地病虫害风险评价指标",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/basic_capacity_rams_graph/index",
+      "name": "home_basic_capacity_rams_graph",
+      "component": "/home/basic_capacity_rams_graph/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地风险监测统计分析",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/basic_capacityrams/index",
+      "name": "home_basic_capacityrams",
+      "component": "/home/basic_capacityrams/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地个体性能指标",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/data_statistics_auto/index",
+      "name": "home_data_statistics_auto",
+      "component": "/home/data_statistics_auto/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "数据统计(自动生成)",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/home_dailysheet/index",
+      "name": "home_home_dailysheet",
+      "component": "/home/home_dailysheet/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "日报表",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/home_annualsheet_auto/index",
+      "name": "home_home_annualsheet_auto",
+      "component": "/home/home_annualsheet_auto/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "年度报表数据(自动生成)",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/productivityinfo/index",
+      "name": "home_productivityinfo",
+      "component": "/home/productivityinfo/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "生产性能详细",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/basic_makescore/index",
+      "name": "home_basic_makescore",
+      "component": "/home/basic_makescore/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "草地健康评分标准",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/home/importdata/index",
+      "name": "home_importdata",
+      "component": "/home/importdata/useProTable/index",
+      "meta": {
+        "icon": "PieChart",
+        "title": "数据导入",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    }
+  ]
+},
+{
+  "path": "/g_slaughter",
+  "name": "g_slaughter",
+  "redirect": "/g_slaughter/salesinfo/useProTable",
+  "meta": {
+    "icon": "Van",
+    "title": "屠宰销售管理",
+    "isLink": "",
+    "isHide": false,
+    "isFull": false,
+    "isAffix": false,
+    "isKeepAlive": true
+  },
+  "children": [
+    {
+      "path": "/g_slaughter/s_salesinfo/index",
+      "name": "g_slaughter_s_salesinfo",
+      "component": "/g_slaughter/s_salesinfo/useProTable/index",
+      "meta": {
+        "icon": "Van",
+        "title": "草地销售",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/g_slaughter/g_salesinfo/index",
+      "name": "g_slaughter_g_salesinfo",
+      "component": "/g_slaughter/g_salesinfo/useProTable/index",
+      "meta": {
+        "icon": "Van",
+        "title": "草地副产品销售",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/g_slaughter/economicinfo/index",
+      "name": "g_slaughter_economicinfo",
+      "component": "/g_slaughter/economicinfo/useProTable/index",
+      "meta": {
+        "icon": "Van",
+        "title": "经济效益",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/g_slaughter/slaughtersegmentinfo/index",
+      "name": "g_slaughter_slaughtersegmentinfo",
+      "component": "/g_slaughter/slaughtersegmentinfo/useProTable/index",
+      "meta": {
+        "icon": "Van",
+        "title": "屠宰分割",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    },
+    {
+      "path": "/g_slaughter/binformationinfo/index",
+      "name": "g_slaughter_binformationinfo",
+      "component": "/g_slaughter/binformationinfo/useProTable/index",
+      "meta": {
+        "icon": "Van",
+        "title": "膘情B超",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    }
+  ]
+},

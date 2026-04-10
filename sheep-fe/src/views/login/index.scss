@@ -1,0 +1,90 @@
+.login-container {
+  height: 100%;
+  min-height: 550px;
+  background-color: #eeeeee;
+  .login-box {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96.5%;
+    height: 94%;
+    padding: 0 50px;
+    background-color: rgb(255 255 255 / 80%);
+    border-radius: 10px;
+    .dark {
+      position: absolute;
+      top: 13px;
+      right: 18px;
+    }
+    .login-form {
+      width: 420px;
+      padding: 50px 40px 45px;
+      background-color: var(--el-bg-color);
+      border-radius: 10px;
+      box-shadow: rgb(0 0 0 / 10%) 0 2px 10px 2px;
+      .login-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 45px;
+        .logo-text {
+          padding: 0;
+          margin: 0;
+          font-size: 38px;
+          font-weight: bold;
+          color: #34495e;
+          line-height: 1;
+          width: 100%;
+          text-align: center;
+          white-space: nowrap;
+        }
+      }
+      .el-form-item {
+        margin-bottom: 40px;
+      }
+      .login-btn {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 40px;
+        white-space: nowrap;
+        .el-button {
+          width: 100%;
+          margin-bottom: 10px;
+
+          // width: 185px;
+        }
+      }
+      .operation {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* 均匀分配元素之间的空间，可灵活调整间距 */
+        .forgot-pwd {
+          display: inline-block; // 让按钮以行内块元素形式排列，便于后续使用flex布局控制间距等
+          // margin-right: 276px;
+        }
+        .register {
+          display: inline-block; // 让按钮以行内块元素形式排列，便于后续使用flex布局控制间距等
+        }
+      }
+    }
+  }
+}
+
+.login-left {
+  display: none !important;
+}
+
+@media screen and (width <= 1250px) {
+  .login-left {
+    display: none;
+  }
+}
+
+@media screen and (width <= 600px) {
+  .login-form {
+    width: 97% !important;
+  }
+}

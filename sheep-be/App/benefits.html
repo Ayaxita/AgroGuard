@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>经济效益分析</title>
+
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        html, body {
+            height: 95%;
+            margin-top: 10px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .main {
+            flex-direction: column;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin: 0;
+        }
+
+        .all {
+            width: 95%;
+            height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .assert, .inout {
+            display: flex;
+            justify-content: space-between;
+            flex: 1;
+            height: 100%;
+            border: 2px dashed #1E90FF; /* 设置蓝色虚线边框 */
+            padding: 10px;
+        }
+
+        .assert {
+            flex-direction: column;
+            margin-right: 20px;
+            flex: 0 0 30%; /* 设定占据 30% 宽度 */
+        }
+
+        .inout {
+            flex-direction: column;
+            flex: 0 0 70%; /* 设定占据 70% 宽度 */
+        }
+
+        /* 让两个饼图同行排列 */
+        .income, .outcome {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* 垂直居中 */
+            margin: 10px 0;
+            flex: 1;
+        }
+
+        #mychart, #ByProduct, #direct, #indirect {
+            width: 48%;
+            height: 100%;
+            margin: 0px 0px;
+        }
+        #sheepAssets, #inventoryAssets {
+            width: 100%;
+            height: 50%;
+            margin: 10px 0;
+        }
+        .tt {
+            text-align: center; /* 水平居中 */
+            font-size: 36px; /* 增大字体大小 */
+            font-weight: bold; /* 设置字体加粗 */
+            color: #333; /* 设置字体颜色 */
+            background: linear-gradient(45deg, rgb(255,217,102), rgb(244,176,132)); /* 橙色渐变背景 */
+            padding: 15px 0; /* 上下内边距增大 */
+            margin-bottom: 20px; /* 下边距，确保与下方内容有间隔 */
+            border-radius: 20px; /* 设置更圆的圆角 */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2); /* 添加文本阴影，增强艺术感 */
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* 使用更加艺术感的字体 */
+            letter-spacing: 2px; /* 调整字母间距，使字形更开阔 */
+        }
+        .tt1{
+            text-align: center; /* 水平居中 */
+            font-size: 36px; /* 增大字体大小 */
+            font-weight: bold; /* 设置字体加粗 */
+            color: #333; /* 设置字体颜色 */
+            background: linear-gradient(45deg, rgb(226,239,218), rgb(198,224,180)); /* 绿色渐变背景 */
+            padding: 15px 0; /* 上下内边距增大 */
+            margin-bottom: 20px; /* 下边距，确保与下方内容有间隔 */
+            border-radius: 20px; /* 设置更圆的圆角 */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2); /* 添加文本阴影，增强艺术感 */
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* 使用更加艺术感的字体 */
+            letter-spacing: 2px; /* 调整字母间距，使字形更开阔 */
+        }
+        .title1 {
+            text-align: center; /* 水平居中 */
+            font-size: 36px; /* 设置字体大小 */
+            font-weight: bold; /* 设置字体加粗 */
+            color: #2E8B57; /* 设置字体颜色为绿色 */
+            {#padding: 20px 0; /* 设置上下内边距 */#}
+            {#margin-bottom: 20px; /* 设置下边距，确保标题和其他内容有间隔 */#}
+            border-radius: 8px; /* 设置圆角 */
+        }
+        table {
+            width: 100%;
+            margin: 5px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 1px 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        th:nth-child(0), tr:nth-child(3) {
+            background: linear-gradient(to right,  #7ec850, #4c9f34); /* 绿色渐变背景 */
+            color: white; /* 设置文字颜色为白色，使其更清晰 */
+        }
+        /* 为第一行和第二行添加绿色渐变背景 */
+        tr:nth-child(1), tr:nth-child(2) {
+            background: linear-gradient(to right, #7ec850, #4c9f34); /* 绿色渐变背景 */
+            color: white; /* 设置文字颜色为白色，使其更清晰 */
+        }
+
+        th:nth-child(4), td:nth-child(4) {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main">
+        <div class="title1">养殖经济效益分析</div>
+        <div>
+            <table>
+                <tr>
+                    <th>收入（元）</th>
+                    <th>支出（元）</th>
+                    <th>羊资产（元）</th>
+                    <th>周收益（元）</th>
+                </tr>
+                <tr>
+                    <td>222493</td>
+                    <td>91198.74</td>
+                    <td>-140900</td>
+                    <td>-9605.74</td>
+                </tr>
+            </table>
+        </div>
+        <div class="all">
+            <!-- Assert Section (Left Side) -->
+            <div class="assert">
+                <div id="sheepAssets"></div>
+                <div id="inventoryAssets"></div>
+            </div>
+
+            <!-- Inout Section (Right Side) -->
+            <div class="inout">
+                <!-- Income Section (Top Part of Right Side) -->
+                <div class="tt1">收  入  统  计</div>
+                <div class="income">
+
+                    <div id="mychart"></div>
+                    <div id="ByProduct"></div>
+                </div>
+                <!-- Outcome Section (Bottom Part of Right Side) -->
+                <div class="tt">支  出  统  计</div>
+                <div class="outcome">
+                    <div id="direct"></div>
+                    <div id="indirect"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var myChart = echarts.init(document.getElementById('mychart'));
+        var option = {
+            title: {
+                text: '羊只销售收入：种羊销售、育肥羊销售、淘汰羊销售',
+                x: 'center',
+                textStyle: {
+                    fontSize: 14,
+                    color: 'rgb(128,128,128)'
+                },
+                bottom: 10  // 将标题放置在图表的下方
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    return params[0].name + '<br/>羊只销售收入: ¥' + params[0].value;
+                }
+            },
+            legend: {
+                data: ['羊只销售收入'],
+                orient: 'horizontal',
+                left: '70%',
+                top: '5%',
+                textStyle: {
+                    fontSize: 16
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2025/1/1', '2025/1/2', '2025/1/3', '2025/1/4', '2025/1/5', '2025/1/6', '2025/1/7'],
+                axisLabel: {
+                    textStyle: {
+                        fontSize: 14,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}',
+                    textStyle: {
+                        fontSize: 12,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            series: [{
+                name: '羊只销售收入',
+                type: 'line',
+                data: {{ income_sheepSale|safe }},
+                {#data: [0,0,0,217900,0,0],#}
+                smooth: true,
+                lineStyle: {
+                    color: '#FF5733',  // Red color for line
+                    width: 2
+                },
+                itemStyle: {
+                    color: '#FF5733'
+                },
+                areaStyle: {
+                    color: 'rgba(255, 87, 51, 0.2)'  // Light red for area
+                }
+            }]
+        };
+        myChart.setOption(option);
+
+        var ByProduct = echarts.init(document.getElementById('ByProduct'));
+        var option1 = {
+            title: {
+                text: '羊副产品收入：羊粪、羊毛、羊皮、羊副产物、有机肥、饲草料、其它',
+                x: 'center',
+                textStyle: {
+                    fontSize: 14,
+                    color: 'rgb(128,128,128)'
+                },
+                bottom: 10  // 将标题放置在图表的下方
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    return params[0].name + '<br/>羊副产品收入: ¥' + params[0].value;
+                }
+            },
+            legend: {
+                data: ['羊副产品收入'],
+                orient: 'horizontal',
+                left: '70%',
+                top: '5%',
+                textStyle: {
+                    fontSize: 16
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2025/1/1', '2025/1/2', '2025/1/3', '2025/1/4', '2025/1/5', '2025/1/6', '2025/1/7'],
+                axisLabel: {
+                    textStyle: {
+                        fontSize: 14,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}',
+                    textStyle: {
+                        fontSize: 12,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            series: [{
+                name: '羊副产品收入',
+                type: 'line',
+                data: {{ income_sheepByProduct|safe }},
+                smooth: true,
+                lineStyle: {
+                    color: 'green',  // Green color for line
+                    width: 2
+                },
+                itemStyle: {
+                    color: 'green'
+                },
+                areaStyle: {
+                    color: 'rgba(53, 255, 87, 0.2)'  // Light green for area
+                }
+            }]
+        };
+        ByProduct.setOption(option1);
+
+        var direct = echarts.init(document.getElementById('direct'));
+        var option2 = {
+            title: {
+                text: '直接费用：饲料、疫苗、人工、水电、检测、地租、设备维修',
+                x: 'center',
+                textStyle: {
+                    fontSize: 14,
+                    color: 'rgb(128,128,128)'
+                },
+                bottom : 10
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    return params[0].name + '<br/>直接费用: ¥' + params[0].value;
+                }
+            },
+            legend: {
+                data: ['直接费用', '饲料费用', '人工费用'],
+                orient: 'horizontal',
+                {#left: 'center',  // Center the legend horizontally#}
+                left: '50%',
+                top: '5%',
+                textStyle: {
+                    fontSize: 16
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2025/1/1', '2025/1/2', '2025/1/3', '2025/1/4', '2025/1/5', '2025/1/6', '2025/1/7'],
+                axisLabel: {
+                    textStyle: {
+                        fontSize: 14,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}',
+                    textStyle: {
+                        fontSize: 12,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            series: [{
+                name: '直接费用',
+                type: 'line',
+                data: {{ outcome_direct|safe }},
+                smooth: true,
+                lineStyle: {
+                    color: '#FFD700',  // Yellow color for line
+                    width: 2
+                },
+                itemStyle: {
+                    color: '#FFD700'
+                },
+                areaStyle: {
+                    color: 'rgba(255, 215, 0, 0.2)'  // Light yellow for area
+                }
+            },
+            {
+                name: '饲料费用',  // First additional line name
+                type: 'line',
+                data: [9192.02, 9456.1, 9232.86, 9449.88, 9208.54, 9379.7,9131.5],  // Replace with actual data for the first additional line
+                smooth: true,
+                lineStyle: {
+                    color: '#FF6347',  // Tomato red color for the second line
+                    width: 2
+                },
+                itemStyle: {
+                    color: '#FF6347'
+                },
+                areaStyle: {
+                    color: 'rgba(255, 99, 71, 0.2)'  // Light red for area
+                }
+            },
+            {
+                name: '人工费用',  // Second additional line name
+                type: 'line',
+                data: [2553.87, 2553.87, 2553.87, 2553.87, 2553.87, 2553.87, 2553.87],  // Replace with actual data for the second additional line
+                smooth: true,
+                lineStyle: {
+                    color: '#32CD32',  // Lime green color for the third line
+                    width: 2
+                },
+                itemStyle: {
+                    color: '#32CD32'
+                },
+                areaStyle: {
+                    color: 'rgba(50, 205, 50, 0.2)'  // Light green for area
+                }
+            }]
+        };
+        direct.setOption(option2);
+
+        var indirect = echarts.init(document.getElementById('indirect'));
+        var option3 = {
+            title: {
+                text: '间接费用：低值易耗、研发费、管理费、其他费用',
+                x: 'center',
+                textStyle: {
+                    fontSize: 14,
+                    color: 'rgb(128,128,128)'
+                },
+                bottom : 10
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    return params[0].name + '<br/>间接费用: ¥' + params[0].value;
+                }
+            },
+            legend: {
+                data: ['间接费用'],
+                orient: 'horizontal',
+                left: '70%',
+                top: '5%',
+                textStyle: {
+                    fontSize: 16
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2025/1/1', '2025/1/2', '2025/1/3', '2025/1/4', '2025/1/5', '2025/1/6', '2025/1/7'],
+                axisLabel: {
+                    textStyle: {
+                        fontSize: 14,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}',
+                    textStyle: {
+                        fontSize: 12,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            series: [{
+                name: '间接费用',
+                type: 'line',
+                data: {{ outcome_indirect|safe }},
+                smooth: true,
+                lineStyle: {
+                    color: '#6A5ACD',  // Slate Blue for line
+                    width: 2
+                },
+                itemStyle: {
+                    color: '#6A5ACD'
+                },
+                areaStyle: {
+                    color: 'rgba(106, 90, 205, 0.2)'  // Light slate blue for area
+                }
+            }]
+        };
+        indirect.setOption(option3);
+
+        var sheepAssets = echarts.init(document.getElementById('sheepAssets'));
+        var option4 = {
+            title: {
+                text: '羊库存资产',
+                x: 'center',
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#333'
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    return params[0].name + '<br/>羊库存资产: ¥' + params[0].value;
+                }
+            },
+            legend: {
+                data: ['羊库存资产'],
+                orient: 'horizontal',
+                left: '70%',
+                top: '5%',
+                textStyle: {
+                    fontSize: 16
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2025/1/1', '2025/1/2', '2025/1/3', '2025/1/4', '2025/1/5', '2025/1/6', '2025/1/7'],
+                axisLabel: {
+                    textStyle: {
+                        fontSize: 14,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}',
+                    textStyle: {
+                        fontSize: 8,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            series: [{
+                name: '羊库存资产',
+                type: 'line',
+                data: {{ sheep_assets|safe }},
+                smooth: true,
+                lineStyle: {
+                    color: '#8A2BE2',  // Blue Violet for line
+                    width: 2
+                },
+                itemStyle: {
+                    color: '#8A2BE2'
+                },
+                areaStyle: {
+                    color: 'rgba(138, 43, 226, 0.2)'  // Light blue violet for area
+                }
+            }]
+        };
+        sheepAssets.setOption(option4);
+
+        var inventoryAssets = echarts.init(document.getElementById('inventoryAssets'));
+        var option5 = {
+            title: {
+                text: '物料库存资产',
+                x: 'center',
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#333'
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    return params[0].name + '<br/>物料库存资产: ¥' + params[0].value;
+                }
+            },
+            legend: {
+                data: ['物料库存资产'],
+                orient: 'horizontal',
+                left: '70%',
+                top: '5%',
+                textStyle: {
+                    fontSize: 16
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2025/1/1', '2025/1/2', '2025/1/3', '2025/1/4', '2025/1/5', '2025/1/6', '2025/1/7'],
+                axisLabel: {
+                    textStyle: {
+                        fontSize: 14,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}',
+                    textStyle: {
+                        fontSize: 9,
+                        color: '#666'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                }
+            },
+            series: [{
+                name: '物料库存资产',
+                type: 'line',
+                data: {{ inventory_assets|safe }},
+                smooth: true,
+                lineStyle: {
+                    color: '#FF4500',  // Orange Red for line
+                    width: 2
+                },
+                itemStyle: {
+                    color: '#FF4500'
+                },
+                areaStyle: {
+                    color: 'rgba(255, 69, 0, 0.2)'  // Light orange red for area
+                }
+            }]
+        };
+        inventoryAssets.setOption(option5);
+    </script>
+</body>
+</html>

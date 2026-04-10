@@ -1,0 +1,61 @@
+{% load static %}
+{% load i18n static simpletags %}
+{% load i18n admin_urls static admin_modify simpletags %}
+
+<!DOCTYPE html>
+{% load i18n static %}
+{% load simpletags %}
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl" {% endif %}>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+		{% block title %}
+		<!--<title>{{ site_title }}</title>-->
+		<title>zhongyang</title>
+		{% endblock %}
+
+		{% block icon %}
+		{% endblock %}
+
+		{% block css %}
+		{% include 'admin/includes/css-part.html' %}
+		<link rel="stylesheet" href="{% static '/admin/simpleui-x/css/index.css' %}?_=3.2">
+		<link rel="stylesheet" href="{% static '/admin/simpleui-x/waves/waves.min.css' %}?_=2.1">
+		
+		<link rel="stylesheet" type="text/css" href="{% static '/home/css/first.css' %}" />
+		<!-- <script src="{% static '/admin/simpleui-x/first.js' %}"></script> -->
+		<script src="{% static '/home/js/first.js' %}"></script>
+		{% endblock %}
+		{% block head %}
+
+		{% endblock %}
+	</head>
+	<body>
+		<div v-if="index==0" style="height:100%">
+			<div id="home">
+				<div class="clearfix">
+
+					<div class="quick-wrap"><a href="javascript:;" @click="openTab({name:'繁殖母羊管理',newUrl: '',
+url: ''})"><span class="icon fa fa-database"></span>
+							<span class="card-name">繁殖母羊管理</span></a></div>
+					<div class="quick-wrap"><a href="javascript:void(0);" onclick="openTab({name:'哺乳羔羊管理',newUrl: 'http://39.99.175.254:8888/sheep/manage/admina_sheep_kid.jsp',
+url: 'http://39.99.175.254:8888/sheep/manage/admina_sheep_kid.jsp'})"><span class="icon fa fa-database"></span>
+							<span class="card-name">哺乳羔羊管理</span></a></div>
+					<div class="quick-wrap"><a href="javascript:;" @click="openTab({name:'育成羊管理',newUrl: '',
+url: ''})"><span class="icon fa fa-database"></span>
+							<span class="card-name">育成羊管理'</span></a></div>
+					<div class="quick-wrap"><a href="javascript:;" @click="openTab({name:'繁殖公羊管理',newUrl: '',
+url: ''})"><span class="icon fa fa-database"></span>
+							<span class="card-name">繁殖公羊管理</span></a></div>
+
+
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.js"></script>
+        <script type="text/javascript" src="https://assets.pyecharts.org/assets/themes/wonderland.js"></script>
+        <script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="76241fbc884c486dac2dec1a02cd5ac0" class="chart-container" style="width:900px; height:500px;"></div>
+    <script>
+        var chart_76241fbc884c486dac2dec1a02cd5ac0 = echarts.init(
+            document.getElementById('76241fbc884c486dac2dec1a02cd5ac0'), 'wonderland', {renderer: 'canvas'});
+        var option_76241fbc884c486dac2dec1a02cd5ac0 = {
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "series": [
+        {
+            "type": "bar",
+            "name": "\u91d1\u989d",
+            "legendHoverLink": true,
+            "data": [
+                3400.0,
+                2995.0,
+                400.0,
+                0.0,
+                1.0,
+                101.0,
+                700.0,
+                4975.0,
+                3694.75,
+                7700.0,
+                8870.0,
+                29955.0,
+                5000.0
+            ],
+            "showBackground": false,
+            "barMinHeight": 0,
+            "barCategoryGap": "20%",
+            "barGap": "30%",
+            "large": false,
+            "largeThreshold": 400,
+            "seriesLayoutBy": "column",
+            "datasetIndex": 0,
+            "clip": true,
+            "zlevel": 0,
+            "z": 2,
+            "label": {
+                "show": true,
+                "position": "top",
+                "margin": 8
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u91d1\u989d"
+            ],
+            "selected": {
+                "\u91d1\u989d": true
+            },
+            "show": true,
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5
+    },
+    "xAxis": [
+        {
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "nameRotate": 60,
+            "gridIndex": 0,
+            "axisLabel": {
+                "rotate": 45
+            },
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": false,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            },
+            "data": [
+                "2020-10",
+                "2021-01",
+                "2021-02",
+                "2021-03",
+                "2021-04",
+                "2021-05",
+                "2021-06",
+                "2021-08",
+                "2021-09",
+                "2021-10",
+                "2021-11",
+                "2021-12",
+                "2022-01"
+            ]
+        }
+    ],
+    "yAxis": [
+        {
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": false,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            }
+        }
+    ],
+    "title": [
+        {
+            "padding": 5,
+            "itemGap": 10
+        }
+    ]
+};
+        chart_76241fbc884c486dac2dec1a02cd5ac0.setOption(option_76241fbc884c486dac2dec1a02cd5ac0);
+    </script>
+    <div id="main" class="chart-container" style="width:900px; height:500px;"></div>
+    <script>
+    var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
+
+setTimeout(function () {
+  option = {
+    legend: {},
+    tooltip: {
+      trigger: 'axis',
+      showContent: false
+    },
+    dataset: {
+      source: [
+        ["日期",
+                "2020-10",
+                "2021-01",
+                "2021-02",
+                "2021-03",
+                "2021-04",
+                "2021-05",
+                "2021-06",
+                "2021-07",
+                "2021-08",
+                "2021-09",
+                "2021-10",
+                "2021-11",
+                "2021-12",
+                "2022-01"
+            ],
+        [       "药品",
+                3400.0,
+                2995.0,
+                400.0,
+                0.0,
+                1.0,
+                101.0,
+                700.0,
+                0,
+                4975.0,
+                3694.75,
+                7700.0,
+                8870.0,
+                29955.0,
+                5000.0
+            ],
+            [
+                "饲料",
+                2234.23,
+                0,
+                265894.5,
+                162687.84999999998,
+                354875.42999999993,
+                518679.35,
+                329390.7,
+                300690.6375,
+                643997.1976000001,
+                383104.61629999994,
+                609643.0171300002,
+                1387472.5050000001,
+                229029.456,
+                32829.92
+            ]
+      ]
+    },
+    xAxis: { type: 'category' },
+    yAxis: { gridIndex: 0 },
+    grid: { top: '55%' },
+    series: [
+      {
+        type: 'line',
+        smooth: true,
+        seriesLayoutBy: 'row',
+        emphasis: { focus: 'series' }
+      },
+      {
+        type: 'line',
+        smooth: true,
+        seriesLayoutBy: 'row',
+        emphasis: { focus: 'series' }
+      },
+      {
+        type: 'line',
+        smooth: true,
+        seriesLayoutBy: 'row',
+        emphasis: { focus: 'series' }
+      },
+      {
+        type: 'line',
+        smooth: true,
+        seriesLayoutBy: 'row',
+        emphasis: { focus: 'series' }
+      },
+      {
+        type: 'pie',
+        id: 'pie',
+        radius: '30%',
+        center: ['50%', '25%'],
+        emphasis: {
+          focus: 'self'
+        },
+        label: {
+          formatter: '{b}: {@2012} ({d}%)'
+        },
+        encode: {
+          itemName: 'product',
+          value: '2012',
+          tooltip: '2012'
+        }
+      }
+    ]
+  };
+  myChart.on('updateAxisPointer', function (event) {
+    const xAxisInfo = event.axesInfo[0];
+    if (xAxisInfo) {
+      const dimension = xAxisInfo.value + 1;
+      myChart.setOption({
+        series: {
+          id: 'pie',
+          label: {
+            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+          },
+          encode: {
+            value: dimension,
+            tooltip: dimension
+          }
+        }
+      });
+    }
+  });
+  myChart.setOption(option);
+});
+
+option && myChart.setOption(option);</script>
+    <div id="main1" class="chart-container" style="width:900px; height:500px;"></div>
+    <script type="module">
+
+    $.getJSON('/home/second_visual',  function (data) {
+        if (data['status'] === 200) {
+            var dataset = [];
+            data['data'].forEach(
+                function (i) {
+                    dataset.push([i[0], i[1]])
+                    console.log(i)
+                }
+            );
+            console.log(dataset);
+            render(dataset);
+        }
+    })
+    function render(dataset) {
+    var chartDom = document.getElementById('main1');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    // var base = +new Date(1988, 9, 3);
+    var oneDay = 24 * 3600 * 1000;
+    var data = dataset;
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            position: function (pt) {
+                return [pt[0], '10%'];
+            }
+        },
+        title: {
+            left: 'center',
+            text: '数量可视化',
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+
+        },
+        yAxis: {
+            type: 'value'
+        },
+
+        series: [
+            {
+                name: '数量',
+                type: 'bar',
+                areaStyle: {},
+                data: data
+            }
+        ]
+    };
+
+    option && myChart.setOption(option);
+}
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>wow</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename="css/bootstrap.css") }}">
+</head>
+<body>
+<div>
+    <h4>这真是一种灾难</h4>
+    <ul class="list-group">
+        {% for item in p.items %}
+            <li class="list-group-item">我是{{ item.name }}，我{{ item.age }}岁了</li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <ul class="pagination">
+        <li class="page-item">
+            {% if p.prev_num %}
+                <a class="page-link" href="/thisisbootstrap?page={{ p.prev_num }}" aria-label="Previous">
+            {% else %}
+                <a class="page-link" href="#" aria-label="Previous">
+            {% endif %}
+            <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% for i in range(p.pages) %}
+            {% if p.page == i + 1 %}
+                <li class="page-item active">
+                    {% else %}
+                <li class="page-item">
+            {% endif %}
+        <a class="page-link" href="/thisisbootstrap?page={{ i + 1 }}">{{ i + 1 }}</a>
+        </li>
+        {% endfor %}
+
+
+        <li class="page-item">
+            {% if p.next_num %}
+
+                <a class="page-link" href="/thisisbootstrap?page={{ p.next_num }}" aria-label="Next">
+            {% else %}
+                <a class="page-link" href="javascript:;" aria-label="Next">
+            {% endif %}
+            <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

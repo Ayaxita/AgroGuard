@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/home/feed/css/base.css">
+    <link rel="stylesheet" href="/static/home/feed/css/index.css">
+    <script src="/static/home/feed/js/jquery-1.11.1.min.js"></script>
+
+</head>
+<body >
+<script>
+    var token = "{{ csrf_token }}"
+    $.ajaxSetup({
+        headers: {'X-CSRFTOKEN': `${token}`}, // 这里是headers，不是data
+    });
+</script>
+<nav>
+    <h1 align="center" style="font-size: 30px">牧客-羊饲料智能配方系统</h1>
+</nav>
+
+<div class="main">
+
+    <!--    饲料选项-->
+    <div class="formula" style="text-align: center">
+        <table border="0" cellspacing="0" cellpadding="0" align="center" width="70%" class="select-type ">
+
+            <tr>
+                <td>
+                    <table cellSpacing=0 cellPadding=0 width="100%" border=0>
+                        <tr>
+                            <td class="t-title" align="center">能量饲料</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <table class="content-border" cellSpacing=0 cellPadding=0 border=0 width="100%">
+                        <tr>
+                            <td width="100%">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%"
+                                       class="layout-table">
+                                    <tr>
+                                        <td height="30" width="30%" align="left">
+                                            <label><input type="checkbox" name="chckma" value="玉米"><a>玉米</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="高粱"><a>高粱</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="小麦"><a>小麦</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="大麦"><a>大麦</a></label>
+                                        </td>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="黑麦"><a>黑麦</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="稻谷"><a>稻谷</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="小米"><a>小米</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="糙大米"><a>糙大米</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="大米"><a>大米</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="碎米"><a>碎米</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="粟"><a>粟</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="次粉"><a>次粉</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="乳清粉"><a>乳清粉</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="米糠"><a>米糠</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="小麦麸"><a>小麦麸</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="米糠饼"><a>米糠饼</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="木薯干"><a>木薯干</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="甘薯干"><a>甘薯干</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="蔗糖"><a>蔗糖</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="葡萄糖"><a>葡萄糖</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="玉米胚芽饼"><a>玉米胚芽饼</a></label>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <table cellSpacing=0 cellPadding=0 width="100%" border=0>
+                        <tr>
+                            <td class="t-title" align="center">蛋白质饲料</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <table class="content-border" cellSpacing=0 cellPadding=0 border=0
+                           width="100%">
+                        <tr>
+                            <td width="100%">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%"
+                                       class="layout-table">
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="大豆饼"><a>大豆饼</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="大豆粕"><a>大豆粕</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="棉籽饼"><a>棉籽饼</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="棉籽粕"><a>棉籽粕</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="菜籽饼"><a>菜籽饼</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="菜籽粕"><a>菜籽粕</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="花生仁饼"><a>花生仁饼</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="花生仁粕"><a>花生仁粕</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="向日葵仁饼"><a>向日葵仁饼</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="向日葵仁粕"><a>向日葵仁粕</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="亚麻仁饼"><a>亚麻仁饼</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="亚麻仁粕"><a>亚麻仁粕</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="玉米胚芽粕"><a>玉米胚芽粕</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="芝麻饼"><a>芝麻饼</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="全脂大豆"><a>全脂大豆</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="蚕豆"><a>蚕豆</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="豌豆"><a>豌豆</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="黑豆饼"><a>黑豆饼</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="胡麻仁粕"><a>胡麻仁粕</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="胡麻仁饼"><a>胡麻仁饼</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="黑豆"><a>黑豆</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="玉米蛋白粉"><a>玉米蛋白粉</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="粉浆蛋白粉"><a>粉浆蛋白粉</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="麦芽根(干燥)"><a>麦芽根(干燥)</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="啤酒糟"><a>啤酒糟</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="啤酒酵母"><a>啤酒酵母</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="玉米酒精糟"><a>玉米酒精糟</a></label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <table cellSpacing=0 cellPadding=0 width="100%" border=0>
+                        <tr>
+                            <td class="t-title" align="center">粗饲料</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <table class="content-border" cellSpacing=0 cellPadding=0 border=0 width="100%">
+                        <tr>
+                            <td width="100%">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%"
+                                       class="layout-table">
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="甘薯蔓"><a>甘薯蔓</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="小麦秸秆"><a>小麦秸秆</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="稻草"><a>稻草</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="老芒麦（开花）"><a>老芒麦(开花)</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="苜蓿草粉"><a>苜蓿草粉</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="玉米秸"><a>玉米秸</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="老芒麦（结果）"><a>老芒麦(结果)</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="羊草"><a>羊草</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="赖草"><a>赖草</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="天然牧草"><a>天然牧草</a></label>
+                                        </td>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <table cellSpacing=0 cellPadding=0 width="100%" border=0>
+                        <tr>
+                            <td class="t-title" align="center">矿物质</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <table class="content-border" cellSpacing=0 cellPadding=0 border=0 width="100%">
+                        <tr>
+                            <td width="100%">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%"
+                                       class="layout-table">
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="石粉"><a>石粉</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="贝壳粉"><a>贝壳粉</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma"
+                                                          value="食盐（饲料用盐）"><a>食盐(饲料用盐)</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="乳酸钙"><a>乳酸钙</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="葡萄糖酸钙"><a>葡萄糖酸钙</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="磷酸单钙"><a>磷酸单钙</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="磷酸氢钙"><a>磷酸氢钙</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="磷酸钙"><a>磷酸钙</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="磷酸钠"><a>磷酸钠</a></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="磷酸氢二钠"><a>磷酸氢二钠</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="食盐（家用）"><a>食盐(家用)</a></label>
+                                        </td>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <table cellSpacing=0 cellPadding=0 width="100%" border=0>
+                        <tr>
+                            <td class="t-title" align="center">预混料</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td width="100%">
+                    <table class="content-border" cellSpacing=0 cellPadding=0 border=0 width="100%">
+                        <tr>
+                            <td width="100%">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%"
+                                       style="border-bottom: 1px solid #66CCCC" class="layout-table">
+                                    <tr>
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="预混料（推荐）"><a>预混料(推荐)</a></label>
+                                        </td>
+
+                                        <td height="30" width="30%">
+                                            <label><input type="checkbox" name="chckma" value="预混料"><a>预混料</a></label>
+                                        </td>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <button id="next" style="">下一步</button>
+    </div>
+
+    <!--  -->
+    <div class="cal" style="display: none;padding: 0 150px">
+        <table width="100%" border="1" cellpadding="0" cellspacing="0" id="table" class="content">
+            <tr>
+                <td>
+                    <div align="center">原料名称</div>
+                </td>
+                <td>
+                    <div align="center">原料价格</div>
+                </td>
+                <td>
+                    <div align="center">羊消化能MJ/Kg</div>
+                </td>
+
+                <td>
+                    <div align="center">粗蛋白质%</div>
+                </td>
+
+                <td>
+                    <div align="center">钙%</div>
+                </td>
+
+                <td>
+                    <div align="center">总磷%</div>
+                </td>
+
+                <td>
+                    <div align="center">食盐%</div>
+                </td>
+
+            </tr>
+            <tr id="standard">
+
+                <td>
+                    <div align="center">饲养标准</div>
+                </td>
+                {#                <td>#}
+                {#                    <div align="center">-</div>#}
+                {#                </td>#}
+                {#                <td>#}
+                {#                    <div align="center">-</div>#}
+                {#                </td>#}
+                <td>
+                    <div align="center">-</div>
+                </td>
+
+                <td>
+                    <div align="center"><input type="number" name="txtinput" size="5" value="1.92" step="0.01" style="width:100%;min-width:50px"></div>
+                </td>
+
+                <td>
+                    <div align="center"><input type="number" name="txtinput" size="5" value="25.08" step="0.01" style="width:100%;min-width:50px"></div>
+                </td>
+
+                <td>
+                    <div align="center"><input type="number" name="txtinput" size="5" value="0.64" step="0.01" style="width:100%;min-width:50px"></div>
+                </td>
+
+                <td>
+                    <div align="center"><input type="number" name="txtinput" size="5" value="0.35" step="0.01"
+                                               style="width:100%;min-width:50px"></div>
+                </td>
+
+                <td>
+                    <div align="center"><input type="number" name="txtinput" size="5" value="0.43" step="0.01"
+                                               style="width:100%;min-width:50px"></div>
+                </td>
+
+            </tr>
+
+
+        </table>
+
+        {#        最终结果#}
+        <table width="475" border="1" cellpadding="0" cellspacing="0" bordercolorlight=black bordercolorwhite=dark class="cal-result" style="display: none">
+            <caption id="standard-title"><strong>饲料配方</strong></caption>
+            <tr>
+                <td width="92" bgcolor="#C0C182">
+                    <div align="center">原料名称</div>
+                </td>
+                <td width="137" bgcolor="#C0C182">
+                    <div align="center">原料价格(元/吨)</div>
+                </td>
+                <td width="238" bgcolor="#C0C182">
+                    <div align="center">含量(%)</div>
+                </td>
+            </tr>
+
+
+        </table>
+
+
+        <div class="tips">
+            <ul>
+                <li>
+                    <div class="title"></div>
+                    <div id="items"></div>
+                </li>
+            </ul>
+        </div>
+        <!--    按钮-->
+        <div class="control">
+            <button id="confirm" style="margin-top: 20px">优化计算</button>
+            <button id="back" style="margin-top: 20px" onclick="back_()">上一步</button>
+        </div>
+    </div>
+</div>
+
+
+<footer>
+
+{#    <hr style="background:rgb(255, 115, 0);height: 5px">#}
+</footer>
+
+<script>
+    $(function () {
+
+        bott = true
+        $(".select-type label a").click(function () {
+            if(bott){
+                $(this).css("background","#66BAB7")
+                $(this).css("color","#fff")
+                bott = false
+            }
+            else {
+                $(this).css("background","")
+                $(this).css("color","#666")
+                bott = true
+            }
+        })
+
+
+        function init() {
+            data = []
+            td = $(".layout-table td")
+            console.log(td)
+            for (let i = 0; i < td.length; i++) {
+                td[i].setAttribute("align", "left")
+            }
+
+            var formula = $(".formula")
+            var cal = $(".cal")
+
+            $("#next").click(function () {
+                var items = $("input")
+                flag = false
+                for (let i = 0; i < items.length; i++) {
+                    if ($(items[i]).is(":checked")) {
+                        flag = true
+                        break
+                    }
+                }
+                if (flag) {
+                    var info_food = []
+                    for (let i = 0; i < items.length; i++) {
+                        if ($(items[i]).is(":checked")) {
+                            info_food.push($(items[i]).attr("value"))
+                        }
+                    }
+                    // 发送ajax获取羊标准
+                    $.ajax(
+                        {
+                            url:"/home/feed/standard/",
+                            success:function (result) {
+                                console.log(result)
+                                t = $("#standard input")
+                                console.log(t)
+                                for (let resultKey in result) {
+                                    $(t[0]).attr("value",result[resultKey][1])
+                                    $(t[1]).attr("value",result[resultKey][2])
+                                    $(t[2]).attr("value",result[resultKey][3])
+                                    $(t[3]).attr("value",result[resultKey][4])
+                                    $(t[4]).attr("value",result[resultKey][5])
+                                    $("#standard-title").text(resultKey)
+                                }
+                            }
+                        }
+                    )
+
+
+                    //  发送ajax 获取数据
+                    $.ajax({
+                        url: "/home/feed/forage", success: function (result) {
+                            data = result
+                            console.log(result)
+                            for (let i = 0; i < info_food.length; i++) {
+                                let c = $('<tr class="calculate"><td width="100" align="center"> <input class = "varieties" type="hidden" value=' + info_food[i] + ' name=' + result[info_food[i]][6] + '>' + info_food[i] +
+                                    '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + result[info_food[i]][0] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                                    '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + result[info_food[i]][1] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                                    '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + result[info_food[i]][2] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                                    '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + result[info_food[i]][3] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                                    '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + result[info_food[i]][4] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                                    '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + result[info_food[i]][5] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                                    '</td></tr>')
+                                $(".content").append(c)
+                            }
+                        }
+                    });
+                    //遍历元素并显示 记录缺失种类
+                    formula.css("display", "none")
+                    cal.css("display", "block")
+                } else {
+                    alert("至少选中一项")
+                }
+            })
+            //  绑定控制事件
+            $("#back").click(function () {
+                formula.css("display", "block")
+                cal.css("display", "none")
+            })
+
+            // 判断原料
+            var lost = []
+
+            function isfull() {
+                list = ["能量", "食盐", "磷盐", "钙盐", "蛋白", "粗饲料"]
+                {#sign王旭景#}
+                {#list = ["能量饲料", "矿物质", "预混料", "蛋白质饲料", "粗饲料"]#}
+                names = $(".varieties")
+                current = []
+
+                for (let i = 0; i < names.length; i++) {
+                    {#console.log(list.includes($(names[i]).attr("name")))#}
+                    if (!current.includes($(names[i]).attr("name")) && $(names[i]).attr("name") != "预混料") {
+                        current.push($(names[i]).attr("name"))
+                    }
+                }
+                for (let i = 0; i < list.length; i++) {
+                    if (!current.includes(list[i])) {
+                        lost.push(list[i])
+                    }
+                }
+                console.log(current)
+                console.log(list)
+                return current.length == list.length
+            }
+
+            //  ajax请求数据
+            function data_all() {
+                data_ = []
+                name = $(".calculate input")
+                values = $(".calculate td div input")
+                temp = []
+                stard = [0, 1.92, 25.08, 0.64, 0.35, 0.43]
+                data_.push(stard)
+                for (let i = 0; i < values.length; i++) {
+                    temp.push($(values[i]).attr("value"))
+                    if ((i + 1) % 6 == 0 && i != 0) {
+                        data_.push(temp)
+                        temp = []
+                    }
+                }
+                console.log(data_)
+                return data_
+            }
+
+            //  优化计算
+            $("#confirm").click(function () {
+                //    判断原料标准
+                if (isfull()) {
+                    data_fin = data_all()
+                    console.log(data_fin)
+                    //发送ajax
+                    $.ajax({
+                        url: "/home/feed/calculate/",
+                        traditional: true,
+                        data: {"data_fin": data_fin},
+                        type: 'post',
+                        success: function (result) {
+                            $(".cal-result").css("display","table")
+                            $(".content").css("display","none")
+                            $(".control").css("display","none")
+
+                            showData(result,getName())
+
+                        }
+                    });
+                } else {
+                    //定义缺失种类所包含的其他饲料
+                    other = {}
+                    for (let i = 0; i < lost.length; i++) {
+                        other[lost[i]] = []
+                    }
+                    names = $(".varieties")
+                    for (let i = 0; i < names.length; i++) {
+                        delete data[$(names[i]).attr("value")]
+                    }
+                    for (let t in data) {
+                        {#console.log(typeof t)#}
+                        for (let i = 0; i < lost.length; i++) {
+                            if (lost[i] == data[t][6]) {
+                                other[lost[i]].push(t)
+                                break
+                            }
+                        }
+                    }
+                    {#快速添加种类饲料#}
+                    for (let i = 0; i < lost.length; i++) {
+                        t = $('<div id=' + i + '><h3>当前缺少' + lost[i] + '，点击下方快速添加</h3>' + '</div>')
+                        $(".title").append(t)
+                        for (let j = 0; j < other[lost[i]].length; j++) {
+                            {#console.log(other[lost[i]][j])#}
+                            t = $('<span style="padding: 0 5px" value=' + other[lost[i]][j] + '>' + other[lost[i]][j] + '</span>')
+                            $("#" + i).append(t)
+                        }
+                    }
+                    {#点击添加#}
+                    $(".title span").click(function () {
+                        let c = $('<tr class="calculate"><td width="100" align="center"> <input class = "varieties" type="hidden" value=' + $(this).attr("value") + ' name=' + $(this).attr("value") + '>' + $(this).attr("value") +
+                            '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + data[$(this).attr("value")][0] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                            '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + data[$(this).attr("value")][1] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                            '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + data[$(this).attr("value")][2] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                            '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + data[$(this).attr("value")][3] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                            '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + data[$(this).attr("value")][4] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                            '<td> <div align="center"><input type="number" name="txtinput" size="5" value=' + data[$(this).attr("value")][5] + ' step="0.01" style="width:100%;min-width:50px"></div></td>' +
+                            '</td></tr>')
+                        $(".content").append(c)
+                        {#    删除自己的div#}
+                        $(this).parent().remove()
+                    })
+                }
+
+            })
+            // 渲染最终结果
+            // 获取作物种类
+            function getName() {
+                n = []
+                tmp = $(".varieties")
+                for (let i = 0; i < tmp.length; i++) {
+                    n.push($(tmp[i]).attr("value"))
+                }
+                console.log(n)
+                return n
+            }
+            function showData(data,n) {
+                console.log(n)
+
+                for (let i = 0; i < n.length; i++) {
+                    tm = $(' <tr> <td height="22"> <div align="center">'+n[i]+'</div> </td> <td height="22"> <div align="center">'+data["price"][i]+'</div> </td> <td height="22"> <div align="center">'+data["percent"][i]+'</div> </td> </tr>')
+                    $(".cal-result").append(tm)
+
+                }
+                {#$(".cal-result").append('<tr><td bgcolor="#C0C182"><div align="center" id="cost">配方成本</div></td><td bgcolor="#C0C182"><div align="center">￥981.42</div></td><td bgcolor="#C0C182"><div align="center">&nbsp;</div></td></tr>')#}
+                $(".cal-result").append('<tr><td bgcolor="#F3C585"><div align="center">合计</div></td><td bgcolor="#F3C585"><div align="center"id="cost"></div></td><td bgcolor="#F3C585"><div align="center">100.00</div></td><tr>')
+                $("#cost").text('￥'+ data["money"])
+            }
+        }
+
+        init()
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends 'child1.html' %}
+
+{% block head %}
+    {{ super() }}
+	<p>我真是python</p>
+{% endblock %}
+
+{% block content %}
+    {% include 'child2_include.html' %}
+	<p>Flask Content</p>
+{% endblock %}
+
+<hr />
+
+{#{% include 'child2_include.html' %}#}
+{# 宏定义 #}
+{% macro person(name,age) %}
+    <p>我是：{{ name }},年龄：{{ age }}</p>
+{% endmacro %}
+
+{% block foot %}
+	{{ person("kunkun", 28) }}
+{#    过滤器#}
+    <p>{{ name | capitalize }}</p>
+    <p>{{ name | title }}</p>
+    <p>{{ name | upper }}</p>
+    <p>{{ name | lower }}</p>
+    <p>{{ name | upper | first | lower}}</p>
+    <p>{{ name2 | default("kunkunkunkunkun") }}</p>
+
+
+{% endblock %}

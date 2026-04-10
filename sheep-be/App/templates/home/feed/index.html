@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/home/feed/css/base.css">
+    <link rel="stylesheet" href="/static/home/feed/css/index.css">
+
+    <script src="/static/home/feed/js/jquery-1.11.1.min.js">
+
+    </script>
+
+</head>
+<body background="/static/home/feed/imgs/bgimg.png">
+<script>
+ 　　var token = "{{ csrf_token }}"
+    $.ajaxSetup({
+        headers: { 'X-CSRFTOKEN': `${token}` }, // 这里是headers，不是data
+    });
+</script>
+<nav>
+    <h1 align="center" style="font-size: 30px">牧客-羊饲料智能配方系统</h1>
+</nav>
+
+<div class="main">
+<h2 align="center" style="font-weight: normal;font-size: 30px;padding-top: 20px">请选择配方模型</h2>
+    <br>
+    <br>
+    <div style="margin: 0 auto;clear:both;" class="select">
+
+        <ul style="margin-right: 30px">
+            <li><a href="./select/" index="0">羔羊体重4-6kg</a></li>
+            <li><a href="./select/" index="1">羔羊体重10-12kg</a></li>
+            <li><a href="./select/" index="2">羔羊体重12-14kg</a></li>
+            <li><a href="./select/" index="3">羔羊体重14-16kg</a></li>
+            <li><a href="./select/" index="4">羔羊体重16-18kg</a></li>
+            <li><a href="./select/" index="5">羔羊体重18-20kg</a></li>
+            <li><a href="./select/" index="6">羔羊体重20-25kg</a></li>
+            <li><a href="./select/" index="15">育肥羊体重20-25kg</a></li>
+        </ul>
+        <ul style="margin-left: 30px">
+            <li><a href="./select/" index="7">母羊体重25-30kg</a></li>
+            <li><a href="./select/" index="8">母羊体重30-35kg</a></li>
+            <li><a href="./select/" index="9">母羊体重35-40kg</a></li>
+            <li><a href="./select/" index="10">母羊体重45-50kg</a></li>
+            <li><a href="./select/" index="11">母羊体重50kg以上</a></li>
+            <li><a href="./select/" index="12">公羊体重20-25kg</a></li>
+            <li><a href="./select/" index="13">公羊体重20-25kg</a></li>
+            <li><a href="./select/" index="14">种公羊</a></li>
+        </ul>
+    </div>
+</div>
+
+
+<footer>
+    <div>
+
+    </div>
+    <hr style="background:#66CCCC;height: 5px;margin-top: 40px">
+</footer>
+
+<script>
+    $(function () {
+        $(".select li a").click(function () {
+            var index = $(this).attr("index")
+
+            $.ajax({
+                url: "/home/feed/select/",
+                data: {"index":index},
+                type:'POST',
+                success: function (result) {
+                    console.log(result);
+                }
+            });
+        })
+    })
+</script>
+
+</body>
+</html>

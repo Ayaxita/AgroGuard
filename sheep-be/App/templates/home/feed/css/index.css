@@ -1,0 +1,72 @@
+
+
+body{
+    background-image: url("../imgs/huiyuanbg.gif");
+}
+nav{
+    border-bottom: 4px solid rgb(255, 115, 0);
+    padding: 10px 0;
+}
+/*响应式图片*/
+img {
+    max-width: 60%;
+    height: auto;
+}
+.main{
+    text-align: center;
+    margin-top: 15px;
+}
+.main .select ul{
+    background: #ffffff;
+    border: 2px solid rgb(211, 211, 211);
+    margin: 0 auto;
+    height: 1050px;
+    width: 470px;
+}
+.main .select ul li a{
+    display: inline-block;
+    width: 350px;
+    height: 40px;
+    font-weight: 1000;
+    font-size: 22px;
+    margin: 12px 0;
+}
+.main .select ul li a:hover{
+    background: rgb(0, 139, 139);
+}
+.main .select ul li{
+    text-align: center;
+    /*padding: 10px;*/
+}
+/*饲料配方部分*/
+.t-title{
+    background: rgb(255, 115, 0);
+    color: white;
+    font-weight: 700;
+    height: 30px;
+    font-size: 15px;
+    border-top: #ffa55b 2px solid;
+    border-bottom: #ffa55b 2px solid;
+}
+table{
+    /*width: 1200px;*/
+    margin: 0 auto;
+    background: rgb(244, 244, 244);
+
+}
+tr:first-child{
+    margin-top: 10px;
+}
+.content-border{
+    border-left: 1px solid rgb(255, 115, 0);
+    border-right: 1px solid rgb(255, 115, 0);
+}
+label input{
+    margin: 0 5px;
+}
+label{
+    font-size: 15px;
+}
+form{
+    display: block;
+}
