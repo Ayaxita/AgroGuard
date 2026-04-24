@@ -21,3 +21,16 @@ node_modules/
 # OS
 .DS_Store
 Thumbs.db
+
+# Personal documents (DO NOT upload to GitHub)
+*.pptx
+*.ppt
+*.docx
+*.doc
+*.pdf
+PROJECT_GUIDE.md
+任务书*
+开题报告*
+中期答辩*
+
+# Keep the auto-generated README.md
