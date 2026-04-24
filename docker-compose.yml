@@ -5,7 +5,7 @@ services:
     hostname: flask
     depends_on:
       - mysql-db
-    build: ./sheep-be
+    build: ./meadow-be
     ports:
       - "5000:5000"
     command: python app.py
@@ -25,7 +25,7 @@ services:
     hostname: vue
     depends_on:
       - flask
-    build: ./sheep-fe
+    build: ./meadow-fe
     ports:
       - "5020:80"
 

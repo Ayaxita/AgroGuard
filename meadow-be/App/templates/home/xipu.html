@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .main {
+            {#background: #f9a7a7;#}
+            height: auto;
+            width: auto;
+            margin: 0 20%;
+            padding-bottom: 50px;
+        }
+
+        .head {
+            display: inline;
+        }
+
+        .title {
+            width: 100%;
+            {#background: blue;#}
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .img {
+            width: 100px;
+            height: 140px;
+            {#background: red;#}
+            position: absolute;
+            left: 950px;
+            border:black solid 1px;
+        }
+
+        .basic {
+            width: 90%;
+            height: 200px;
+            background: white;
+            padding-left: 50px;
+        }
+
+        .basic .basic_line {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .text_line {
+            text-decoration: underline;
+            margin: 0 10px;
+        }
+
+        .table {
+            width: 80%;
+            {#background: blue;#}
+            height: auto;
+            padding-left: 50px;
+            margin-bottom: 50px;
+        }
+        .table table{
+            width:100%;
+        }
+
+        .table_title {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main">
+    <div class="head">
+        <div class="title">系谱档案</div>
+<!--        <div class="img"><img src="{{ code_url }}" alt=""></div>-->
+        <div class="basic">
+            <div class="basic_line">品种:
+                <div class="text_line">{{ basic.variety }}</div>
+                普通耳标:
+                <div class="text_line">{{ basic.pre_num }}</div>
+                电子耳标号:
+                <div class="text_line">{{ basic.ele_num }}</div>
+            </div>
+            <div class="basic_line">性别:
+                <div class="text_line">{{ basic.sex }}</div>
+                出生日期:
+                <div class="text_line">{{ basic.birth }}</div>
+                等级评定:
+                <div class="text_line">{{ basic.rank}}</div>
+            </div>
+            <div class="basic_line">初生重(kg):
+                <div class="text_line">{{ basic.bir_weight }}</div>
+                断奶体重(kg):
+                <div class="text_line">{{ basic.wea_weight }}</div>
+                断奶日期：
+                 <div class="text_line">{{ basic.wea_date }}</div>
+                同胎数量:
+                <div class="text_line">{{ basic.together_num }}</div>
+                产地:
+                <div class="text_line">{{ basic.manu_info_name }}</div>
+            </div>
+            <div class="basic_line">
+                位置：
+                <div class="text_line">{{ basic.location }}</div>
+
+                多胎基因(FecB)：
+
+                定位耳标：
+
+
+            </div>
+        </div>
+    </div>
+    <div class="table">
+        <div class="table_title">(一)本身鉴定情况</div>
+        <table border="1">
+            <tr>
+                <th>鉴定日期</th>
+                <th>年龄</th>
+                <th>体重(kg)</th>
+                <th>体高(cm)</th>
+                <th>体长(cm)</th>
+                <th>胸围(cm)</th>
+                <th>等级</th>
+            </tr>
+            {% for i in first %}
+                <tr>
+                    <td>{{ i.other.date | date:"Y-m-d"}}</td>
+                    <td>{{ i.mon_age }}</td>
+                    <td>{{ i.other.weight }}</td>
+                    <td>{{ i.other.high }}</td>
+                    <td>{{ i.other.Llong }}</td>
+                    <td>{{ i.other.bust }}</td>
+                    <td>{{ i.rank }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="table">
+        <div class="table_title">(二)亲,祖代品质及性能</div>
+        <table border="1">
+            <tr>
+                <th>代别</th>
+                <th>电子耳号</th>
+                <th>普通耳号</th>
+                <th>体重</th>
+                <th>体高</th>
+                <th>体长</th>
+                <th>胸围</th>
+                <th>外貌等级</th>
+            </tr>
+            {% for i in second %}
+                <tr>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.ele_num }}</td>
+                    <td>{{ i.pre_num }}</td>
+                    <td>{{ i.other.weight }}</td>
+                    <td>{{ i.other.high }}</td>
+                    <td>{{ i.other.Llong }}</td>
+                    <td>{{ i.other.bust }}</td>
+                    <td>{{ i.rank }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="table">
+        <div class="table_title">(三)后裔情况</div>
+        <table border="1">
+            <tr>
+                <th>配种日期</th>
+                <th>与配羊耳号</th>
+                <th>出苗日期</th>
+                <th>出苗数量</th>
+                <th>初生重</th>
+                <th>断奶重</th>
+                <th>羔羊耳标</th>
+                <th>性别</th>
+                <th>繁殖率</th>
+            </tr>
+            {% for i in third %}
+                <tr>
+                    <td>{{ i.breeding_date | date:"Y-m-d"}}</td>
+                    <td>{{ i.friend_ele_num }}</td>
+                    <td>{{ i.delivery_date }}</td>
+                    <td>{{ i.live_num }}</td>
+                    <td>{{ i.other.bir_weight }}</td>
+                    <td>{{ i.other.wea_weight }}</td>
+                    <td>{{ i.other.pre_num }}</td>
+                    <td>{{ i.sex }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="table">
+        <div class="table_title">(四)接种免疫情况</div>
+        <table border="1">
+            <tr>
+                <th>疫苗名称</th>
+                <th>接种日期</th>
+                <th>接种剂量</th>
+                <th>接种月龄</th>
+                <th>注射人员</th>
+            </tr>
+            {% for i in fourth %}
+                <tr>
+                    <td>{{ i.vaccine_name }}</td>
+                    <td>{{ i.imm_date | date:"Y-m-d"}}</td>
+                    <td>{{ i.dose }}</td>
+                    <td>{{ i.imm_age }}</td>
+                    <td>{{ i.staff }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="table">
+        <div class="table_title">(五)布鲁氏杆菌检测情况</div>
+        <table border="1">
+            <tr>
+                <th>采样日期</th>
+                <th>检测方式</th>
+                <th>采样数量</th>
+                <th>抗体</th>
+                <th>检测单位</th>
+            </tr>
+            {% for i in fifth %}
+                <tr>
+                    <td>{{ i.date | date:"Y-m-d"}}</td>
+                    <td>{{ i.detection_mode }}</td>
+                    <td>{{ i.num }}</td>
+                    <td>{{ i.antibody }}</td>
+                    <td>{{ i.institutions }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="table">
+        <div class="table_title">(六)疾病诊疗情况</div>
+        <table border="1">
+            <tr>
+                <th>疾病名称</th>
+                <th>发病时间</th>
+                <th>年龄</th>
+                <th>诊疗时间</th>
+                <th>药品信息</th>
+                <th>治愈效果</th>
+                <th>治愈时间</th>
+                <th>出库时间</th>
+            </tr>
+            {% for i in sixth %}
+                <tr>
+                    <td>{{ i.disease }}</td>
+                    <td>{{ i.disease_time | date:"Y-m-d"}}</td>
+                    <td>{{ i.age }}</td>
+                    <td>{{ i.treatment_time | date:"Y-m-d"}}</td>
+                    <td>{{ i.drug_name }}</td>
+                    <td>{{ i.cur_effect }}</td>
+                    <td>{{ i.cur_time | date:"Y-m-d"}}</td>
+                    <td>{{ i.out_time | date:"Y-m-d"}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

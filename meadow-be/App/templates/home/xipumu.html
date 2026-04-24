@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .main {
+            {#background: #f9a7a7;#}
+            height: auto;
+            width: auto;
+            margin: 0 20%;
+            padding-bottom: 50px;
+        }
+
+        .head {
+            display: inline;
+        }
+
+        .title {
+            width: 100%;
+            {#background: blue;#}
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .img {
+            width: 100px;
+            height: 140px;
+            {#background: red;#}
+            position: absolute;
+            left: 950px;
+            border:black solid 1px;
+        }
+
+        .basic {
+            width: 90%;
+            height: 200px;
+            background: white;
+            padding-left: 50px;
+        }
+
+        .basic .basic_line {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .text_line {
+            text-decoration: underline;
+            margin: 0 10px;
+        }
+
+        .table {
+            width: 80%;
+            {#background: blue;#}
+            height: auto;
+            padding-left: 50px;
+            margin-bottom: 50px;
+        }
+        .table table{
+            width:100%;
+        }
+
+        .table_title {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main">
+    <div class="head" >
+        <div class="title">系谱档案</div>
+<!--        <div class="img"><img src="{{ code_url }}" alt=""></div>-->
+        <div class="basic">
+            <div class="basic_line">
+                品种:
+                <div class="text_line">{{ basic.variety }}</div>
+                性别:
+                <div class="text_line">{{ basic.sex }}</div>
+            </div>
+            <div class="basic_line">
+                普通耳标号:
+                <div class="text_line">{{ basic.pre_num }}</div>
+                电子耳标号:
+                <div class="text_line">{{ basic.ele_num }}</div>
+            </div>
+            <div class="basic_line">
+                同胎数量:<div class="text_line">{{ basic.together_num }}</div>
+                综合等级评定:<div class="text_line">{{ basic.rank}}</div>
+            </div>
+            <div class="basic_line">
+                种源产地:
+                <div class="text_line">{{ basic.manu_info_name }}</div>
+                出生日期:
+                <div class="text_line">{{ basic.birth }}</div>
+            </div>
+            <div class="basic_line">
+                初生重(kg):
+                <div class="text_line">{{ basic.bir_weight }}</div>
+                断奶日期:
+                <div class="text_line">{{ basic.wea_date }}</div>
+
+            </div>
+            <div class="basic_line">
+                断奶体重(kg):
+                <div class="text_line">{{ basic.wea_weight }}</div>
+                Fecb基因型:
+                <div class="text_line">{{ basic.gene_a }}</div>
+            </div>
+            <div class="basic_line">
+                定位圈舍:
+                <div class="text_line">{{ basic.location }}</div>
+                定位羊耳号:
+                <div class="text_line"></div>
+            </div>
+        </div>
+    </div>
+{#    <br><br><br><br>#}
+    <div style="margin: 100px;"></div>
+
+    <div class="table">
+        <div class="table_title">(一)亲、祖代品种及性能</div>
+        <table border="1">
+            <tr>
+                <th>代别</th>
+                <th>电子耳号</th>
+                <th>普通耳号</th>
+                <th>体重(kg)</th>
+                <th>体高(cm)</th>
+                <th>体长(cm)</th>
+                <th>胸围(cm)</th>
+                <th>等级评定</th>
+            </tr>
+            <tr>
+                <th>父亲</th>
+                <th>{{ second.f_ele_num }}</th>
+                <th>{{ second.f_pre_num }}</th>
+                <th>{{ second.f_weight }}</th>
+                <th>{{ second.f_high }}</th>
+                <th>{{ second.f_Llong }}</th>
+                <th>{{ second.f_bust }}</th>
+                <th>{{ second.f_rank }}</th>
+            </tr>
+            <tr>
+                <th>母亲</th>
+                <th>{{ second.m_ele_num }}</th>
+                <th>{{ second.m_pre_num }}</th>
+                <th>{{ second.m_weight }}</th>
+                <th>{{ second.m_high }}</th>
+                <th>{{ second.m_Llong }}</th>
+                <th>{{ second.m_bust }}</th>
+                <th>{{ second.m_rank }}</th>
+            </tr>
+            <tr>
+                <th>祖父</th>
+                <th>{{ second.zf_ele_num }}</th>
+                <th>{{ second.zf_pre_num }}</th>
+                <th>{{ second.ff_weight }}</th>
+                <th>{{ second.ff_high }}</th>
+                <th>{{ second.ff_Llong }}</th>
+                <th>{{ second.ff_bust }}</th>
+                <th>{{ second.ff_rank }}</th>
+            </tr>
+            <tr>
+                <th>祖母</th>
+                <th>{{ second.zm_ele_num }}</th>
+                <th>{{ second.zm_pre_num }}</th>
+                <th>{{ second.fm_weight }}</th>
+                <th>{{ second.fm_high }}</th>
+                <th>{{ second.fm_Llong }}</th>
+                <th>{{ second.fm_bust }}</th>
+                <th>{{ second.fm_rank }}</th>
+            </tr>
+            <tr>
+                <th>外祖父</th>
+                <th>{{ second.gf_ele_num }}</th>
+                <th>{{ second.gf_pre_num }}</th>
+                <th>{{ second.mf_weight }}</th>
+                <th>{{ second.mf_high }}</th>
+                <th>{{ second.mf_Llong }}</th>
+                <th>{{ second.mf_bust }}</th>
+                <th>{{ second.mf_rank }}</th>
+            </tr>
+            <tr>
+                <th>外祖母</th>
+                <th>{{ second.gm_ele_num }}</th>
+                <th>{{ second.gm_pre_num }}</th>
+                <th>{{ second.mm_weight }}</th>
+                <th>{{ second.mm_high }}</th>
+                <th>{{ second.mm_Llong }}</th>
+                <th>{{ second.mm_bust }}</th>
+                <th>{{ second.mm_rank }}</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="table">
+        <div class="table_title">(二)本身鉴定情况</div>
+        <table border="1">
+            <tr>
+                <th>鉴定日期</th>
+                <th>月龄</th>
+                <th>体重(kg)</th>
+                <th>体高(cm)</th>
+                <th>体长(cm)</th>
+                <th>胸围(cm)</th>
+                <th>背脂厚(mm)</th>
+                <th>眼肌面积(cm²)</th>
+                <th>日增重(g)</th>
+                <th>外貌等级</th>
+                <th>综合评分</th>
+            </tr>
+
+            {% for item in second.first_table %}
+                <tr>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.mon_age }}</td>
+                    <td>{{ item.weight }}</td>
+                    <td>{{ item.high }}</td>
+                    <td>{{ item.Llong }}</td>
+                    <td>{{ item.bust }}</td>
+                    <td>{{ item.back_fat}}</td>
+                    <td>{{ item.eye }}</td>
+                    <td>{{ item.day_weight }}</td>
+                    <td>{{ item.rank }}</td>
+                    <td>{{ item.star }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table">
+        <div class="table_title">(三)后裔情况</div>
+        <table border="1">
+{#        <table border="1" border frame=box, cellspacing="0px">#}
+            <tr>
+                <th rowspan="2">配种日期</th>
+                <th rowspan="2">与配公羊耳号</th>
+                <th rowspan="2">配种方式</th>
+                <th rowspan="2">出苗日期</th>
+                <th rowspan="2">出苗数量</th>
+                <th colspan="10">新生羔羊基本信息</th>
+                <th rowspan="2">繁殖成活率</th>
+                <th rowspan="2">年出苗数</th>
+            </tr>
+            <tr>
+                <th colspan="2">初生重(kg)</th>
+                <th>出苗编号</th>
+                <th>性别</th>
+                <th>状态</th>
+                <th>出苗编号</th>
+                <th>性别</th>
+                <th>状态</th>
+                <th colspan="2">断奶重(kg)</th>
+            </tr>
+
+            {% for i in third %}
+                <tr>
+                    <th rowspan="2">{{i.breeding_date}}</th>
+                    <th rowspan="2">{{i.friend_pre_num}}</th>
+                    <th rowspan="2">{{i.breeding_way}}</th>
+                    <th rowspan="2">{{i.delivery_date}}</th>
+                    <th rowspan="2">{{i.live_num}}</th>
+                    <th>{{i.bir_weight1}}</th>
+                    <th>{{i.bir_weight2}}</th>
+                    <th>{{i.pre_num1}}</th>
+                    <th>{{i.sex1}}</th>
+                    <th>{{i.state1}}</th>
+                    <th>{{i.pre_num2}}</th>
+                    <th>{{i.sex2}}</th>
+                    <th>{{i.state2}}</th>
+                    <th>{{i.wea_weight1}}</th>
+                    <th>{{i.wea_weight2}}</th>
+                    <th rowspan="2">{{ i.fanzhi }}</th>
+                    <th rowspan="2"></th>
+
+                </tr>
+                <tr>
+                    <th>{{i.bir_weight3}}</th>
+                    <th>{{i.bir_weight4}}</th>
+                    <th>{{i.pre_num3}}</th>
+                    <th>{{i.sex3}}</th>
+                    <th>{{i.state3}}</th>
+                    <th>{{i.pre_num4}}</th>
+                    <th>{{i.sex4}}</th>
+                    <th>{{i.state4}}</th>
+                    <th>{{i.wea_weight3}}</th>
+                    <th>{{i.wea_weight4}}</th>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table">
+        <div class="table_title">(四)疫苗接种免疫情况</div>
+        <table border="1">
+            <tr>
+                <th>疫苗名称</th>
+                <th>接种日期</th>
+                <th>接种剂量</th>
+                <th>接种月龄</th>
+                <th>接种人员</th>
+            </tr>
+            {% for i in fourth %}
+                <tr>
+                    <td>{{ i.vaccine_name }}</td>
+{#                    <td>{{ i.imm_date | date("Y-m-d")}}</td>#}
+                    <td>{{ i.imm_date }}</td>
+{#                    <td>{{ i.imm_date | strftime("%Y-%m-%d")}}</td>#}
+                    <td>{{ i.dose }}</td>
+                    <td>{{ i.imm_age }}</td>
+                    <td>{{ i.staff }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table">
+        <div class="table_title">(五)布鲁氏菌病检测情况</div>
+        <table border="1">
+            <tr>
+                <th>检测日期</th>
+                <th>检测方法</th>
+                <th>采样数量</th>
+                <th>检测结果</th>
+                <th>检测人员</th>
+                <th>备注说明</th>
+            </tr>
+            {% for i in fifth %}
+                <tr>
+                    <td>{{ i.date}}</td>
+                    <td>{{ i.detection_mode }}</td>
+                    <td>{{ i.num }}</td>
+                    <td>{{ i.antibody }}</td>
+                    <td>{{ i.institutions }}</td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table">
+        <div class="table_title">(六)疾病诊疗情况</div>
+        <table border="1">
+            <tr>
+                <th>发病时间</th>
+                <th>疾病名称</th>
+                <th>月龄</th>
+                <th>诊疗时间</th>
+                <th>药品名称</th>
+                <th>药品出库时间</th>
+                <th>诊疗人员</th>
+                <th>治疗结束时间</th>
+                <th>治疗效果</th>
+            </tr>
+            {% for i in sixth %}
+                <tr>
+                    <td>{{ i.disease_time }}</td>
+                    <td>{{ i.disease }}</td>
+                    <td>{{ i.age }}</td>
+                    <td>{{ i.treatment_time }}</td>
+                    <td>{{ i.drug_name }}</td>
+                    <td>{{ i.out_time }}</td>
+                    <td>{{ i.m_staff }}</td>
+                    <td>{{ i.cur_time }}</td>
+                    <td>{{ i.cur_effect }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table">
+        <div class="table_title">(七)种羊育种信息评价</div>
+        <table border="1" width="200%">
+            <tr>
+                <th rowspan="2">评价年度</th>
+                <th colspan="6">种羊综合评估</th>
+            </tr>
+            <tr>
+                <th><div>基础信息分值</div><div>(10分)</div></th>
+                <th><div>本身性能测定分值</div><div>(50分)</div></th>
+                <th><div>后裔信息分值</div><div>(35分)</div></th>
+                <th><div>防疫信息分值</div><div>(5分)</div></th>
+                <th><div>总分值</div><div>(100分)</div></th>
+                <th>等级评定</th>
+            </tr>
+                <tr>
+                    <td>{{ score.time }}</td>
+                    <td>{{ score.score1 }}</td>
+                    <td>{{ score.score2 }}</td>
+                    <td>{{ score.score3 }}</td>
+                    <td>{{ score.score4 }}</td>
+                    <td>{{ score.scoreall }}</td>
+                    <td>{{ score.rank }}</td>
+                </tr>
+        </table>
+    </div>
+
+    <div class="table">
+        <div class="table_title">(八)种羊评估情况</div>
+        <table border="1" width="200%">
+            <tr>
+                <th rowspan="2">评估时间</th>
+                <th colspan="5">评估结论</th>
+            </tr>
+            <tr>
+                <th>基本信息</th>
+                <th>本身性能测定</th>
+                <th>后裔情况</th>
+                <th>防疫情况</th>
+                <th>主要问题</th>
+            </tr>
+            <tr>
+                <td rowspan="2">{{ judge.time }}</td>
+                <td>{{ judge.jiben }}</td>
+                <td>{{ judge.benshen }}</td>
+                <td>{{ judge.houyi }}</td>
+                <td>{{ judge.fangyi }}</td>
+                <td>{{ judge.wenti }}</td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>
+</body>
+</html>
