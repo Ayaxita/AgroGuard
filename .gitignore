@@ -39,4 +39,4 @@ dist/
 
 # Database files
 *.db
-instance/*.db
+instance/*.dbinit-scripts/meadow_test-2025_03_21_18_30_21-dump.sql
