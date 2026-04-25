@@ -277,10 +277,10 @@ const initCharts = () => {
       { name: "其他", data: tableData.value.map(i => [i.date, i.income_byproducts.other]) }
     ]),
 
-    // initChart(byproductIncomeChart, "羊副产品收入", [
+    // initChart(byproductIncomeChart, "草地副产品收入", [
     //   { name: "粪肥", data: tableData.value.map(i => [i.date, i.income_byproducts.dung]) },
-    //   { name: "羊毛", data: tableData.value.map(i => [i.date, i.income_byproducts.wool]) },
-    //   { name: "羊皮", data: tableData.value.map(i => [i.date, i.income_byproducts.skin]) },
+    //   { name: "采收产物", data: tableData.value.map(i => [i.date, i.income_byproducts.wool]) },
+    //   { name: "草皮", data: tableData.value.map(i => [i.date, i.income_byproducts.skin]) },
     //   { name: "有机肥", data: tableData.value.map(i => [i.date, i.income_byproducts.manure]) },
     //   { name: "饲料", data: tableData.value.map(i => [i.date, i.income_byproducts.feed]) },
     //   { name: "副产品", data: tableData.value.map(i => [i.date, i.income_byproducts.producted]) },

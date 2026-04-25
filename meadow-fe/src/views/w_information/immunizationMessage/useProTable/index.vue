@@ -246,7 +246,7 @@ defineExpose({
 // const deleteData = async delinfo => {
 //   console.log("选中的删除信息", delinfo);
 //   if (delinfo.length !== 0) {
-//     ElMessageBox.confirm(`确认删除对象?<br/>已选${delinfo.length}只羊`, "温馨提示", {
+//     ElMessageBox.confirm(`确认删除对象?<br/>已选${delinfo.length}株`, "温馨提示", {
 //       type: "warning",
 //       dangerouslyUseHTMLString: true
 //     }).then(() => {

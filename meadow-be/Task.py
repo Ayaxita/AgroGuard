@@ -141,7 +141,7 @@ def update_database():
                     w.house = b.house_name,
                     w.hurdle_name = b.hurdle_name;
             '''
-        # 删除 query是删除不正常的羊
+        # 删除 query是删除不正常的记录
         query5 = '''
                 DELETE w
                 FROM
@@ -150,7 +150,7 @@ def update_database():
                 WHERE
                 b.state != 1
             '''
-        # 删除一生只打一次的羊
+        # 删除一生只打一次的记录
         query6 = '''
             delete w
             FROM

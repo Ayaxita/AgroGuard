@@ -316,7 +316,7 @@ const selectEwe = async selectedList => {
     ElMessageBox.confirm("只能选择1条记录?", "温馨提示", { type: "warning" });
     return;
   }
-  // 获取选中羊的 ele_num 值
+  // 获取选中记录的 ele_num 值
 
   const selectedFname = selectedList[0].goods;
   const selectedType = selectedList[0].type;

@@ -29,7 +29,7 @@ export const editBreederConditionInfo = params => {
 export const delManu = params => {
   return http.post(PORT1 + `/breederconditioninfo/del`, params);
 };
-//获取能添加种羊体况信息的好羊信息
+//获取能添加母本体况信息的优质记录信息
 export const getGoodsheep = params => {
   const result = http.post(PORT1 + `/breederconditioninfo/get_Goodsheep`, params);
   result.then(resp => console.log("返回的列表数据", resp));

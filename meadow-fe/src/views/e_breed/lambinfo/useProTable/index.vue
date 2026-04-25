@@ -104,7 +104,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   // },
   // {
   //   prop: "basic_id",
-  //   label: "入棚后羊基本id",
+  //   label: "入棚后草地基本id",
   //   search: { el: "input" }
   // },
   {

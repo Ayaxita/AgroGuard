@@ -238,11 +238,11 @@ const selectSheep = async selectedList => {
     ElMessage.warning("请选择要添加的记录");
     return;
   } else if (selectedList.length > 1) {
-    // ElMessageBox.confirm("只能选择1只羊?", "温馨提示", { type: "warning" });
+    // ElMessageBox.confirm("只能选择1株?", "温馨提示", { type: "warning" });
     ElMessage.warning("只能选择一条记录");
     return;
   }
-  // 获取选中羊的 ele_num 值
+  // 获取选中记录的 ele_num 值
   const selectedItem = selectedList[0];
 
   // 确认提示

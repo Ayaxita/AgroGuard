@@ -318,7 +318,7 @@ const selectEwe = async selectedList => {
     ElMessageBox.confirm("只能选择1个监测区域或监测地块?", "温馨提示", { type: "warning" });
     return;
   }
-  // 获取选中羊的 ele_num 值
+  // 获取选中记录的 ele_num 值
 
   const selectedHouse_id = selectedList[0].id;
   const selectedHouse_name = selectedList[0].name;

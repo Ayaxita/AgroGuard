@@ -26,7 +26,7 @@ TO_EMAIL = "1923088415@qq.com"  # 收件邮箱
 # ============================================
 
 #  {
-#     label: "种羊(待分类)",
+#     label: "母本(待分类)",
 #     value: 0
 #   },
 #   {
@@ -34,19 +34,19 @@ TO_EMAIL = "1923088415@qq.com"  # 收件邮箱
 #     value: 1
 #   },
 #   {
-#     label: "哺乳羔羊",
+#     label: "哺乳幼苗",
 #     value: 2
 #   },
 #   {
-#     label: "繁殖公羊",
+#     label: "繁殖期公株",
 #     value: 5
 #   },
 #   {
-#     label: "繁殖母羊",
+#     label: "繁殖期母株",
 #     value: 6
 #   },
 #   {
-#     label: "育成羊",
+#     label: "成熟草",
 #     value: 8
 #   }
 # ];
@@ -100,9 +100,9 @@ SessionLocal = sessionmaker(bind=engine)
 #     #     print(f"错误详情: {str(e)}")
 #     #     print(f"堆栈跟踪:\n{traceback.format_exc()}")
 
-# ___________________________定时更新羊库存资产数据，每天生成16条记录到羊库存资产表_____________________________
+# ___________________________定时更新草地库存资产数据，每天生成16条记录到草地库存资产表_____________________________
 def calculate_assets():
-    """主计算函数：统计羊只资产价值并入库"""
+    """主计算函数：统计草地资产价值并入库"""
 
     try:
         # 初始化统计字典结构
@@ -187,7 +187,7 @@ def calculate_assets():
                         missing_weight_data.append({
                             'basic_id': record.basic_id,
                             '耳号': record.ele_num,  # 添加中文列名
-                            '所属羊舍': record.house_name,
+                            '所属草地棚': record.house_name,
                             '所属栏位': record.hurdle_name
                         })
                         log_file.write(f"{record.basic_id, record.ele_num, record.house_name, record.hurdle_name}\n")
@@ -206,7 +206,7 @@ def calculate_assets():
                         adjusted_purpose = 1
                     else:
                         adjusted_purpose = record.purpose
-                        # 原用途为5、6转为种羊（0），8育成转为育肥（1）
+                        # 原用途为5、6转为母本（0），8育成转为育肥（1）
                         if record.purpose in (5, 6):
                             adjusted_purpose = 0
                         elif record.purpose == 8:
@@ -313,14 +313,14 @@ def calculate_assets():
             db.session.bulk_insert_mappings(SheepAssetinfo, bulk_insert)
             db.session.commit()
             print(f"成功插入{len(bulk_insert)}条统计记录")
-        print("羊库存资产计算成功")
-        # send_email("羊库存资产计算", True)
+        print("草地库存资产计算成功")
+        # send_email("草地库存资产计算", True)
 
     except Exception as e:
         # 异常处理：回滚事务并记录错误
         db.session.rollback()
         print(f"处理失败: {str(e)}")
-        # send_email("羊库存资产计算", False)
+        # send_email("草地库存资产计算", False)
         raise  # 可根据需要决定是否重新抛出异常
 
 
@@ -441,8 +441,8 @@ def update_stats(stats_dict, variety, purpose, sex, value, weight):
 #             db.session.add(analysis_record)
 #
 #         db.session.commit()
-#         print("更新羊库存资产成功！")
-#         # send_email("羊库存资产计算更新", True)
+#         print("更新草地库存资产成功！")
+#         # send_email("草地库存资产计算更新", True)
 #
 #         # # 创建新分析记录
 #         # new_analysis = AnalysisSheepAsset(
@@ -459,7 +459,7 @@ def update_stats(stats_dict, variety, purpose, sex, value, weight):
 #
 #     except Exception as e:
 #         db.session.rollback()
-#         # send_email("羊库存资产计算更新", False)
+#         # send_email("草地库存资产计算更新", False)
 
 
 def update_stocksheet():
@@ -782,7 +782,7 @@ def update_daily_income():  # 按照总价去分，再根据类型去分
             'other_value': 0.0
         }
 
-        # 处理GSlaughterSSalesinfo数据（羊只销售）
+        # 处理GSlaughterSSalesinfo数据（草地销售）
         ssales_records = db.session.query(
             GSlaughterSSalesinfo.type,
             GSlaughterSSalesinfo.total_price
@@ -866,7 +866,7 @@ def update_daily_income():  # 按照总价去分，再根据类型去分
 
 def update_daily_sheep_asset(session):
     try:
-        print("开始更新羊库存资产")
+        print("开始更新草地库存资产")
         # 获取今天的日期
         today = datetime.now().date()
         print(f"获取到今天的日期: {today}")
@@ -934,23 +934,23 @@ def update_daily_sheep_asset(session):
             db.session.add(analysis_record)
 
         db.session.commit()
-        print("更新羊库存资产成功！")
-        # send_email("羊库存资产计算更新", True)
+        print("更新草地库存资产成功！")
+        # send_email("草地库存资产计算更新", True)
 
     except Exception as e:
         db.session.rollback()
-        print(f"更新羊库存资产失败: {e}")
+        print(f"更新草地库存资产失败: {e}")
         import traceback
         traceback.print_exc()
-        # send_email("羊库存资产计算更新", False)
+        # send_email("草地库存资产计算更新", False)
 # ____________________________________________________________________________________________
 def Task():
     db.session = SessionLocal()
     print("开始执行任务，已获取数据库会话")
     # daily_sheetinit() #初始化日支出报表
     # update_daily_income() # 初始化收入报表
-    # calculate_assets() #计算羊库存资产 16 条
-    update_daily_sheep_asset(db.session) # 更新羊库存资产
+    # calculate_assets() #计算草地库存资产 16 条
+    update_daily_sheep_asset(db.session) # 更新草地库存资产
     print("任务执行完成")
     # update_stocksheet() #计算物料库存资产
 

@@ -526,11 +526,11 @@ const drawerWidth = computed(() => {
 //     ElMessage.warning("请选择要添加的监测地块");
 //     return;
 //   } else if (selectedList.length > 1) {
-//     // ElMessageBox.confirm("只能选择1只羊?", "温馨提示", { type: "warning" });
+//     // ElMessageBox.confirm("只能选择1株?", "温馨提示", { type: "warning" });
 //     ElMessage.warning("只能选择一个记录");
 //     return;
 //   }
-//   // 获取选中羊的 ele_num 值
+//   // 获取选中记录的 ele_num 值
 //   const selectedColony = selectedList[0].name;
 
 //   // 确认提示

@@ -307,7 +307,7 @@ const selectCname = async selectedList => {
     ElMessageBox.confirm("只能选择1条信息?", "温馨提示", { type: "warning" });
     return;
   }
-  // 获取选中羊的 ele_num 值
+  // 获取选中记录的 ele_num 值
 
   const selectedCname = selectedList[0].cname;
   // 确认提示
@@ -334,7 +334,7 @@ const selectSupply = async selectedList => {
     ElMessageBox.confirm("只能选择1条信息?", "温馨提示", { type: "warning" });
     return;
   }
-  // 获取选中羊的 ele_num 值
+  // 获取选中记录的 ele_num 值
 
   const selectedSupply = selectedList[0].supplier_name;
   // 确认提示

@@ -112,7 +112,7 @@ import { ElMessage } from "element-plus";
 /** 后端返回的防护剂名称在界面上的草地监测用语映射（不改变提交数据） */
 const IMM_CNAME_DISPLAY_MAP: Record<string, string> = {
   口蹄疫疫苗: "真菌病防护剂",
-  羊痘疫苗: "锈病防护剂",
+  草地疫病疫苗: "锈病防护剂",
   三联四防疫苗: "综合防护剂",
   小反刍疫苗: "植保药剂",
   小反刍病疫苗: "植保药剂"
