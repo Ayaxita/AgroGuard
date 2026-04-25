@@ -1,6 +1,8 @@
 # Large SQL dump files
 init-scripts/*.sql
+!init-scripts/init.sql
 *.sql
+!init.sql
 
 # Python cache
 __pycache__/
