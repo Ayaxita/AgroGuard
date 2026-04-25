@@ -290,8 +290,8 @@ def get_quarantineinfo():
     conditions = []
     search_params = {
         # 'basic_id': DHealthDeathinfo.basic_id,
-        'ele_num': DHealthQuarantineinfo.basic_id,  # 电子耳号
-        'pre_num': DHealthQuarantineinfo.basic_id,  # 防疫耳号
+        'ele_num': DHealthQuarantineinfo.basic_id,  # 草地编号
+        'pre_num': DHealthQuarantineinfo.basic_id,  # 草地类型
         'date': DHealthQuarantineinfo.date,
         'detection_mode': DHealthQuarantineinfo.detection_mode,
         'item': DHealthQuarantineinfo.item,
@@ -403,8 +403,8 @@ def get_nursinginfo():
     conditions = []
     search_params = {
         # 'basic_id': DHealthDeathinfo.basic_id,
-        'ele_num': DHealthNursinginfo.basic_id,  # 电子耳号
-        'pre_num': DHealthNursinginfo.basic_id,  # 防疫耳号
+        'ele_num': DHealthNursinginfo.basic_id,  # 草地编号
+        'pre_num': DHealthNursinginfo.basic_id,  # 草地类型
         'age': DHealthNursinginfo.age,
         'nurse': DHealthNursinginfo.nurse,
         'nur_time': DHealthNursinginfo.nur_time,
@@ -512,8 +512,8 @@ def get_diseaseinfo():
     conditions = []
     search_params = {
         # 'basic_id': DHealthDeathinfo.basic_id,
-        'ele_num': DHealthDiseaseinfo.basic_id,  # 电子耳号
-        'pre_num': DHealthDiseaseinfo.basic_id,  # 防疫耳号
+        'ele_num': DHealthDiseaseinfo.basic_id,  # 草地编号
+        'pre_num': DHealthDiseaseinfo.basic_id,  # 草地类型
         'disease_time': DHealthDiseaseinfo.disease_time,
         'age': DHealthDiseaseinfo.age,
         'disease': DHealthDiseaseinfo.disease,
@@ -600,8 +600,8 @@ def get_abortioninfo():
     conditions = []
     search_params = {
         # 'basic_id': DHealthDeathinfo.basic_id,
-        'ele_num': DHealthAbortioninfo.basic_id,  # 电子耳号
-        'pre_num': DHealthAbortioninfo.basic_id,  # 防疫耳号
+        'ele_num': DHealthAbortioninfo.basic_id,  # 草地编号
+        'pre_num': DHealthAbortioninfo.basic_id,  # 草地类型
         'notes': DHealthAbortioninfo.notes,
         'method': DHealthAbortioninfo.method,
         'staff': DHealthAbortioninfo.staff,
@@ -667,7 +667,7 @@ def add_immunizationinfo():
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证电子耳号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
+    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
     ele_num = data['ele_num']
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
@@ -837,7 +837,7 @@ def add_nursinginfo():
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证电子耳号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
+    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
     ele_num = data['ele_num']
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
@@ -881,7 +881,7 @@ def add_diseaseinfo():
     # ctime = datetime.now()
     data['belong'] = 0
     # data['f_date'] = ctime
-    # 验证电子耳号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
+    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
     ele_num = data['ele_num']
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
@@ -935,7 +935,7 @@ def add_abortioninfo():
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证电子耳号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
+    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
     ele_num = data['ele_num']
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
@@ -1282,8 +1282,8 @@ def export_drugbathinfo():
         data_list = []
         for info, ele_num, pre_num, cname, supplier_name in drugbath_info:
             data_list.append({
-                '电子耳号': ele_num,
-                '防疫耳号': pre_num,
+                '草地编号': ele_num,
+                '草地类型': pre_num,
                 '药浴月龄': info.drug_age,
                 '用药时间': info.take_time.isoformat() if info.take_time else None,
                 '药品信息': cname,
@@ -1559,8 +1559,8 @@ def export_diseaseinfo():
         for info, ele_num, pre_num, cname in disease_info:
             datacur_effect = cur_effect.get(info.cur_effect, " ")
             data_list.append({
-                '电子耳号': ele_num,
-                '防疫耳号': pre_num,
+                '草地编号': ele_num,
+                '草地类型': pre_num,
                 '发病时间': info.disease_time.isoformat() if info.disease_time else None,
                 '年龄': info.age,
                 '疾病名称': info.disease,

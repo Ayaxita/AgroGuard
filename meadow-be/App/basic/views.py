@@ -528,7 +528,7 @@ def validate_sheep_num():
             result = {
                 "code": 200,
                 'realcode': 500,
-                "msg": '电子耳号已存在'
+                "msg": '草地编号已存在'
             }
             return jsonify(result)
     elif prop == 'pre_num':
@@ -536,7 +536,7 @@ def validate_sheep_num():
             result = {
                 "code": 200,
                 'realcode': 500,
-                "msg": '防疫耳号已存在'
+                "msg": '草地类型已存在'
             }
             return jsonify(result)
     elif prop == 'f_ele_num':
@@ -555,7 +555,7 @@ def validate_sheep_num():
             result = {
                 "code": 200,
                 'realcode': 500,
-                "msg": '父电子耳号不存在'
+                "msg": '父草地编号不存在'
             }
             return jsonify(result)
         else:
@@ -565,7 +565,7 @@ def validate_sheep_num():
                 'data': {
                     'f_pre_num': info.pre_num,
                 },
-                "msg": '父电子耳号存在, 验证成功'
+                "msg": '父草地编号存在, 验证成功'
             }
             return jsonify(result)
     elif prop == 'f_pre_num' and value != '0':
@@ -574,7 +574,7 @@ def validate_sheep_num():
             result = {
                 "code": 200,
                 'realcode': 500,
-                "msg": '父防疫耳号不存在'
+                "msg": '父草地类型不存在'
             }
             return jsonify(result)
     elif prop == 'm_ele_num':
@@ -593,7 +593,7 @@ def validate_sheep_num():
             result = {
                 "code": 200,
                 'realcode': 500,
-                "msg": '母电子耳号不存在'
+                "msg": '母草地编号不存在'
             }
             return jsonify(result)
         else:
@@ -603,7 +603,7 @@ def validate_sheep_num():
                 'data': {
                     'm_pre_num': info.pre_num,
                 },
-                "msg": '母电子耳号存在, 验证成功'
+                "msg": '母草地编号存在, 验证成功'
             }
             return jsonify(result)
     elif prop == 'm_pre_num' and value != '0':
@@ -612,7 +612,7 @@ def validate_sheep_num():
             result = {
                 "code": 200,
                 'realcode': 500,
-                "msg": '母防疫耳号不存在'
+                "msg": '母草地类型不存在'
             }
             return jsonify(result)
     result = {
@@ -999,7 +999,7 @@ def import_basic_info():
                 # basic_info.ele_num = generate_ele_num(df.iloc[r, 1], df.iloc[r, 2])  # 根据pre_num和variety生成ele_num
                 birth_date = df.iloc[r, 9]  # 获取出生日期
                 variety_label = df.iloc[r, 2]  # 获取品种标签
-                pre_num = df.iloc[r, 1]  # 获取防疫耳号
+                pre_num = df.iloc[r, 1]  # 获取草地类型
                 basic_info.ele_num = generate_ele_num(pre_num, birth_date, variety_label)  # 根据birth和variety生成ele_num
             else:
                 print('----111++++++++++++++++++++++++++++')
@@ -1484,7 +1484,7 @@ def get_breedercondition_info():
     #     value = request.json.get(param)
     #     if value is not None:  # 检查值不为 None
     #         basic_conditions.append(column == value)
-    # # 如果有三个条件:电子耳号,品种,毛色,则查询basic表的id,并将条件添加到conditions
+    # # 如果有三个条件:草地编号,品种,毛色,则查询basic表的id,并将条件添加到conditions
     # if basic_conditions:
     #     basic_query = BasicBasicinfo.query.filter(and_(*basic_conditions))
     #     # 如果没有，什么也不干

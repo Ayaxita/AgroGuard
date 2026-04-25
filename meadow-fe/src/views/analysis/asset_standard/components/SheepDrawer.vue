@@ -166,7 +166,7 @@ const rules = reactive({
   // pre_num: [
   //   {
   //     required: true,
-  //     message: "请填写防疫耳号"
+  //     message: "请填写草地类型"
   //   }
   // ]
 });
@@ -407,7 +407,7 @@ const drawerWidth = computed(() => {
 
 //   // 确认提示
 //   try {
-//     await ElMessageBox.confirm(`确认选择电子耳号为 ${selectedColony} 的母系草地?`, "温馨提示", {
+//     await ElMessageBox.confirm(`确认选择草地编号为 ${selectedColony} 的母系草地?`, "温馨提示", {
 //       type: "warning"
 //     });
 

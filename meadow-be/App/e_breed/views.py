@@ -1887,7 +1887,7 @@ def search_ewe_sheep():
     basic_info = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
 
     if not basic_info:
-        return jsonify({"code": 400, "msg": "未找到对应的电子耳号信息"})
+        return jsonify({"code": 400, "msg": "未找到对应的草地编号信息"})
 
     # 获取对应的 ewe_id
     ewe_id = basic_info.id
@@ -2167,7 +2167,7 @@ def add_postnatalinfo():
         # 生成 logo 字段
         logo = f"{ewe_ele_num}_{delivery_date_str}_{i}"
 
-        # 从 BasicBasicinfo 中查找父母的防疫耳号
+        # 从 BasicBasicinfo 中查找父母的草地类型
         ewe = db.session.query(BasicBasicinfo).filter_by(id=data['ewe_id']).first()
         ram = db.session.query(BasicBasicinfo).filter_by(id=data['ram_id']).first()
         print("++++++++++++++_________________________+++++++++++++++")
@@ -2275,7 +2275,7 @@ def get_pregnantinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
 
-            elif param == 'ewe_ele_num':#如果是查电子耳号，首先要查基本信息表里面，获取这个电子耳号的id
+            elif param == 'ewe_ele_num':#如果是查草地编号，首先要查基本信息表里面，获取这个草地编号的id
                 basic_id = BasicBasicinfo.query.filter(
                         BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
                 print(basic_id)
@@ -3435,7 +3435,7 @@ def export_lambinfo():
 #添加入库信息tobasic添加记录到基本信息表并修改新草地信息表
 @e_breed.route('/e_breed/lambinfo/edit_and_tobasic', methods=['POST'])
 def edit_and_tobasic():
-    # 入棚自动添加电子耳号
+    # 入棚自动添加草地编号
     def generate_ele_num(pre_num, birth_date, variety):
         # 固定的前6位
         prefix = "131102"
@@ -3473,7 +3473,7 @@ def edit_and_tobasic():
         # if  lamb_info.ele_num is None:  # 如果ele_num为空
         #     birth_date = lamb_info.birth  # 获取出生日期
         #     variety = data.get('variety') # 获取品种标签
-        #     pre_num = lamb_info.pre_num  # 获取防疫耳号
+        #     pre_num = lamb_info.pre_num  # 获取草地类型
         #     lamb_info.ele_num = generate_ele_num(pre_num, birth_date, variety)  # 根据pre_num、birth和variety生成ele_num
         #     print(lamb_info.ele_num)
 
@@ -3487,7 +3487,7 @@ def edit_and_tobasic():
             # 如果没有传递 ele_num，根据 pre_num 生成 ele_num
             birth_date = lamb_info.birth  # 获取出生日期
             variety = data.get('variety')  # 获取品种标签
-            pre_num = lamb_info.pre_num  # 获取防疫耳号
+            pre_num = lamb_info.pre_num  # 获取草地类型
             lamb_info.ele_num = generate_ele_num(pre_num, birth_date, variety)  # 根据 pre_num、birth 和 variety 生成 ele_num
         print(lamb_info.ele_num)
 

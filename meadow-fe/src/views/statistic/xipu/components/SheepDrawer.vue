@@ -267,7 +267,7 @@ const validateProps = (rule: any, value: any, callback: any) => {
 
 const rules = reactive({
   // ele_num: [
-  //   { required: true, message: "请输入电子耳号", trigger: "blur" },
+  //   { required: true, message: "请输入草地编号", trigger: "blur" },
   //   { validator: validateProps, trigger: "blur" }
   // ],
   pre_num: [
