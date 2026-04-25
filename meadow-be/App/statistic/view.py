@@ -203,7 +203,7 @@ def get_basic_info():
     else:
         query = BasicBasicinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     query = query.filter(and_(BasicBasicinfo.belong == 0))
@@ -573,7 +573,7 @@ def validate_sheep_num():
                 'data': {
                     'f_pre_num': 0,
                 },
-                "msg": '父不在羊场中,验证成功'
+                "msg": '父不在草场中,验证成功'
             }
             return jsonify(result)
         info = BasicBasicinfo.query.filter_by(ele_num=value).first()
@@ -611,7 +611,7 @@ def validate_sheep_num():
                 'data': {
                     'm_pre_num': 0,
                 },
-                "msg": '母不在羊场中,验证成功'
+                "msg": '母不在草场中,验证成功'
             }
             return jsonify(result)
         info = BasicBasicinfo.query.filter_by(ele_num=value).first()
@@ -1316,7 +1316,7 @@ def get_makescoreTable():
     else:
         query = BasicMakescore.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -1927,11 +1927,11 @@ def xiazai_xipu():
                     fangyi_score = score_list[3]
                     scoreall = score_list[4]
                     if scoreall >= 90:
-                        rank = '特级羊'
+                        rank = '特级草'
                     elif scoreall >= 80:
-                        rank = '一级羊'
+                        rank = '一级草'
                     elif scoreall >= 70:
-                        rank = '二级羊'
+                        rank = '二级草'
                     else:
                         rank = ''
                     contex['score'] = {
@@ -2005,11 +2005,11 @@ def xiazai_xipu():
                     scoreall = score_list[4]
 
                     if scoreall >= 90:
-                        rank = '特级羊'
+                        rank = '特级草'
                     elif scoreall >= 80:
-                        rank = '一级羊'
+                        rank = '一级草'
                     elif scoreall >= 70:
-                        rank = '二级羊'
+                        rank = '二级草'
                     else:
                         rank = ''
                     contex['score'] = {
@@ -2127,7 +2127,7 @@ def get_basic(basic_id):
         return dict_1
 
 
-# 第一个table 只有一个表 BasicBreederconditioninfo 种羊体况
+# 第一个table 只有一个表 BasicBreederconditioninfo 草种体况
 def get_first_table(basic_id):
         """获取第一个表格数据"""
         first = BasicBreederconditioninfo.query.filter_by(basic_id=basic_id).all()
@@ -2779,11 +2779,11 @@ def chakan_xipu():
             fangyi_score = score_list[3]
             scoreall = score_list[4]
             if scoreall >= 90:
-                rank = '特级羊'
+                rank = '特级草'
             elif scoreall >= 80:
-                rank = '一级羊'
+                rank = '一级草'
             elif scoreall >= 70:
-                rank = '二级羊'
+                rank = '二级草'
             else:
                 rank = ''
             contex['score'] = {
@@ -2860,11 +2860,11 @@ def chakan_xipu():
             scoreall = score_list[4]
 
             if scoreall >= 90:
-                rank = '特级羊'
+                rank = '特级草'
             elif scoreall >= 80:
-                rank = '一级羊'
+                rank = '一级草'
             elif scoreall >= 70:
-                rank = '二级羊'
+                rank = '二级草'
             else:
                 rank = ''
             contex['score'] = {
@@ -2936,7 +2936,7 @@ def calculate_score(basic_id):
         'offspring_score': score_list[2],
         'health_score': score_list[3],
         'total_score': score_list[4],
-        'rank': '特级羊' if score_list[4] >= 90 else '一级羊' if score_list[4] >= 80 else '二级羊'
+        'rank': '特级草' if score_list[4] >= 90 else '一级草' if score_list[4] >= 80 else '二级草'
     }
 
 

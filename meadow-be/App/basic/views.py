@@ -547,7 +547,7 @@ def validate_sheep_num():
                 'data': {
                     'f_pre_num': 0,
                 },
-                "msg": '父不在羊场中,验证成功'
+                "msg": '父不在草场中,验证成功'
             }
             return jsonify(result)
         info = BasicBasicinfo.query.filter_by(ele_num=value).first()
@@ -585,7 +585,7 @@ def validate_sheep_num():
                 'data': {
                     'm_pre_num': 0,
                 },
-                "msg": '母不在羊场中,验证成功'
+                "msg": '母不在草场中,验证成功'
             }
             return jsonify(result)
         info = BasicBasicinfo.query.filter_by(ele_num=value).first()
@@ -1739,7 +1739,7 @@ def update_grandparents():
         }
         return jsonify(result)
 
-#获取状态为健康的羊的基本信息
+#获取状态为健康的草的基本信息
 @basic.route('/basic/breederconditioninfo/get_Goodsheep', methods=['POST'])
 def get_Goodsheep():
     pageNum = int(request.json.get('pageNum'))

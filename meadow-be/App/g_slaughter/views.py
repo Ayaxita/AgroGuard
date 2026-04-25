@@ -14,7 +14,7 @@ from ..utils.AlchemyEncoder import AlchemyEncoder
 g_slaughter = Blueprint('g_slaughter', __name__)
 
 
-@g_slaughter.route('/g_slaughter/s_salesinfo', methods=['POST'])#羊只销售
+@g_slaughter.route('/g_slaughter/s_salesinfo', methods=['POST'])#草只销售
 def get_s_salesinfo():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
@@ -135,7 +135,7 @@ def edit_s_salesinfo():
     return jsonify(result)
 
 
-@g_slaughter.route('/g_slaughter/g_salesinfo', methods=['POST'])#羊副产品销售
+@g_slaughter.route('/g_slaughter/g_salesinfo', methods=['POST'])#草副产品销售
 def get_g_salesinfo():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))

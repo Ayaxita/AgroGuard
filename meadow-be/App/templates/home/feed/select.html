@@ -16,7 +16,7 @@
     });
 </script>
 <nav>
-    <h1 align="center" style="font-size: 30px">牧客-羊饲料智能配方系统</h1>
+    <h1 align="center" style="font-size: 30px">牧客-草地饲料智能配方系统</h1>
 </nav>
 
 <div class="main">
@@ -332,7 +332,7 @@
                                         </td>
 
                                         <td height="30" width="30%">
-                                            <label><input type="checkbox" name="chckma" value="羊草"><a>羊草</a></label>
+                                            <label><input type="checkbox" name="chckma" value="牧草"><a>牧草</a></label>
                                         </td>
 
                                         <td height="30" width="30%">
@@ -475,7 +475,7 @@
                     <div align="center">原料价格</div>
                 </td>
                 <td>
-                    <div align="center">羊消化能MJ/Kg</div>
+                    <div align="center">草消化能MJ/Kg</div>
                 </td>
 
                 <td>
@@ -623,7 +623,7 @@
                             info_food.push($(items[i]).attr("value"))
                         }
                     }
-                    // 发送ajax获取羊标准
+                    // 发送ajax获取草标准
                     $.ajax(
                         {
                             url:"/home/feed/standard/",

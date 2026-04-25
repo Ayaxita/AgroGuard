@@ -276,7 +276,7 @@ def update_thresholdsetMessageinfo():
                     w.house = b.house_name,
                     w.hurdle_name = b.hurdle_name;
             '''
-        # 删除 query是删除不正常的羊
+        # 删除 query是删除不正常的草
         query5 = '''
                 DELETE w
                 FROM
@@ -285,7 +285,7 @@ def update_thresholdsetMessageinfo():
                 WHERE
                 b.state != 1
             '''
-        # 删除一生只打一次的羊
+        # 删除一生只打一次的草
         query6 = '''
             delete w
             FROM

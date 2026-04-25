@@ -15,7 +15,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import desc, and_, or_, not_, text, func, asc
 
 #  {
-#     label: "种羊(待分类)",
+#     label: "草种(待分类)",
 #     value: 0
 #   },
 #   {
@@ -35,7 +35,7 @@ from sqlalchemy import desc, and_, or_, not_, text, func, asc
 #     value: 6
 #   },
 #   {
-#     label: "育成羊",
+#     label: "育成草",
 #     value: 8
 #   }
 # ];
@@ -53,9 +53,9 @@ engine = create_engine(DATABASE_URI)
 SessionLocal = sessionmaker(bind=engine)
 
 
-# ___________________________定时更新羊库存资产数据，每天生成16条记录到羊库存资产表_____________________________
+# ___________________________定时更新草库存资产数据，每天生成16条记录到草库存资产表_____________________________
 def calculate_assets():
-    """主计算函数：统计羊只资产价值并入库"""
+    """主计算函数：统计草只资产价值并入库"""
 
     try:
         # 初始化统计字典结构
@@ -140,7 +140,7 @@ def calculate_assets():
                         missing_weight_data.append({
                             'basic_id': record.basic_id,
                             '耳号': record.ele_num,  # 添加中文列名
-                            '所属羊舍': record.house_name,
+                            '所属草地区块': record.house_name,
                             '所属栏位': record.hurdle_name
                         })
                         log_file.write(f"{record.basic_id, record.ele_num, record.house_name, record.hurdle_name}\n")
@@ -159,7 +159,7 @@ def calculate_assets():
                         adjusted_purpose = 1
                     else:
                         adjusted_purpose = record.purpose
-                        # 原用途为5、6转为种羊（0），8育成转为育肥（1）
+                        # 原用途为5、6转为草种（0），8育成转为育成（1）
                         if record.purpose in (5, 6):
                             adjusted_purpose = 0
                         elif record.purpose == 8:
@@ -266,7 +266,7 @@ def calculate_assets():
             db.session.bulk_insert_mappings(SheepAssetinfo, bulk_insert)
             db.session.commit()
             print(f"成功插入{len(bulk_insert)}条统计记录")
-        print("羊库存资产计算成功")
+        print("草库存资产计算成功")
 
     except Exception as e:
         # 异常处理：回滚事务并记录错误
@@ -392,7 +392,7 @@ def update_daily_sheep_asset():
             db.session.add(analysis_record)
 
         db.session.commit()
-        print("更新羊库存资产成功！")
+        print("更新草库存资产成功！")
 
         # # 创建新分析记录
         # new_analysis = AnalysisSheepAsset(
@@ -724,7 +724,7 @@ def update_daily_income():  # 按照总价去分，再根据类型去分
             'other_value': 0.0
         }
 
-        # 处理GSlaughterSSalesinfo数据（羊只销售）
+        # 处理GSlaughterSSalesinfo数据（草只销售）
         ssales_records = db.session.query(
             GSlaughterSSalesinfo.type,
             GSlaughterSSalesinfo.total_price
@@ -810,8 +810,8 @@ def Task():
     db.session = SessionLocal()
     daily_sheetinit() #初始化日支出报表
     update_daily_income() # 初始化收入报表
-    calculate_assets() #计算羊库存资产 16 条
-    update_daily_sheep_asset() # 更新羊库存资产
+    calculate_assets() #计算草库存资产 16 条
+    update_daily_sheep_asset() # 更新草库存资产
     update_stocksheet() #计算物料库存资产
 
 

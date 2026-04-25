@@ -702,7 +702,7 @@ def add_test():
     data = request.get_json()
     # belong为0
     data['belong'] = 0
-    # 羊只面积比例不能为空
+    # 草只面积比例不能为空
     data['area_pro'] = 0
     data['pid'] = 0
     # print(data)

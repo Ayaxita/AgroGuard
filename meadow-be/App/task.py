@@ -103,7 +103,7 @@
 #                         mon_age = ROUND(DATEDIFF(CURRENT_DATE, w.birth) / 30, 1),
 #                         distance_date = DATEDIFF(CURRENT_DATE, w.imm_date);
 #                 '''
-#             # 删除 query是删除不正常的羊
+#             # 删除 query是删除不正常的草
 #             query5 = '''
 #                     DELETE w
 #                     FROM

@@ -105,16 +105,16 @@ const initCharts = () => {
 
   // 库存饼图
   const stockOption = {
-    title: { text: "羊库存资产", left: "center" },
+    title: { text: "草库存资产", left: "center" },
     tooltip: { trigger: "item" },
     series: [
       {
         type: "pie",
         radius: "50%",
         data: [
-          { value: 1048, name: "成年羊" },
-          { value: 735, name: "幼羊" },
-          { value: 580, name: "种羊" }
+          { value: 1048, name: "成年草" },
+          { value: 735, name: "幼草" },
+          { value: 580, name: "草种" }
         ]
       }
     ]

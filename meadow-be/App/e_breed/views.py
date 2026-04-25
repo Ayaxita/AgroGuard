@@ -77,7 +77,7 @@ def get_rutinfo():
     else:
         query = EBreedRutinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -271,7 +271,7 @@ def get_ewesheep():
             BasicBasicinfo.mon_age >= 6
         ))  # 如果没有动态条件，只筛选固定条件
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     query = query.filter(and_(BasicBasicinfo.state != -1, BasicBasicinfo.state != 0, BasicBasicinfo.belong == 0))
@@ -450,7 +450,7 @@ def get_semencollectinfo():
     else:
         query = EBreedSemencollectinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -694,7 +694,7 @@ def get_ramsheep():
             BasicBasicinfo.mon_age >= 6
         ))  # 如果没有动态条件，只筛选固定条件
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     query = query.filter(and_(BasicBasicinfo.state != -1, BasicBasicinfo.state != 0, BasicBasicinfo.belong == 0))
@@ -848,7 +848,7 @@ def get_breedinginfo():
     else:
         query = EBreedBreedinginfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -1254,7 +1254,7 @@ def get_postnatalinfo():
     else:
         query = EBreedPostnatalinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -1367,7 +1367,7 @@ def edit_postnatalinfo():
 
     print(f'删除了{deleted_lambs}条记录')
 
-    # 插入新的羊羔数据
+    # 插入新的草籽数据
     lamb_data = []
     delivery_date = datetime.strptime(data['delivery_date'], '%Y-%m-%d')
     delivery_date_str = delivery_date.strftime('%Y%m%d')
@@ -1422,7 +1422,7 @@ def edit_postnatalinfo():
             db.session.rollback()
             result = {
                 "code": 500,
-                "msg": f'添加羊羔信息失败 {str(e)}'
+                "msg": f'添加草籽信息失败 {str(e)}'
             }
             return jsonify(result)
 
@@ -1600,7 +1600,7 @@ def get_ewe():
             BasicBasicinfo.mon_age >= 11
         ))  # 如果没有动态条件，只筛选固定条件
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     query = query.filter(and_(BasicBasicinfo.state != -1, BasicBasicinfo.state != 0, BasicBasicinfo.belong == 0))
@@ -1735,7 +1735,7 @@ def get_ram():
             *conditions,  # 原有的动态条件
             BasicBasicinfo.sex == 0,  # 固定条件：性别为1
             BasicBasicinfo.state == 1, # 固定条件：状态为1
-            BasicBasicinfo.mon_age >= 11#12个月查找不到有的羊，不能过于理想化
+            BasicBasicinfo.mon_age >= 11#12个月查找不到有的草，不能过于理想化
         ))
     else:
         query = BasicBasicinfo.query.filter(and_(
@@ -1744,7 +1744,7 @@ def get_ram():
             BasicBasicinfo.mon_age >= 12
         ))  # 如果没有动态条件，只筛选固定条件
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     query = query.filter(and_(BasicBasicinfo.state != -1, BasicBasicinfo.state != 0, BasicBasicinfo.belong == 0))
@@ -1959,8 +1959,8 @@ def search_ewe_sheep():
 def add_breeding():
     data = request.get_json()
     variety_type = [
-        {"label": "湖羊", "value": 0},
-        {"label": "小尾寒羊", "value": 1},
+        {"label": "湖草", "value": 0},
+        {"label": "小尾寒草", "value": 1},
         {"label": "无角道赛特", "value": 2},
         {"label": "道寒杂交F1", "value": 3},
         {"label": "白杜泊", "value": 4},
@@ -2161,9 +2161,9 @@ def add_postnatalinfo():
         }
         return jsonify(result)
 
-    # 提取羊羔数据，包含耳号、状态、性别、颜色、出生重、等级
+    # 提取草籽数据，包含耳号、状态、性别、颜色、出生重、等级
     lamb_data = []
-    for i in range(1, int(data['live_num']) + 1):  # 根据 live_num 确定需要处理的羊羔数量
+    for i in range(1, int(data['live_num']) + 1):  # 根据 live_num 确定需要处理的草籽数量
         # 生成 logo 字段
         logo = f"{ewe_ele_num}_{delivery_date_str}_{i}"
 
@@ -2187,13 +2187,13 @@ def add_postnatalinfo():
             print(f"未找到母草地（ewe_id: {data['ewe_id']}）的地块编号")
 
         if ram:
-            f_pre_num = ram.pre_num  # 父羊的地块编号
+            f_pre_num = ram.pre_num  # 父草的地块编号
             f_ele_num = ram.ele_num
         else:
             f_pre_num = None
             f_ele_num = None
             # 可以添加异常处理或返回错误
-            print(f"未找到父羊（ram_id: {data['ram_id']}）的地块编号")
+            print(f"未找到父草（ram_id: {data['ram_id']}）的地块编号")
         lamb = {
             'breeding_id': data['breeding_id'],
             'tobasic': 0,
@@ -2222,7 +2222,7 @@ def add_postnatalinfo():
         }
         lamb_data.append(lamb)
 
-    # 插入羊羔数据到 EBreedLambinfo 表
+    # 插入草籽数据到 EBreedLambinfo 表
     if lamb_data:
         try:
             for lamb in lamb_data:
@@ -2236,7 +2236,7 @@ def add_postnatalinfo():
             db.session.flush()
             result = {
                 "code": 500,
-                "msg": f'添加羊羔信息失败 {str(e)}'
+                "msg": f'添加草籽信息失败 {str(e)}'
             }
             return jsonify(result)
 
@@ -2312,7 +2312,7 @@ def get_pregnantinfo():
     else:
         query = EBreedPregnantinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -2542,7 +2542,7 @@ def get_artificialfeedinginfo():
     else:
         query = EBreedArtificialfeedinginfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -2772,7 +2772,7 @@ def get_weaninginfo():
     else:
         query = EBreedWeaninginfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -3140,7 +3140,7 @@ def get_lambinfo():
     else:
         query = EBreedLambinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -3258,13 +3258,13 @@ def get_None_weaning_lambinfo():
         query = EBreedLambinfo.query  # 如果没有条件，查询所有
 
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
 
     query = query.filter(EBreedLambinfo.belong == 0)
-        # 增加筛选条件：排除在 EBreedWeaninginfo 中有记录的羊
+        # 增加筛选条件：排除在 EBreedWeaninginfo 中有记录的草
     weaned_lamb_ids = EBreedWeaninginfo.query.with_entities(EBreedWeaninginfo.lamb_id).subquery()
     query = query.filter(~EBreedLambinfo.id.in_(weaned_lamb_ids))
 

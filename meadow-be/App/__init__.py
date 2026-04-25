@@ -32,7 +32,7 @@ def create_app():
 
     # 注册蓝图
     app.register_blueprint(login_auth)      #登录
-    app.register_blueprint(basic)       #羊只基本信息
+    app.register_blueprint(basic)       #草只基本信息
     app.register_blueprint(colony)  #
     app.register_blueprint(supply)
     app.register_blueprint(h_store)

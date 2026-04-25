@@ -1553,7 +1553,7 @@ def export_diseaseinfo():
         cur_effect = {
             0: "治愈",
             1: "淘汰",
-            2: "死亡"
+            2: "枯萎"
         }
         data_list = []
         for info, ele_num, pre_num, cname in disease_info:

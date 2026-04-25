@@ -29,7 +29,7 @@ from flask import send_file
 analysis = Blueprint('analysis', __name__)
 # today = datetime(2025, 1, 2).date()
 
-@analysis.route('/analysis/standardinfo', methods=['POST'])#  获取羊资产评价标准
+@analysis.route('/analysis/standardinfo', methods=['POST'])#  获取草资产评价标准
 def get_standardinfo():
 
     # pageNum = int(request.json.get('pageNum'))
@@ -57,7 +57,7 @@ def get_standardinfo():
     else:
         query = SheepAssetStandardinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -83,7 +83,7 @@ def get_standardinfo():
     }
     return jsonify(result)
 
-@analysis.route('/analysis/standardinfo/add', methods=['POST'])#  新增羊资产评价标准
+@analysis.route('/analysis/standardinfo/add', methods=['POST'])#  新增草资产评价标准
 def add_standardinfo():
     data = request.get_json()
 
@@ -113,7 +113,7 @@ def add_standardinfo():
     }
     return jsonify(result)
 
-@analysis.route('/analysis/standardinfo/edit', methods=['POST'])#  编辑羊资产评价标准
+@analysis.route('/analysis/standardinfo/edit', methods=['POST'])#  编辑草资产评价标准
 def edit_standardinfo():
     data = request.get_json()
     print("--data-->", data)
@@ -139,7 +139,7 @@ def edit_standardinfo():
     return jsonify(result)
 
 
-@analysis.route('/analysis/sheep_assetinfo', methods=['POST'])#  获取羊资产表
+@analysis.route('/analysis/sheep_assetinfo', methods=['POST'])#  获取草资产表
 def get_sheep_assetinfo():
 
     pageNum = int(request.json.get('pageNum'))
@@ -170,7 +170,7 @@ def get_sheep_assetinfo():
     else:
         query = SheepAssetinfo.query  # 如果没有条件，查询所有
 
-    # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+    # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
@@ -198,9 +198,9 @@ def get_sheep_assetinfo():
     }
     return jsonify(result)
 
-@analysis.route('/analysis/sheep_assetinfo/update', methods=['POST'])#  手动更新羊库存资产表
+@analysis.route('/analysis/sheep_assetinfo/update', methods=['POST'])#  手动更新草库存资产表
 def update_sheep_assetinfo():
-    """更新羊资产统计信息路由"""
+    """更新草资产统计信息路由"""
     try:
         # 获取当前日期
         today = datetime.now().date()
@@ -264,7 +264,7 @@ def update_sheep_assetinfo():
 
         return jsonify({
             'code': '200',
-            'msg': '更新羊库存资产成功'
+            'msg': '更新草库存资产成功'
         }), 200
 
     except Exception as e:
@@ -361,7 +361,7 @@ def _calculate_asset_stats():
                     missing_weight_data.append({
                         'basic_id': record.basic_id,
                         '耳号': record.ele_num,  # 添加中文列名
-                        '所属羊舍': record.house_name,
+                        '所属草地区块': record.house_name,
                         '所属栏位': record.hurdle_name
                     })
 
@@ -383,7 +383,7 @@ def _calculate_asset_stats():
                 else:
 
                     adjusted_purpose = record.purpose
-                    # 原用途为5、6转为种羊（0），8转为育肥（1）
+                    # 原用途为5、6转为草种（0），8转为育成（1）
                     if record.purpose in (5, 6):
                         adjusted_purpose = 0
                     elif record.purpose == 8:
@@ -524,7 +524,7 @@ def _update_stats(stats_dict, variety, purpose, sex, value, weight):
 
 
 
-@analysis.route('/analysis/sheep_assetinfo/commit_update', methods=['POST'])#  已交完销售记录之后手动更新羊库存资产表
+@analysis.route('/analysis/sheep_assetinfo/commit_update', methods=['POST'])# 已交完销售记录之后手动更新草库存资产表
 def commit_update_asset():
 
     """提交销售后更新资产表路由"""
@@ -676,7 +676,7 @@ def Commit_calculate_asset_stats(basic_ids):
                     missing_weight_data.append({
                         'basic_id': record.basic_id,
                         '耳号': record.ele_num,  # 添加中文列名
-                        '所属羊舍': record.house_name,
+                        '所属草地区块': record.house_name,
                         '所属栏位': record.hurdle_name
                     })
 
@@ -698,7 +698,7 @@ def Commit_calculate_asset_stats(basic_ids):
                 else:
 
                     adjusted_purpose = record.purpose
-                    # 原用途为5、6转为种羊（0），8转为育肥（1）
+                    # 原用途为5、6转为草种（0），8转为育成（1）
                     if record.purpose in (5, 6):
                         adjusted_purpose = 0
                     elif record.purpose == 8:
@@ -890,7 +890,7 @@ def get_daily_income():
         else:
             query = AnalysisDailyIncome.query  # 如果没有条件，查询所有
 
-        # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+        # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
         # 并且根据id降序排列
 
         # 并且根据id降序排列
@@ -999,7 +999,7 @@ def export_daily_income():
 #             'other_value': 0.0
 #         }
 #
-#         # 处理GSlaughterSSalesinfo数据(羊只销售)
+#         # 处理GSlaughterSSalesinfo数据(草只销售)
 #         ssales_records = db.session.query(
 #             GSlaughterSSalesinfo.type,
 #             GSlaughterSSalesinfo.total_price
@@ -1021,7 +1021,7 @@ def export_daily_income():
 #
 #             # 检查价格是否一致
 #             # 检查价格是否一致
-#             unique_prices = set(prices)   #确定这些羊是不是同一批，因为一批羊只录入一个总价
+#             unique_prices = set(prices)   #确定这些草是不是同一批，因为一批草只录入一个总价
 #             # unique_prices = len(set(prices))
 #             if len(unique_prices) == 1:
 #                 total = list(unique_prices)[0]  # 直接取唯一值
@@ -1102,7 +1102,7 @@ def update_daily_income():#按照总价去分，再根据类型去分
             'other_value': 0.0
         }
 
-        # 处理GSlaughterSSalesinfo数据（羊只销售）
+        # 处理GSlaughterSSalesinfo数据（草只销售）
         ssales_records = db.session.query(
             GSlaughterSSalesinfo.type,
             GSlaughterSSalesinfo.total_price
@@ -1229,7 +1229,7 @@ def update_select__daily_income():
             'other_value': 0.0
         }
 
-        # 处理GSlaughterSSalesinfo数据（羊只销售）
+        # 处理GSlaughterSSalesinfo数据（草只销售）
         ssales_records = db.session.query(
             GSlaughterSSalesinfo.type,
             GSlaughterSSalesinfo.total_price
@@ -1368,7 +1368,7 @@ def commit_update__daily_income():
             'other_value': 0.0
         }
 
-        # 处理GSlaughterSSalesinfo数据（羊只销售）
+        # 处理GSlaughterSSalesinfo数据（草只销售）
         ssales_records = db.session.query(
             GSlaughterSSalesinfo.type,
             GSlaughterSSalesinfo.total_price
@@ -1461,7 +1461,7 @@ def commit_update__daily_income():
 
 
 
-@analysis.route('/analysis/daily_sheep_asset', methods=['POST'])#  获取羊库存资产报表
+@analysis.route('/analysis/daily_sheep_asset', methods=['POST'])# 获取草库存资产报表
 def get_daily_sheep_asset():
 
         pageNum = int(request.json.get('pageNum'))
@@ -1488,7 +1488,7 @@ def get_daily_sheep_asset():
         else:
             query = AnalysisSheepAsset.query  # 如果没有条件，查询所有
 
-        # 筛选出没有被淘汰的羊(状态-1)和没有死亡的羊(状态0)
+        # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
         # 并且根据id降序排列
 
         # 并且根据id降序排列
@@ -1566,7 +1566,7 @@ def export_daily_sheep_asset():
     except Exception as e:
         return jsonify({'code': 500, 'msg': f'导出失败 {str(e)}'})
 
-@analysis.route('/analysis/daily_sheep_asset/update', methods=['POST'])#更新羊库存资产报表
+@analysis.route('/analysis/daily_sheep_asset/update', methods=['POST'])# 更新草库存资产报表
 def update_daily_sheep_asset():
     try:
         # 获取今天的日期
@@ -2381,15 +2381,15 @@ def get_daily_financial_data():
         # 收入相关
         income_total: 15000,      # 总收入
         income_sales: {           # 销售明细
-            breeding_sheep: {number: 10, value: 5000},   # 种羊
-            fattening_sheep: {number: 20, value: 8000},  # 育肥羊
+            breeding_sheep: {number: 10, value: 5000},   # 草种
+            fattening_sheep: {number: 20, value: 8000},  # 育成草
             lamb: {number: 5, value: 2000},              # 幼苗
-            other_sheep: {number: 3, value: 1000}        # 其他羊
+            other_sheep: {number: 3, value: 1000}        # 其他草
         },
         income_byproducts: {      # 副产品收入
             dung: 300,            # 粪肥
-            wool: 500,            # 羊毛
-            skin: 200,            # 羊皮
+            wool: 500,            # 草叶
+            skin: 200,            # 草皮
             manure: 150,          # 堆肥
             feed: 400,            # 饲料
             producted: 600,       # 生产品
@@ -2401,7 +2401,7 @@ def get_daily_financial_data():
         expense_direct: {          # 直接费用
             total: 6000,
             detail: {
-                buysheep: 1000,   # 购羊费
+                buysheep: 1000,   # 购草费
                 forage: 800,      # 草料费
                 fine_fodder: 500,  # 精料费
                 vaccine: 300,      # 疫苗费
@@ -2424,7 +2424,7 @@ def get_daily_financial_data():
         },
 
         # 资产相关
-        sheep_asset: 50000,       # 羊资产
+        sheep_asset: 50000,       # 草资产
         stock_asset: 30000,       # 库存资产
         fixed_asset: 80000,       # 固定资产
         profit: 7000              # 当日盈利
@@ -2469,11 +2469,11 @@ def get_daily_financial_data():
                 income_data = [0] * 15
             # 处理收入数据
             income_sales = {
-                "breeding_sheep": {  # 种羊
+                "breeding_sheep": {  # 草种
                     "number": float(income_data[0]or 0) if income_data else 0,
                     "value": float(income_data[1]or 0) if income_data else 0
                 },
-                "fattening_sheep": {  # 育肥羊
+                "fattening_sheep": {  # 育成草
                     "number": float(income_data[2]or 0) if income_data else 0,
                     "value": float(income_data[3]or 0) if income_data else 0
                 },
@@ -2481,7 +2481,7 @@ def get_daily_financial_data():
                     "number": float(income_data[4]or 0) if income_data else 0,
                     "value": float(income_data[5]or 0) if income_data else 0
                 },
-                "other_sheep": {  # 其他羊
+                "other_sheep": {  # 其他草
                     "number": float(income_data[6]or 0) if income_data else 0,
                     "value": float(income_data[7]or 0) if income_data else 0
                 }
@@ -2555,7 +2555,7 @@ def get_daily_financial_data():
             expense_total = direct_total + indirect_total
 
             # 3. 资产数据统计 -----------------------------------------------
-            # 羊资产（保持原有逻辑）
+            # 草资产（保持原有逻辑）
             sheep_assets = db.session.query(
                 *[getattr(AnalysisSheepAsset, c.name) for c in AnalysisSheepAsset.__table__.columns
                   if c.name not in ['id', 'f_date', 'belong']
@@ -2608,7 +2608,7 @@ def get_monthly_financial_data():
     获取整个月度数据：
       - 聚合周期内所有天的收入和支出数据（求和）
       - 资产数据取该月最后一天的数据，如果本月最后一天还未到，则使用今天的数据
-      - 盈利：本月收入-支出 +（本周期最后一天羊资产 - 上周期最后一天羊资产）
+      - 盈利：本月收入-支出 +（本周期最后一天草资产 - 上周期最后一天草资产）
     """
     try:
         # 从所有记录中提取日期，然后按"YYYY-MM"去重
@@ -2624,7 +2624,7 @@ def get_monthly_financial_data():
         months = sorted(list(months_set))
 
         result = []
-        # 初始上周期的羊资产
+        # 初始上周期的草资产
         begin_assets = 5810148
 
         for month in months:
@@ -2790,7 +2790,7 @@ def get_quarterly_financial_data():
     获取整个季度数据：
       - 根据所有记录的日期计算所属季度（格式："YYYY-Qn"）
       - 聚合周期内数据求和，资产数据取该季度最后一天的数据（如果还未到，则取今天的数据）
-      - 盈利：本季度收入-支出 +（本季度最后一天羊资产 - 上季度最后一天羊资产）
+      - 盈利：本季度收入-支出 +（本季度最后一天草资产 - 上季度最后一天草资产）
     """
     try:
         # 提取所有日期对应的季度标签
@@ -2979,7 +2979,7 @@ def get_annual_financial_data():
     获取整年度数据：
       - 根据所有记录日期提取年份（格式："YYYY"）
       - 聚合当年所有数据，资产数据取该年最后一天（12月31日）的数据（如果还未到，则使用今天的数据）
-      - 盈利：本年收入-支出 +（本年最后一天羊资产 - 上年最后一天羊资产）
+      - 盈利：本年收入-支出 +（本年最后一天草资产 - 上年最后一天草资产）
     """
     try:
         # 提取所有年份

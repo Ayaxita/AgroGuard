@@ -140,7 +140,7 @@
                 <tr>
                     <th>收入（元）</th>
                     <th>支出（元）</th>
-                    <th>羊资产（元）</th>
+                    <th>草资产（元）</th>
                     <th>周收益（元）</th>
                 </tr>
                 <tr>
@@ -182,7 +182,7 @@
         var myChart = echarts.init(document.getElementById('mychart'));
         var option = {
             title: {
-                text: '羊只销售收入：种羊销售、育肥羊销售、淘汰羊销售',
+                text: '草只销售收入：草种销售、育成草销售、移除草销售',
                 x: 'center',
                 textStyle: {
                     fontSize: 14,
@@ -193,11 +193,11 @@
             tooltip: {
                 trigger: 'axis',
                 formatter: function (params) {
-                    return params[0].name + '<br/>羊只销售收入: ¥' + params[0].value;
+                    return params[0].name + '<br/>草只销售收入: ¥' + params[0].value;
                 }
             },
             legend: {
-                data: ['羊只销售收入'],
+                data: ['草只销售收入'],
                 orient: 'horizontal',
                 left: '70%',
                 top: '5%',
@@ -237,7 +237,7 @@
                 }
             },
             series: [{
-                name: '羊只销售收入',
+                name: '草只销售收入',
                 type: 'line',
                 data: {{ income_sheepSale|safe }},
                 {#data: [0,0,0,217900,0,0],#}
@@ -259,7 +259,7 @@
         var ByProduct = echarts.init(document.getElementById('ByProduct'));
         var option1 = {
             title: {
-                text: '羊副产品收入：羊粪、羊毛、羊皮、羊副产物、有机肥、饲草料、其它',
+                text: '草副产品收入：草粪、草叶、草皮、草副产物、有机肥、饲草料、其它',
                 x: 'center',
                 textStyle: {
                     fontSize: 14,
@@ -270,11 +270,11 @@
             tooltip: {
                 trigger: 'axis',
                 formatter: function (params) {
-                    return params[0].name + '<br/>羊副产品收入: ¥' + params[0].value;
+                    return params[0].name + '<br/>草副产品收入: ¥' + params[0].value;
                 }
             },
             legend: {
-                data: ['羊副产品收入'],
+                data: ['草副产品收入'],
                 orient: 'horizontal',
                 left: '70%',
                 top: '5%',
@@ -314,7 +314,7 @@
                 }
             },
             series: [{
-                name: '羊副产品收入',
+                name: '草副产品收入',
                 type: 'line',
                 data: {{ income_sheepByProduct|safe }},
                 smooth: true,
@@ -520,7 +520,7 @@
         var sheepAssets = echarts.init(document.getElementById('sheepAssets'));
         var option4 = {
             title: {
-                text: '羊库存资产',
+                text: '草库存资产',
                 x: 'center',
                 textStyle: {
                     fontSize: 18,
@@ -531,11 +531,11 @@
             tooltip: {
                 trigger: 'axis',
                 formatter: function (params) {
-                    return params[0].name + '<br/>羊库存资产: ¥' + params[0].value;
+                    return params[0].name + '<br/>草库存资产: ¥' + params[0].value;
                 }
             },
             legend: {
-                data: ['羊库存资产'],
+                data: ['草库存资产'],
                 orient: 'horizontal',
                 left: '70%',
                 top: '5%',
@@ -575,7 +575,7 @@
                 }
             },
             series: [{
-                name: '羊库存资产',
+                name: '草库存资产',
                 type: 'line',
                 data: {{ sheep_assets|safe }},
                 smooth: true,
