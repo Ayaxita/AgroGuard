@@ -23,7 +23,7 @@
     <div class="bottom-section">
       <!-- 左侧库存 -->
       <div class="left-stock">
-        <div ref="sheepStockChart" style="height: 200px; margin-bottom: 20px"></div>
+        <div ref="grassStockChart" style="height: 200px; margin-bottom: 20px"></div>
         <div ref="materialStockChart" style="height: 200px"></div>
       </div>
 
@@ -51,7 +51,7 @@ import * as echarts from "echarts";
 
 // 图表Ref
 const profitChart = ref(null);
-const sheepStockChart = ref(null);
+const grassStockChart = ref(null);
 const materialStockChart = ref(null);
 const salesIncomeChart = ref(null);
 const byproductIncomeChart = ref(null);
@@ -119,7 +119,7 @@ const initCharts = () => {
       }
     ]
   };
-  echarts.init(sheepStockChart.value).setOption(stockOption);
+  echarts.init(grassStockChart.value).setOption(stockOption);
 
   // 其他图表初始化类似，根据需求配置不同option
   // 此处省略其他图表配置，实际开发中需要补充完整

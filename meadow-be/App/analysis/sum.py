@@ -41,7 +41,7 @@ from sqlalchemy import desc, and_, or_, not_, text, func, asc
 # ];
 
 # 数据库配置
-DATABASE_URI = 'mysql+pymysql://root:hscjtCemt2024$@182.92.207.3:3306/sheep'
+DATABASE_URI = 'mysql+pymysql://root:hscjtCemt2024$@182.92.207.3:3306/meadow'
 
 # 创建 SQLAlchemy 引擎
 engine = create_engine(DATABASE_URI)
@@ -263,7 +263,7 @@ def calculate_assets():
 
         if bulk_insert:
             # 批量插入数据库
-            db.session.bulk_insert_mappings(SheepAssetinfo, bulk_insert)
+            db.session.bulk_insert_mappings(GrassAssetinfo, bulk_insert)
             db.session.commit()
             print(f"成功插入{len(bulk_insert)}条统计记录")
         print("草库存资产计算成功")
@@ -284,14 +284,14 @@ def get_standard_info(variety, sex, purpose):
         purpose: 调整后的用途代码
 
     Returns:
-        SheepAssetStandardinfo对象 或 None
+        GrassAssetStandardinfo对象 或 None
     """
-    return db.session.query(SheepAssetStandardinfo).filter(
-        SheepAssetStandardinfo.variety == variety,
-        SheepAssetStandardinfo.sex == sex,
-        SheepAssetStandardinfo.purpose == purpose
+    return db.session.query(GrassAssetStandardinfo).filter(
+        GrassAssetStandardinfo.variety == variety,
+        GrassAssetStandardinfo.sex == sex,
+        GrassAssetStandardinfo.purpose == purpose
     ).order_by(
-        SheepAssetStandardinfo.f_date.desc()  # 按日期降序获取最新标准
+        GrassAssetStandardinfo.f_date.desc()  # 按日期降序获取最新标准
     ).first()
 
 
@@ -335,14 +335,14 @@ def update_stats(stats_dict, variety, purpose, sex, value, weight):
     stats_dict[key]['sum_weight'] += Decimal(weight)
     stats_dict[key]['count'] += 1
 
-def update_daily_sheep_asset():
+def update_daily_grass_asset():
     try:
         # 获取今天的日期
         today = datetime.now().date()
 
-        # 查询今日所有的SheepAssetinfo记录
-        today_assets = SheepAssetinfo.query.filter(
-            db.func.date(SheepAssetinfo.f_date) == today
+        # 查询今日所有的GrassAssetinfo记录
+        today_assets = GrassAssetinfo.query.filter(
+            db.func.date(GrassAssetinfo.f_date) == today
         ).all()
 
         # 初始化分析记录字段字典
@@ -371,7 +371,7 @@ def update_daily_sheep_asset():
                     analysis_fields[field_name] = asset.sum_value
 
         # 查询或创建分析记录
-        analysis_record = AnalysisSheepAsset.query.filter_by(
+        analysis_record = AnalysisGrassAsset.query.filter_by(
             f_date=today,
             belong=0
         ).first()
@@ -383,7 +383,7 @@ def update_daily_sheep_asset():
             analysis_record.update_time = datetime.now()
         else:
             # 创建新记录
-            analysis_record = AnalysisSheepAsset(
+            analysis_record = AnalysisGrassAsset(
                 f_date=today,
                 belong=0,
                 # create_time=datetime.now(),
@@ -395,7 +395,7 @@ def update_daily_sheep_asset():
         print("更新草库存资产成功！")
 
         # # 创建新分析记录
-        # new_analysis = AnalysisSheepAsset(
+        # new_analysis = AnalysisGrassAsset(
         #     f_date=today,
         #     belong=0,
         #     **analysis_fields
@@ -563,7 +563,7 @@ def update_stocksheet():
 
         # 处理疫苗相关数据
         # 定义需要分别统计的疫苗名称列表
-        vaccine_goods = ["小反刍山羊痘二联苗", "三联四防", "口蹄疫", "多联必应"]
+        vaccine_goods = ["小反刍山草害二联苗", "三联四防", "口蹄疫", "多联必应"]
         # 用于存储已统计的疫苗记录的 id，以便后续筛选出“其他疫苗”
         vaccine_ids = []
         for good in vaccine_goods:
@@ -580,7 +580,7 @@ def update_stocksheet():
             for record in records:
                 vaccine_ids.append(record.id)
             # 根据当前疫苗名称，将计算得到的数量和价值存储到 result 字典的对应键中
-            if good == "小反刍山羊痘二联苗":
+            if good == "小反刍山草害二联苗":
                 result["smallvaccine_num"] = num
                 result["smallvaccine_val"] = val
             elif good == "三联四防":
@@ -665,7 +665,7 @@ def daily_sheetinit():
     # 创建 Analysisdailysheet 对象并初始化
     new_entry = Analysisdailysheet(
         date=next_day,
-        buysheep_fees=0,
+        buygrass_fees=0,
         caoliao_fees=0,
         jingliao_fees=0,
         yimiao_fees=0,
@@ -811,7 +811,7 @@ def Task():
     daily_sheetinit() #初始化日支出报表
     update_daily_income() # 初始化收入报表
     calculate_assets() #计算草库存资产 16 条
-    update_daily_sheep_asset() # 更新草库存资产
+    update_daily_grass_asset() # 更新草库存资产
     update_stocksheet() #计算物料库存资产
 
 

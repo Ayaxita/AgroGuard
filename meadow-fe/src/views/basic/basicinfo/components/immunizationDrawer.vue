@@ -409,7 +409,7 @@ const rules = reactive({
 interface DrawerProps {
   title: string;
   isView: boolean;
-  sheepList: any[];
+  grassList: any[];
   api?: (params: any) => Promise<any>;
   clearSelection?: () => void;
   getTableList?: () => void;
@@ -419,7 +419,7 @@ const drawerVisible = ref(false);
 const drawerProps = ref<DrawerProps>({
   isView: false,
   title: "",
-  sheepList: []
+  grassList: []
 });
 
 // 接收父组件传过来的参数
@@ -434,7 +434,7 @@ const handleSubmit = () => {
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {
-      let params = drawerProps.value.sheepList.map(item => {
+      let params = drawerProps.value.grassList.map(item => {
         return {
           ...immunizationProps.value,
           basic_info: item

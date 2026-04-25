@@ -33,7 +33,7 @@
       </template>
     </ProTable>
     <thresholdSet ref="dialogRef" />
-    <SheepDrawer ref="drawerRef" />
+    <GrassDrawer ref="drawerRef" />
   </div>
 </template>
 
@@ -43,7 +43,7 @@ import { useRoute, useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
-import SheepDrawer from "../components/SheepDrawer.vue";
+import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, MessageBox, SetUp, View } from "@element-plus/icons-vue";
 import { editThresholdeinfo, getManuList, getThresholdeinfo, updateWarnMessage } from "../api/manu";
@@ -280,7 +280,7 @@ defineExpose({
 //   }
 // };
 // 打开 drawer(新增、查看、编辑)
-// const drawerRef = ref<InstanceType<typeof SheepDrawer> | null>(null);
+// const drawerRef = ref<InstanceType<typeof GrassDrawer> | null>(null);
 // const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
 //   const params = {
 //     title,

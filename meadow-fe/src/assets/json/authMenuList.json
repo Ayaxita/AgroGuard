@@ -785,9 +785,9 @@
           ]
         },
         {
-          "path": "/statistic/obsoletesheepinfo/index",
-          "name": "obsoletesheepinfo",
-          "component": "/statistic/obsoletesheepinfo/useProTable/index",
+          "path": "/statistic/obsoletegrassinfo/index",
+          "name": "obsoletegrassinfo",
+          "component": "/statistic/obsoletegrassinfo/useProTable/index",
           "meta": {
             "icon": "Tickets",
             "title": "地块退化记录",
@@ -915,9 +915,9 @@
               }
             },
             {
-              "path": "/analysis/daily_sheep_asset/index",
-              "name": "daily_sheep_asset",
-              "component": "/analysis/daily_sheep_asset/useProTable/index",
+              "path": "/analysis/daily_grass_asset/index",
+              "name": "daily_grass_asset",
+              "component": "/analysis/daily_grass_asset/useProTable/index",
               "meta": {
                 "icon": "Tickets",
                 "title": "草地资产报表",
@@ -988,9 +988,9 @@
         },
 
         {
-          "path": "/analysis/sheep_asset/index",
+          "path": "/analysis/grass_asset/index",
           "name": "asset",
-          "component": "/analysis/sheep_asset/useProTable/index",
+          "component": "/analysis/grass_asset/useProTable/index",
           "meta": {
             "icon": "MessageBox",
             "title": "草地资产",

@@ -27,7 +27,7 @@
         <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
       </template>
     </ProTable>
-    <SheepDrawer ref="drawerRef" />
+    <GrassDrawer ref="drawerRef" />
     <Basicinfo ref="dialogRef" />
   </div>
 </template>
@@ -38,7 +38,7 @@ import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
-import SheepDrawer from "../components/SheepDrawer.vue";
+import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, View } from "@element-plus/icons-vue";
 import { getManuList, editManu, addManu, delImmunizationinfo, exportGrassInfo } from "../api/manu";
@@ -239,20 +239,20 @@ const downloadFile = async () => {
 //导出所选数据
 const downloadSelectFile = async selectedListIds => {
   // 获取用户在表格中所选的记录数据
-  const selectedSheepData = selectedListIds;
+  const selectedGrassData = selectedListIds;
 
-  if (!selectedSheepData || selectedSheepData.length === 0) {
+  if (!selectedGrassData || selectedGrassData.length === 0) {
     ElMessage.warning("请先选择要导出的草地数据!");
     return;
   }
 
-  ElMessageBox.confirm(`确认导出所选的${selectedSheepData.length}条草地数据?`, "温馨提示", { type: "warning" }).then(() => {
+  ElMessageBox.confirm(`确认导出所选的${selectedGrassData.length}条草地数据?`, "温馨提示", { type: "warning" }).then(() => {
     // 调用useDownload函数进行导出,并传入所选草地数据
-    useDownload(() => exportGrassInfo(selectedSheepData), `草地防护导出结果`, null);
+    useDownload(() => exportGrassInfo(selectedGrassData), `草地防护导出结果`, null);
   });
 };
 // 打开 drawer(新增、查看、编辑)
-const drawerRef = ref<InstanceType<typeof SheepDrawer> | null>(null);
+const drawerRef = ref<InstanceType<typeof GrassDrawer> | null>(null);
 const drawerVisible = ref(false);
 const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   const params = {

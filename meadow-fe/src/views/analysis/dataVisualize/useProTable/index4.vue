@@ -63,7 +63,7 @@
           <el-table-column prop="date" label="记录日期" width="120" />
           <el-table-column prop="income_total" label="收入(元)" width="120" />
           <el-table-column prop="expense_total" label="支出(元)" width="120" />
-          <el-table-column prop="sub_sheep_asset" label="Δ草地库存资产(元)" width="140" />
+          <el-table-column prop="sub_grass_asset" label="Δ草地库存资产(元)" width="140" />
           <el-table-column prop="profit" label="盈利(元)" width="120" />
         </el-table>
       </div>
@@ -72,7 +72,7 @@
     <!-- 下半部分 -->
     <div class="bottom-section">
       <div class="left-stock">
-        <div ref="sheepStockChart" style="height: 300px; margin-bottom: 20px"></div>
+        <div ref="grassStockChart" style="height: 300px; margin-bottom: 20px"></div>
         <div ref="materialStockChart" style="height: 300px"></div>
       </div>
 
@@ -107,14 +107,14 @@ const colorPalette = [
 
 // 图表 Ref
 const profitChart = ref(null);
-const sheepStockChart = ref(null);
+const grassStockChart = ref(null);
 const materialStockChart = ref(null);
 const salesIncomeChart = ref(null);
 const directExpenseChart = ref(null);
 
 // 修改1：为每个图表创建独立的实例引用
 const profitChartInstance = ref(null);
-const sheepStockChartInstance = ref(null);
+const grassStockChartInstance = ref(null);
 const materialStockChartInstance = ref(null);
 const salesIncomeChartInstance = ref(null);
 const directExpenseChartInstance = ref(null);
@@ -236,7 +236,7 @@ const updateCharts = () => {
   // 销毁旧实例
   [
     profitChartInstance,
-    sheepStockChartInstance,
+    grassStockChartInstance,
     materialStockChartInstance,
     salesIncomeChartInstance,
     directExpenseChartInstance
@@ -258,10 +258,10 @@ const updateCharts = () => {
     }
   ]);
 
-  sheepStockChartInstance.value = initChart(sheepStockChart, "草地库存资产趋势", [
+  grassStockChartInstance.value = initChart(grassStockChart, "草地库存资产趋势", [
     {
       name: "库存价值",
-      data: seriesData.map(i => [parseDate(i.date).getTime(), i.sheep_asset])
+      data: seriesData.map(i => [parseDate(i.date).getTime(), i.grass_asset])
     }
   ]);
 
@@ -273,10 +273,10 @@ const updateCharts = () => {
   ]);
 
   salesIncomeChartInstance.value = initChart(salesIncomeChart, "销售收入", [
-    { name: "种苗", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_sales.breeding_sheep.value]) },
-    { name: "生长期草地", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_sales.fattening_sheep.value]) },
+    { name: "种苗", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_sales.breeding_grass.value]) },
+    { name: "生长期草地", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_sales.fattening_grass.value]) },
     { name: "幼苗期地块", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_sales.lamb.value]) },
-    { name: "其他草地记录", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_sales.other_sheep.value]) },
+    { name: "其他草地记录", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_sales.other_grass.value]) },
     { name: "草地残渣", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_byproducts.dung]) },
     { name: "采收产物", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_byproducts.wool]) },
     { name: "地表覆盖物", data: seriesData.map(i => [parseDate(i.date).getTime(), i.income_byproducts.skin]) },
@@ -287,7 +287,7 @@ const updateCharts = () => {
   ]);
 
   directExpenseChartInstance.value = initChart(directExpenseChart, "费用支出", [
-    { name: "种苗购买费", data: seriesData.map(i => [parseDate(i.date).getTime(), i.expense_direct.detail.buysheep]) },
+    { name: "种苗购买费", data: seriesData.map(i => [parseDate(i.date).getTime(), i.expense_direct.detail.buygrass]) },
     { name: "草地投入费", data: seriesData.map(i => [parseDate(i.date).getTime(), i.expense_direct.detail.forage]) },
     { name: "精准投入费", data: seriesData.map(i => [parseDate(i.date).getTime(), i.expense_direct.detail.fine_fodder]) },
     { name: "防护费", data: seriesData.map(i => [parseDate(i.date).getTime(), i.expense_direct.detail.vaccine]) },
@@ -374,7 +374,7 @@ onMounted(async () => {
 // 组件卸载部分修改为：
 onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
-  [profitChart.value, sheepStockChart.value, materialStockChart.value, salesIncomeChart.value, directExpenseChart.value].forEach(
+  [profitChart.value, grassStockChart.value, materialStockChart.value, salesIncomeChart.value, directExpenseChart.value].forEach(
     chart => {
       if (chart && chart.chartInstance) {
         chart.chartInstance.dispose();
@@ -385,7 +385,7 @@ onBeforeUnmount(() => {
 
 // 窗口调整处理修改为：
 const handleResize = () => {
-  [profitChart.value, sheepStockChart.value, materialStockChart.value, salesIncomeChart.value, directExpenseChart.value].forEach(
+  [profitChart.value, grassStockChart.value, materialStockChart.value, salesIncomeChart.value, directExpenseChart.value].forEach(
     chart => {
       if (chart && chart.chartInstance) {
         chart.chartInstance.resize();

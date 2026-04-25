@@ -59,7 +59,7 @@
           <el-table-column prop="date" label="记录日期" width="120" />
           <el-table-column prop="income_total" label="收入(元)" width="120" />
           <el-table-column prop="expense_total" label="支出(元)" width="120" />
-          <el-table-column prop="sub_sheep_asset" label="Δ草地库存资产(元)" width="140" />
+          <el-table-column prop="sub_grass_asset" label="Δ草地库存资产(元)" width="140" />
           <el-table-column prop="profit" label="盈利(元)" width="120" />
         </el-table>
       </div>
@@ -68,7 +68,7 @@
     <!-- 下半部分 -->
     <div class="bottom-section">
       <div class="left-stock">
-        <div ref="sheepStockChart" style="height: 300px; margin-bottom: 20px"></div>
+        <div ref="grassStockChart" style="height: 300px; margin-bottom: 20px"></div>
         <div ref="materialStockChart" style="height: 300px"></div>
       </div>
 
@@ -90,7 +90,7 @@ import axios from "axios"; // 引入 axios 库
 
 // 图表Ref
 const profitChart = ref(null);
-const sheepStockChart = ref(null);
+const grassStockChart = ref(null);
 const materialStockChart = ref(null);
 const salesIncomeChart = ref(null);
 const byproductIncomeChart = ref(null);
@@ -255,8 +255,8 @@ const initCharts = () => {
   charts = [
     initChart(profitChart, "盈利趋势分析", [{ name: "盈利", data: tableData.value.map(i => [i.date, i.profit]) }]),
 
-    initChart(sheepStockChart, "草地库存资产趋势", [
-      { name: "库存价值", data: tableData.value.map(i => [i.date, i.sheep_asset]) }
+    initChart(grassStockChart, "草地库存资产趋势", [
+      { name: "库存价值", data: tableData.value.map(i => [i.date, i.grass_asset]) }
     ]),
 
     initChart(materialStockChart, "物料库存资产趋势", [
@@ -264,10 +264,10 @@ const initCharts = () => {
     ]),
 
     initChart(salesIncomeChart, "销售收入", [
-      { name: "种苗", data: tableData.value.map(i => [i.date, i.income_sales.breeding_sheep.value]) },
-      { name: "生长期草地", data: tableData.value.map(i => [i.date, i.income_sales.fattening_sheep.value]) },
+      { name: "种苗", data: tableData.value.map(i => [i.date, i.income_sales.breeding_grass.value]) },
+      { name: "生长期草地", data: tableData.value.map(i => [i.date, i.income_sales.fattening_grass.value]) },
       { name: "幼苗期地块", data: tableData.value.map(i => [i.date, i.income_sales.lamb.value]) },
-      { name: "其他草地记录", data: tableData.value.map(i => [i.date, i.income_sales.other_sheep.value]) },
+      { name: "其他草地记录", data: tableData.value.map(i => [i.date, i.income_sales.other_grass.value]) },
       { name: "草地残渣", data: tableData.value.map(i => [i.date, i.income_byproducts.dung]) },
       { name: "采收产物", data: tableData.value.map(i => [i.date, i.income_byproducts.wool]) },
       { name: "地表覆盖物", data: tableData.value.map(i => [i.date, i.income_byproducts.skin]) },
@@ -288,7 +288,7 @@ const initCharts = () => {
     // ]),
 
     initChart(directExpenseChart, "费用支出", [
-      { name: "种苗购买费", data: tableData.value.map(i => [i.date, i.expense_direct.detail.buysheep]) },
+      { name: "种苗购买费", data: tableData.value.map(i => [i.date, i.expense_direct.detail.buygrass]) },
       { name: "草地投入费", data: tableData.value.map(i => [i.date, i.expense_direct.detail.forage]) },
       { name: "精准投入费", data: tableData.value.map(i => [i.date, i.expense_direct.detail.fine_fodder]) },
       { name: "防护费", data: tableData.value.map(i => [i.date, i.expense_direct.detail.vaccine]) },

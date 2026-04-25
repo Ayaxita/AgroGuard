@@ -28,9 +28,9 @@ def get_houseinfo():
         'h_type': ColonyHouseinfo.h_type,
         'h_lwh': ColonyHouseinfo.h_lwh,
         'sports_lwh': ColonyHouseinfo.sports_lwh,
-        'sheep_type': ColonyHouseinfo.sheep_type,
+        'grass_type': ColonyHouseinfo.grass_type,
         'area_pro': ColonyHouseinfo.area_pro,
-        'sheep_quantity': ColonyHouseinfo.sheep_quantity,
+        'grass_quantity': ColonyHouseinfo.grass_quantity,
         'build_time': ColonyHouseinfo.build_time,
         'staff': ColonyHouseinfo.staff,
     }
@@ -81,7 +81,7 @@ def add_houseinfo():
     # 作物密度比例不能为空
     data['area_pro'] = 0
     data['pid'] = 0
-    data['sheep_quantity'] = 0
+    data['grass_quantity'] = 0
     # print(data)
     data_info = ColonyHouseinfo()
     for key, value in data.items():
@@ -140,7 +140,7 @@ def del_houseinfo():
             })
 
         for i in sons:
-            if i.sheep_quantity > 0:
+            if i.grass_quantity > 0:
                 return jsonify({
                     "code": 500,
                     "msg": '监测地块下存在田块记录，删除失败，请先迁移数据再操作'
@@ -188,9 +188,9 @@ def get_hurdleinfo():
         'h_type': ColonyHouseinfo.h_type,
         'h_lwh': ColonyHouseinfo.h_lwh,
         'sports_lwh': ColonyHouseinfo.sports_lwh,
-        'sheep_type': ColonyHouseinfo.sheep_type,
+        'grass_type': ColonyHouseinfo.grass_type,
         'area_pro': ColonyHouseinfo.area_pro,
-        'sheep_quantity': ColonyHouseinfo.sheep_quantity,
+        'grass_quantity': ColonyHouseinfo.grass_quantity,
         'build_time': ColonyHouseinfo.build_time,
         'staff': ColonyHouseinfo.staff,
     }
@@ -242,7 +242,7 @@ def add_hurdleinfo():
     # 作物密度比例不能为空
     data['area_pro'] = 0
     data['pid'] = request.json.get('house_id')
-    data['sheep_quantity'] = 0
+    data['grass_quantity'] = 0
     # print(data)
     data_info = ColonyHouseinfo()
     for key, value in data.items():
@@ -306,7 +306,7 @@ def set_hurdle():
 
     # 检查每个监测地块是否有记录，如果有记录则无法删除
     for house in houses_to_merge:
-        if house.sheep_quantity > 0:
+        if house.grass_quantity > 0:
             return jsonify({
                 "code": 500,
                 "msg": '监测地块下存在田块记录，合并失败，请先将记录转移再来操作'
@@ -320,9 +320,9 @@ def set_hurdle():
     staff = houses_to_merge[0].staff  # 责任人员
     f_staff = houses_to_merge[0].f_staff  # 创建人员
     difinfect_time = houses_to_merge[0].difinfect_time  # 消杀时间
-    sheep_type = houses_to_merge[0].sheep_type  # 作物类型
+    grass_type = houses_to_merge[0].grass_type  # 作物类型
     belong = 0  # 默认值
-    sheep_quantity = 0  # 默认值
+    grass_quantity = 0  # 默认值
 
     # 拼接需要拼接的字段
     name_str = ','.join(house.name for house in houses_to_merge)  # 分区名称
@@ -349,8 +349,8 @@ def set_hurdle():
         f_staff=f_staff,
         difinfect_time=difinfect_time,
         belong=belong,  # 默认值
-        sheep_quantity=sheep_quantity,  # 默认值
-        sheep_type=sheep_type,  # 默认值
+        grass_quantity=grass_quantity,  # 默认值
+        grass_type=grass_type,  # 默认值
         name=name_str,  # 拼接后的 name 字段
         h_lwh=h_lwh_str,  # 拼接后的 h_lwh 字段
         sports_lwh=sports_lwh_str,  # 拼接后的 sports_lwh 字段
@@ -432,8 +432,8 @@ def unseal_hurdle():
                 f_staff=house.f_staff,
                 difinfect_time=house.difinfect_time,
                 belong=house.belong,  # 保持不变
-                sheep_quantity=house.sheep_quantity,  # 田块数量，保持不变
-                sheep_type=house.sheep_type,  # 作物类型，保持不变
+                grass_quantity=house.grass_quantity,  # 田块数量，保持不变
+                grass_type=house.grass_type,  # 作物类型，保持不变
                 name=name_list[i],  # 拆分后的分区名称
                 h_lwh=h_lwh_list[i],  # 拆分后的分区长宽高
                 sports_lwh=sports_lwh_list[i],  # 拆分后的缓冲区长宽高
@@ -474,7 +474,7 @@ def del_hurdleinfo():
         # 获取该监测地块信息
         item = ColonyHouseinfo.query.filter_by(id=i).first()
         # 判断该监测地块是否有田块记录
-        if item.sheep_quantity > 0:
+        if item.grass_quantity > 0:
             return jsonify({
                 "code": 500,
                 "msg": '监测地块下存在田块记录，删除失败，请先将记录转移再来操作'
@@ -502,9 +502,9 @@ def del_hurdleinfo():
 def update_house_number():
     colony_infos = ColonyHouseinfo.query.filter_by(belong=0, pid=0).all()
     for info in colony_infos:
-        info.sheep_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
-        if info.sheep_quantity != 0:
-            info.area_pro = info.area / info.sheep_quantity
+        info.grass_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
+        if info.grass_quantity != 0:
+            info.area_pro = info.area / info.grass_quantity
     try:
         db.session.commit()
     except Exception as e:
@@ -531,9 +531,9 @@ def update_house_number():
 def update_hurdle_number():
     colony_infos = ColonyHouseinfo.query.filter(ColonyHouseinfo.belong == 0, ColonyHouseinfo.pid != 0).all()
     for info in colony_infos:
-        info.sheep_quantity = BasicBasicinfo.query.filter_by(hurdle_id=info.id).count()
-        if info.sheep_quantity != 0:
-            info.area_pro = info.area / info.sheep_quantity
+        info.grass_quantity = BasicBasicinfo.query.filter_by(hurdle_id=info.id).count()
+        if info.grass_quantity != 0:
+            info.area_pro = info.area / info.grass_quantity
     try:
         db.session.commit()
     except Exception as e:
@@ -652,9 +652,9 @@ def get_test():
         'h_type': ColonyHouseinfo.h_type,
         'h_lwh': ColonyHouseinfo.h_lwh,
         'sports_lwh': ColonyHouseinfo.sports_lwh,
-        'sheep_type': ColonyHouseinfo.sheep_type,
+        'grass_type': ColonyHouseinfo.grass_type,
         'area_pro': ColonyHouseinfo.area_pro,
-        'sheep_quantity': ColonyHouseinfo.sheep_quantity,
+        'grass_quantity': ColonyHouseinfo.grass_quantity,
         'build_time': ColonyHouseinfo.build_time,
         'staff': ColonyHouseinfo.staff,
     }
@@ -762,7 +762,7 @@ def del_test():
             })
 
         for i in sons:
-            if i.sheep_quantity > 0:
+            if i.grass_quantity > 0:
                 return jsonify({
                     "code": 500,
                     "msg": '监测区域下存在田块记录，删除失败，请先将记录转移再来操作'

@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # 数据库配置
-DATABASE_URI = 'mysql+pymysql://root:hscjtCemt2024$@182.92.207.3:3306/sheep_test'
+DATABASE_URI = 'mysql+pymysql://root:hscjtCemt2024$@182.92.207.3:3306/meadow_test'
 
 # 创建 SQLAlchemy 引擎
 engine = create_engine(DATABASE_URI)

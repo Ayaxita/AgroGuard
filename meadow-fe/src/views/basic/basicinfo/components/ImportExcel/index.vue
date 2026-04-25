@@ -44,7 +44,7 @@ import { ref } from "vue";
 import { useDownload } from "../../hooks/useDownload";
 import { Download } from "@element-plus/icons-vue";
 import { ElNotification, UploadRequestOptions, UploadRawFile } from "element-plus";
-import { BatchAddSheepTemp } from "../../api/sheep";
+import { BatchAddGrassTemp } from "../../api/grass";
 
 export interface ExcelParameterProps {
   title: string; // 标题

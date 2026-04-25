@@ -44,7 +44,7 @@ def login():
         print(f"DEBUG: pwd==user.password: {pwd == user.password}", flush=True)
         print(f"DEBUG: md5(pwd)={md5(pwd)}, user.password={user.password}", flush=True)
         print(f"DEBUG: md5(pwd)==user.password: {md5(pwd) == user.password}", flush=True)
-    if user and name == user.username and pwd == user.password:
+    if user and name == user.username and md5(pwd) == user.password:
         # 'b8f994d0c9e22cb4c365915254cb0d2c'
         ctime = datetime.now()
         # expire_date = ctime + timedelta(days=2)
@@ -161,10 +161,10 @@ def test():
     #疫苗信息
     
         1.第Ⅱ号炭疽芽胞苗 2.布氏杆菌病猪型疫苗 3.大肠杆菌病灭活疫苗 7.布氏杆菌病疫苗 9.O型口蹄疫
-        10.多联必应 12.小反刍兽疫 22.口蹄疫O型.A型二价苗 25.草地疫病 30.山羊痘活疫苗 62.六联干粉灭活疫苗 63.六联干粉灭活疫苗
+        10.多联必应 12.草害疫病 22.口蹄疫O型.A型二价苗 25.草害疫病 30.山草害活疫苗 62.六联干粉灭活疫苗 63.六联干粉灭活疫苗
     
     infos = ["第Ⅱ号炭疽芽胞苗", "布氏杆菌病猪型疫苗", "大肠杆菌病灭活疫苗" ,"布氏杆菌病疫苗","O型口蹄疫",
-        "多联必应","小反刍兽疫","口蹄疫O型.A型二价苗","羊痘","山羊痘活疫苗","六联干粉灭活疫苗","六联干粉灭活疫苗"]
+        "多联必应","草害疫病","口蹄疫O型.A型二价苗","草害","山草害活疫苗","六联干粉灭活疫苗","六联干粉灭活疫苗"]
     for info in infos:
 
         query = db.session.query(BasicBasicinfo.ele_num, BasicBasicinfo.house_name,BasicBasicinfo.hurdle_name,

@@ -40,11 +40,11 @@ def get_standardinfo():
     # 分页不用了，只返回数据
     conditions = []
     search_params = {
-        'variety': SheepAssetStandardinfo.variety,
-        'sex': SheepAssetStandardinfo.sex,
-        'purpose': SheepAssetStandardinfo.purpose,
-        'unit_price': SheepAssetStandardinfo.unit_price,
-        'f_date': SheepAssetStandardinfo.f_date,
+        'variety': GrassAssetStandardinfo.variety,
+        'sex': GrassAssetStandardinfo.sex,
+        'purpose': GrassAssetStandardinfo.purpose,
+        'unit_price': GrassAssetStandardinfo.unit_price,
+        'f_date': GrassAssetStandardinfo.f_date,
     }
     for param, column in search_params.items():
         value = request.json.get(param)
@@ -53,17 +53,17 @@ def get_standardinfo():
 
         # 使用 and_() 组合条件
     if conditions:
-        query = SheepAssetStandardinfo.query.filter(and_(*conditions))
+        query = GrassAssetStandardinfo.query.filter(and_(*conditions))
     else:
-        query = SheepAssetStandardinfo.query  # 如果没有条件，查询所有
+        query = GrassAssetStandardinfo.query  # 如果没有条件，查询所有
 
     # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
 
-    query = query.filter(SheepAssetStandardinfo.belong == 0)
-    infos = query.order_by(asc(SheepAssetStandardinfo.id)).paginate(error_out=False)
+    query = query.filter(GrassAssetStandardinfo.belong == 0)
+    infos = query.order_by(asc(GrassAssetStandardinfo.id)).paginate(error_out=False)
     # total = query.count()
 
     list = []
@@ -92,7 +92,7 @@ def add_standardinfo():
     data['f_date'] = ctime
 
 
-    data_info= SheepAssetStandardinfo()
+    data_info= GrassAssetStandardinfo()
 
     for key, value in data.items():#将data字典里的数据添加到实例对象中
         setattr(data_info, key, value)
@@ -122,7 +122,7 @@ def edit_standardinfo():
     # BasicBasicinfo.query.filter_by(ele_id = ele_id,pre_id = pre_id).update(data)
     try:
         # 更新
-        SheepAssetStandardinfo.query.filter_by(id=id).update(data)
+        GrassAssetStandardinfo.query.filter_by(id=id).update(data)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
@@ -139,8 +139,8 @@ def edit_standardinfo():
     return jsonify(result)
 
 
-@analysis.route('/analysis/sheep_assetinfo', methods=['POST'])#  获取草资产表
-def get_sheep_assetinfo():
+@analysis.route('/analysis/grass_assetinfo', methods=['POST'])#  获取草资产表
+def get_grass_assetinfo():
 
     pageNum = int(request.json.get('pageNum'))
     # pageNum = int(request.form.get('pageNum'))
@@ -148,11 +148,11 @@ def get_sheep_assetinfo():
 
     conditions = []
     search_params = {
-        'variety': SheepAssetinfo.variety,
-        'sex': SheepAssetinfo.sex,
-        'purpose': SheepAssetinfo.purpose,
-        # 'unit_price': SheepAssetStandardinfo.unit_price,
-        'f_date': SheepAssetStandardinfo.f_date,
+        'variety': GrassAssetinfo.variety,
+        'sex': GrassAssetinfo.sex,
+        'purpose': GrassAssetinfo.purpose,
+        # 'unit_price': GrassAssetStandardinfo.unit_price,
+        'f_date': GrassAssetStandardinfo.f_date,
     }
     for param, column in search_params.items():
         value = request.json.get(param)
@@ -166,18 +166,18 @@ def get_sheep_assetinfo():
 
         # 使用 and_() 组合条件
     if conditions:
-        query = SheepAssetinfo.query.filter(and_(*conditions))
+        query = GrassAssetinfo.query.filter(and_(*conditions))
     else:
-        query = SheepAssetinfo.query  # 如果没有条件，查询所有
+        query = GrassAssetinfo.query  # 如果没有条件，查询所有
 
     # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
     # 并且根据id降序排列
 
     # 并且根据id降序排列
 
-    query = query.filter(SheepAssetinfo.belong == 0)
-    # infos = query.order_by(desc(SheepAssetinfo.id)).paginate(error_out=False)
-    infos = query.order_by(desc(SheepAssetinfo.id)).paginate(page=pageNum, per_page=pageSize,
+    query = query.filter(GrassAssetinfo.belong == 0)
+    # infos = query.order_by(desc(GrassAssetinfo.id)).paginate(error_out=False)
+    infos = query.order_by(desc(GrassAssetinfo.id)).paginate(page=pageNum, per_page=pageSize,
                                                                   error_out=False)
     total = query.count()
 
@@ -198,8 +198,8 @@ def get_sheep_assetinfo():
     }
     return jsonify(result)
 
-@analysis.route('/analysis/sheep_assetinfo/update', methods=['POST'])#  手动更新草库存资产表
-def update_sheep_assetinfo():
+@analysis.route('/analysis/grass_assetinfo/update', methods=['POST'])#  手动更新草库存资产表
+def update_grass_assetinfo():
     """更新草资产统计信息路由"""
     try:
         # 获取当前日期
@@ -207,8 +207,8 @@ def update_sheep_assetinfo():
         # today = datetime(2025, 1, 1).date()
 
         # -------------------------- 步骤1：检查现有记录 --------------------------
-        existing_records = db.session.query(SheepAssetinfo).filter(
-            SheepAssetinfo.f_date == today
+        existing_records = db.session.query(GrassAssetinfo).filter(
+            GrassAssetinfo.f_date == today
         ).all()
 
         # 转换为字典方便查找 {(品种, 用途, 性别): 记录}
@@ -253,11 +253,11 @@ def update_sheep_assetinfo():
 
         # -------------------------- 执行数据库操作 --------------------------
         if to_update:
-            db.session.bulk_update_mappings(SheepAssetinfo, to_update)
+            db.session.bulk_update_mappings(GrassAssetinfo, to_update)
             print(f"更新 {len(to_update)} 条记录")
 
         if to_insert:
-            db.session.bulk_insert_mappings(SheepAssetinfo, to_insert)
+            db.session.bulk_insert_mappings(GrassAssetinfo, to_insert)
             print(f"插入 {len(to_insert)} 条新记录")
 
         db.session.commit()
@@ -480,12 +480,12 @@ def _adjust_purpose(original_purpose, mon_age):
 
 def _get_standard_info(variety, sex, purpose):
     """获取最新标准信息"""
-    return db.session.query(SheepAssetStandardinfo).filter(
-        SheepAssetStandardinfo.variety == variety,
-        SheepAssetStandardinfo.sex == sex,
-        SheepAssetStandardinfo.purpose == purpose
+    return db.session.query(GrassAssetStandardinfo).filter(
+        GrassAssetStandardinfo.variety == variety,
+        GrassAssetStandardinfo.sex == sex,
+        GrassAssetStandardinfo.purpose == purpose
     ).order_by(
-        SheepAssetStandardinfo.f_date.desc()
+        GrassAssetStandardinfo.f_date.desc()
     ).first()
 
 
@@ -524,7 +524,7 @@ def _update_stats(stats_dict, variety, purpose, sex, value, weight):
 
 
 
-@analysis.route('/analysis/sheep_assetinfo/commit_update', methods=['POST'])# 已交完销售记录之后手动更新草库存资产表
+@analysis.route('/analysis/grass_assetinfo/commit_update', methods=['POST'])# 已交完销售记录之后手动更新草库存资产表
 def commit_update_asset():
 
     """提交销售后更新资产表路由"""
@@ -561,11 +561,11 @@ def commit_update_asset():
             for key, values in stats.items():
                 variety, purpose, sex = key
                 # 查询需要更新的历史记录
-                history_records = db.session.query(SheepAssetinfo).filter(
-                    SheepAssetinfo.f_date >= update_date,
-                    SheepAssetinfo.variety == variety,
-                    SheepAssetinfo.purpose == purpose,
-                    SheepAssetinfo.sex == sex
+                history_records = db.session.query(GrassAssetinfo).filter(
+                    GrassAssetinfo.f_date >= update_date,
+                    GrassAssetinfo.variety == variety,
+                    GrassAssetinfo.purpose == purpose,
+                    GrassAssetinfo.sex == sex
                 ).all()
 
                 # 对每条历史记录进行扣减
@@ -588,11 +588,11 @@ def commit_update_asset():
 
             # -------------------------- 执行数据库更新 --------------------------
             if to_update:
-                db.session.bulk_update_mappings(SheepAssetinfo, to_update)
+                db.session.bulk_update_mappings(GrassAssetinfo, to_update)
                 print(f"成功更新 {len(to_update)} 条历史资产记录")
 
             db.session.commit()
-            update_select_sheep_asset(update_date)
+            update_select_grass_asset(update_date)
             return jsonify({
                 'code': '200',
                 'msg': '资产表更新成功',
@@ -779,13 +779,13 @@ def Commit_calculate_asset_stats(basic_ids):
 
 
 
-def update_select_sheep_asset(date):
+def update_select_grass_asset(date):
     try:
 
 
-        # 查询今日所有的SheepAssetinfo记录
-        today_assets = SheepAssetinfo.query.filter(
-            db.func.date(SheepAssetinfo.f_date) == date
+        # 查询今日所有的GrassAssetinfo记录
+        today_assets = GrassAssetinfo.query.filter(
+            db.func.date(GrassAssetinfo.f_date) == date
         ).all()
 
         # 初始化分析记录字段字典
@@ -814,7 +814,7 @@ def update_select_sheep_asset(date):
                     analysis_fields[field_name] = asset.sum_value
 
         # 查询或创建分析记录
-        analysis_record = AnalysisSheepAsset.query.filter_by(
+        analysis_record = AnalysisGrassAsset.query.filter_by(
             f_date=date,
             belong=0
         ).first()
@@ -826,7 +826,7 @@ def update_select_sheep_asset(date):
             analysis_record.update_time = datetime.now()
         else:
             # 创建新记录
-            analysis_record = AnalysisSheepAsset(
+            analysis_record = AnalysisGrassAsset(
                 f_date=date,
                 belong=0,
                 # create_time=datetime.now(),
@@ -838,7 +838,7 @@ def update_select_sheep_asset(date):
 
 
         # # 创建新分析记录
-        # new_analysis = AnalysisSheepAsset(
+        # new_analysis = AnalysisGrassAsset(
         #     f_date=today,
         #     belong=0,
         #     **analysis_fields
@@ -1461,8 +1461,8 @@ def commit_update__daily_income():
 
 
 
-@analysis.route('/analysis/daily_sheep_asset', methods=['POST'])# 获取草库存资产报表
-def get_daily_sheep_asset():
+@analysis.route('/analysis/daily_grass_asset', methods=['POST'])# 获取草库存资产报表
+def get_daily_grass_asset():
 
         pageNum = int(request.json.get('pageNum'))
         # pageNum = int(request.form.get('pageNum'))
@@ -1471,7 +1471,7 @@ def get_daily_sheep_asset():
         conditions = []
         search_params = {
 
-            'f_date': AnalysisSheepAsset.f_date,
+            'f_date': AnalysisGrassAsset.f_date,
         }
         for param, column in search_params.items():
             value = request.json.get(param)
@@ -1484,18 +1484,18 @@ def get_daily_sheep_asset():
                     conditions.append(column == value)
             # 使用 and_() 组合条件
         if conditions:
-            query = AnalysisSheepAsset.query.filter(and_(*conditions))
+            query = AnalysisGrassAsset.query.filter(and_(*conditions))
         else:
-            query = AnalysisSheepAsset.query  # 如果没有条件，查询所有
+            query = AnalysisGrassAsset.query  # 如果没有条件，查询所有
 
         # 筛选出没有被移除的草(状态-1)和没有枯萎的草(状态0)
         # 并且根据id降序排列
 
         # 并且根据id降序排列
 
-        query = query.filter(AnalysisSheepAsset.belong == 0)
-        # infos = query.order_by(desc(AnalysisSheepAsset.id)).paginate(error_out=False)
-        infos = query.order_by(desc(AnalysisSheepAsset.id)).paginate(page=pageNum, per_page=pageSize,
+        query = query.filter(AnalysisGrassAsset.belong == 0)
+        # infos = query.order_by(desc(AnalysisGrassAsset.id)).paginate(error_out=False)
+        infos = query.order_by(desc(AnalysisGrassAsset.id)).paginate(page=pageNum, per_page=pageSize,
                                                                  error_out=False)
 
         total = query.count()
@@ -1518,8 +1518,8 @@ def get_daily_sheep_asset():
         return jsonify(result)
 
 
-@analysis.route('/analysis/daily_sheep_asset/export', methods=['POST'])
-def export_daily_sheep_asset():
+@analysis.route('/analysis/daily_grass_asset/export', methods=['POST'])
+def export_daily_grass_asset():
     try:
         selected_ids = request.get_json()
         _dict = {
@@ -1529,12 +1529,12 @@ def export_daily_sheep_asset():
 
         if selected_ids:
             info = (
-                db.session.query(AnalysisSheepAsset)
-                    .filter(AnalysisSheepAsset.id.in_(selected_ids))
+                db.session.query(AnalysisGrassAsset)
+                    .filter(AnalysisGrassAsset.id.in_(selected_ids))
                     .all()
             )
         else:
-            info = (db.session.query(AnalysisSheepAsset).all())
+            info = (db.session.query(AnalysisGrassAsset).all())
 
         data_list = []
         for info1 in info:
@@ -1559,22 +1559,22 @@ def export_daily_sheep_asset():
             })
         df = pd.DataFrame(data_list)
 
-        export_path = os.path.join(os.getcwd(), 'App', 'analysis', 'export_excel', 'sheep_asset_info.xlsx')
+        export_path = os.path.join(os.getcwd(), 'App', 'analysis', 'export_excel', 'grass_asset_info.xlsx')
         df.to_excel(export_path, index=False)
 
         return send_file(export_path, as_attachment=True)
     except Exception as e:
         return jsonify({'code': 500, 'msg': f'导出失败 {str(e)}'})
 
-@analysis.route('/analysis/daily_sheep_asset/update', methods=['POST'])# 更新草库存资产报表
-def update_daily_sheep_asset():
+@analysis.route('/analysis/daily_grass_asset/update', methods=['POST'])# 更新草库存资产报表
+def update_daily_grass_asset():
     try:
         # 获取今天的日期
         today = datetime.now().date()
 
-        # 查询今日所有的SheepAssetinfo记录
-        today_assets = SheepAssetinfo.query.filter(
-            db.func.date(SheepAssetinfo.f_date) == today
+        # 查询今日所有的GrassAssetinfo记录
+        today_assets = GrassAssetinfo.query.filter(
+            db.func.date(GrassAssetinfo.f_date) == today
         ).all()
 
         # 初始化分析记录字段字典
@@ -1603,7 +1603,7 @@ def update_daily_sheep_asset():
                     analysis_fields[field_name] = asset.sum_value
 
         # 查询或创建分析记录
-        analysis_record = AnalysisSheepAsset.query.filter_by(
+        analysis_record = AnalysisGrassAsset.query.filter_by(
             f_date=today,
             belong=0
         ).first()
@@ -1615,7 +1615,7 @@ def update_daily_sheep_asset():
             analysis_record.update_time = datetime.now()
         else:
             # 创建新记录
-            analysis_record = AnalysisSheepAsset(
+            analysis_record = AnalysisGrassAsset(
                 f_date=today,
                 belong=0,
                 # create_time=datetime.now(),
@@ -1627,7 +1627,7 @@ def update_daily_sheep_asset():
 
 
         # # 创建新分析记录
-        # new_analysis = AnalysisSheepAsset(
+        # new_analysis = AnalysisGrassAsset(
         #     f_date=today,
         #     belong=0,
         #     **analysis_fields
@@ -1684,7 +1684,7 @@ CALCULATION_PATTERNS = {
                     'directtotal_fees', 'indirecttotal_fees', 'total_fees', 'other_text']
     },
     'income': {'include': ['value']},
-    'sheep_asset': {'exclude': ['id', 'f_date', 'belong']},
+    'grass_asset': {'exclude': ['id', 'f_date', 'belong']},
     'stock_asset': {'include': ['_val']}
 }
 
@@ -1795,7 +1795,7 @@ def add_dailyReport():
                         setattr(sheet, key, current_value + value)
                 continue
             else:
-                # if key in ['buysheep_fees', 'foods_fees', 'drug_fees', 'test_fees', 'labor_fees',
+                # if key in ['buygrass_fees', 'foods_fees', 'drug_fees', 'test_fees', 'labor_fees',
                 #            'waterEle_fees', 'land_fees', 'maintenance_fees']:  # 如果是直接费用的字典
                 #     setattr(sheet, 'directtotal_fees', value + sheet.directtotal_fees)  # 计算直接费用总花费
                 # elif key in ['cheep_fees', 'manage_fees', 'research_fees', 'other_fees']:  # 如果是间接费用的字典
@@ -1831,7 +1831,7 @@ def add_dailyReport():
                 continue
             elif value is None:
                 value = 0
-            # if key in ['buysheep_fees', 'foods_fees', 'drug_fees', 'test_fees', 'labor_fees',
+            # if key in ['buygrass_fees', 'foods_fees', 'drug_fees', 'test_fees', 'labor_fees',
             #            'waterEle_fees', 'land_fees', 'maintenance_fees']:  # 如果是直接费用的字典
             #     setattr(sheet, 'directtotal_fees', value + sheet.directtotal_fees)  # 计算直接费用总花费
             # elif key in ['cheep_fees', 'manage_fees', 'research_fees', 'other_fees']:  # 如果是间接费用的字典
@@ -1886,7 +1886,7 @@ def edit_dailyReport():
     latest_date = db.session.query(func.max(Analysisdailysheet.date)).scalar()
     # 直接费用字段列表
     direct_fees_fields = [
-        'buysheep_fees', 'test_fees',
+        'buygrass_fees', 'test_fees',
         'labor_fees', 'waterEle_fees', 'land_fees', 'maintenance_fees'
     ]
     # 间接费用字段列表
@@ -1964,7 +1964,7 @@ def export_dailyReport():
         for info in daily_report_info:
             data_list.append({
                 '日期': info.date.isoformat() if info.date else None,
-                '种苗购置费用': round(info.buysheep_fees, 2) if info.buysheep_fees is not None else None,
+                '种苗购置费用': round(info.buygrass_fees, 2) if info.buygrass_fees is not None else None,
                 '草料费用': round(info.caoliao_fees, 2) if info.caoliao_fees is not None else None,
                 '精料费用': round(info.jingliao_fees, 2) if info.jingliao_fees is not None else None,
                 '疫苗费用': round(info.yimiao_fees, 2) if info.yimiao_fees is not None else None,
@@ -2197,7 +2197,7 @@ def update_stocksheet():
 
         # 处理疫苗相关数据
         # 定义需要分别统计的疫苗名称列表
-        vaccine_goods = ["小反刍山羊痘二联苗", "三联四防", "口蹄疫", "多联必应"]
+        vaccine_goods = ["小反刍山草害二联苗", "三联四防", "口蹄疫", "多联必应"]
         # 用于存储已统计的疫苗记录的 id，以便后续筛选出“其他疫苗”
         vaccine_ids = []
         for good in vaccine_goods:
@@ -2214,7 +2214,7 @@ def update_stocksheet():
             for record in records:
                 vaccine_ids.append(record.id)
             # 根据当前疫苗名称，将计算得到的数量和价值存储到 result 字典的对应键中
-            if good == "小反刍山羊痘二联苗":
+            if good == "小反刍山草害二联苗":
                 result["smallvaccine_num"] = num
                 result["smallvaccine_val"] = val
             elif good == "三联四防":
@@ -2338,8 +2338,8 @@ def export_stocksheet():
                 '乳酸钙价值': round(info.calciumlactate_val, 2) if info.calciumlactate_val is not None else None,
                 '其他精料数量': round(info.otherfinefodder_num, 2) if info.otherfinefodder_num is not None else None,
                 '其他精料价值': round(info.otherfinefodder_val, 2) if info.otherfinefodder_val is not None else None,
-                '小反刍山羊痘二联苗数量': round(info.smallvaccine_num, 2) if info.smallvaccine_num is not None else None,
-                '小反刍山羊痘二联苗价值': round(info.smallvaccine_val, 2) if info.smallvaccine_val is not None else None,
+                '小反刍山草害二联苗数量': round(info.smallvaccine_num, 2) if info.smallvaccine_num is not None else None,
+                '小反刍山草害二联苗价值': round(info.smallvaccine_val, 2) if info.smallvaccine_val is not None else None,
                 '三联四防疫苗数量': round(info.threePfourD_num, 2) if info.threePfourD_num is not None else None,
                 '三联四防疫苗价值': round(info.threePfourD_val, 2) if info.threePfourD_val is not None else None,
                 '口蹄疫疫苗数量': round(info.footAmouthdisease_num, 2) if info.footAmouthdisease_num is not None else None,
@@ -2381,10 +2381,10 @@ def get_daily_financial_data():
         # 收入相关
         income_total: 15000,      # 总收入
         income_sales: {           # 销售明细
-            breeding_sheep: {number: 10, value: 5000},   # 草种
-            fattening_sheep: {number: 20, value: 8000},  # 育成草
+            breeding_grass: {number: 10, value: 5000},   # 草种
+            fattening_grass: {number: 20, value: 8000},  # 育成草
             lamb: {number: 5, value: 2000},              # 幼苗
-            other_sheep: {number: 3, value: 1000}        # 其他草
+            other_grass: {number: 3, value: 1000}        # 其他草
         },
         income_byproducts: {      # 副产品收入
             dung: 300,            # 粪肥
@@ -2401,7 +2401,7 @@ def get_daily_financial_data():
         expense_direct: {          # 直接费用
             total: 6000,
             detail: {
-                buysheep: 1000,   # 购草费
+                buygrass: 1000,   # 购草费
                 forage: 800,      # 草料费
                 fine_fodder: 500,  # 精料费
                 vaccine: 300,      # 疫苗费
@@ -2424,7 +2424,7 @@ def get_daily_financial_data():
         },
 
         # 资产相关
-        sheep_asset: 50000,       # 草资产
+        grass_asset: 50000,       # 草资产
         stock_asset: 30000,       # 库存资产
         fixed_asset: 80000,       # 固定资产
         profit: 7000              # 当日盈利
@@ -2441,7 +2441,7 @@ def get_daily_financial_data():
         )
 
         result = []
-        begin_sheep_sheet = 5810147
+        begin_grass_sheet = 5810147
         for date_item in dates:
             date_str = date_item[0].strftime('%Y-%m-%d')
             current_date = datetime.strptime(date_str, '%Y-%m-%d').date()
@@ -2469,11 +2469,11 @@ def get_daily_financial_data():
                 income_data = [0] * 15
             # 处理收入数据
             income_sales = {
-                "breeding_sheep": {  # 草种
+                "breeding_grass": {  # 草种
                     "number": float(income_data[0]or 0) if income_data else 0,
                     "value": float(income_data[1]or 0) if income_data else 0
                 },
-                "fattening_sheep": {  # 育成草
+                "fattening_grass": {  # 育成草
                     "number": float(income_data[2]or 0) if income_data else 0,
                     "value": float(income_data[3]or 0) if income_data else 0
                 },
@@ -2481,7 +2481,7 @@ def get_daily_financial_data():
                     "number": float(income_data[4]or 0) if income_data else 0,
                     "value": float(income_data[5]or 0) if income_data else 0
                 },
-                "other_sheep": {  # 其他草
+                "other_grass": {  # 其他草
                     "number": float(income_data[6]or 0) if income_data else 0,
                     "value": float(income_data[7]or 0) if income_data else 0
                 }
@@ -2500,17 +2500,17 @@ def get_daily_financial_data():
 
             # 计算总收入
             income_total = sum([
-                income_sales.get("breeding_sheep", {}).get("value", 0),
-                income_sales.get("fattening_sheep", {}).get("value", 0),
+                income_sales.get("breeding_grass", {}).get("value", 0),
+                income_sales.get("fattening_grass", {}).get("value", 0),
                 income_sales.get("lamb", {}).get("value", 0),
-                income_sales.get("other_sheep", {}).get("value", 0),
+                income_sales.get("other_grass", {}).get("value", 0),
                 sum(income_byproducts.values()) if income_byproducts else 0
             ])
 
             # 2. 支出数据统计 -----------------------------------------------
             # 获取支出明细
             expense_data = db.session.query(
-                Analysisdailysheet.buysheep_fees,
+                Analysisdailysheet.buygrass_fees,
                 Analysisdailysheet.caoliao_fees,
                 Analysisdailysheet.jingliao_fees,
                 Analysisdailysheet.yimiao_fees,
@@ -2530,7 +2530,7 @@ def get_daily_financial_data():
                 expense_data = [0] * 14
             # 处理直接费用
             direct_detail = {
-                "buysheep": float(expense_data[0]or 0) if expense_data else 0,
+                "buygrass": float(expense_data[0]or 0) if expense_data else 0,
                 "forage": float(expense_data[1]or 0) if expense_data else 0,
                 "fine_fodder": float(expense_data[2]or 0) if expense_data else 0,
                 "vaccine": float(expense_data[3]or 0) if expense_data else 0,
@@ -2556,11 +2556,11 @@ def get_daily_financial_data():
 
             # 3. 资产数据统计 -----------------------------------------------
             # 草资产（保持原有逻辑）
-            sheep_assets = db.session.query(
-                *[getattr(AnalysisSheepAsset, c.name) for c in AnalysisSheepAsset.__table__.columns
+            grass_assets = db.session.query(
+                *[getattr(AnalysisGrassAsset, c.name) for c in AnalysisGrassAsset.__table__.columns
                   if c.name not in ['id', 'f_date', 'belong']
-                  ]).filter(AnalysisSheepAsset.f_date == current_date).first()
-            sheep_total = sum([float(v or 0) for v in sheep_assets]) if sheep_assets else 0
+                  ]).filter(AnalysisGrassAsset.f_date == current_date).first()
+            grass_total = sum([float(v or 0) for v in grass_assets]) if grass_assets else 0
 
             # 库存资产（保持原有逻辑）
             stock_assets = db.session.query(
@@ -2586,13 +2586,13 @@ def get_daily_financial_data():
                     "detail": indirect_detail
                 },
 
-                "sheep_asset": round(sheep_total, 2),
+                "grass_asset": round(grass_total, 2),
                 "stock_asset": round(stock_total, 2),
-                "fixed_asset": round(sheep_total + stock_total, 2),
-                "sub_sheep_asset": round(sheep_total-begin_sheep_sheet, 2),
-                "profit": round(income_total - expense_total + sheep_total - begin_sheep_sheet , 2)
+                "fixed_asset": round(grass_total + stock_total, 2),
+                "sub_grass_asset": round(grass_total-begin_grass_sheet, 2),
+                "profit": round(income_total - expense_total + grass_total - begin_grass_sheet , 2)
             })
-            begin_sheep_sheet = sheep_total
+            begin_grass_sheet = grass_total
         return jsonify({"code": 200, "data": result})
 
     except Exception as e:
@@ -2653,11 +2653,11 @@ def get_monthly_financial_data():
             ).filter(AnalysisDailyIncome.f_date.between(start_date, end_date)).first()
 
             income_sales = {
-                "breeding_sheep": {
+                "breeding_grass": {
                     "number": float(income_data[0] or 0),
                     "value": float(income_data[1] or 0)
                 },
-                "fattening_sheep": {
+                "fattening_grass": {
                     "number": float(income_data[2] or 0),
                     "value": float(income_data[3] or 0)
                 },
@@ -2665,7 +2665,7 @@ def get_monthly_financial_data():
                     "number": float(income_data[4] or 0),
                     "value": float(income_data[5] or 0)
                 },
-                "other_sheep": {
+                "other_grass": {
                     "number": float(income_data[6] or 0),
                     "value": float(income_data[7] or 0)
                 }
@@ -2680,16 +2680,16 @@ def get_monthly_financial_data():
                 "other": float(income_data[14] or 0)
             }
             income_total = sum([
-                income_sales["breeding_sheep"]["value"],
-                income_sales["fattening_sheep"]["value"],
+                income_sales["breeding_grass"]["value"],
+                income_sales["fattening_grass"]["value"],
                 income_sales["lamb"]["value"],
-                income_sales["other_sheep"]["value"],
+                income_sales["other_grass"]["value"],
                 sum(income_byproducts.values())
             ])
 
             # 2. 支出数据聚合（按月求和）
             expense_data = db.session.query(
-                func.sum(Analysisdailysheet.buysheep_fees),
+                func.sum(Analysisdailysheet.buygrass_fees),
                 func.sum(Analysisdailysheet.caoliao_fees),
                 func.sum(Analysisdailysheet.jingliao_fees),
                 func.sum(Analysisdailysheet.yimiao_fees),
@@ -2706,7 +2706,7 @@ def get_monthly_financial_data():
             ).filter(Analysisdailysheet.date.between(start_date, end_date)).first()
 
             direct_detail = {
-                "buysheep": float(expense_data[0] or 0),
+                "buygrass": float(expense_data[0] or 0),
                 "forage": float(expense_data[1] or 0),
                 "fine_fodder": float(expense_data[2] or 0),
                 "vaccine": float(expense_data[3] or 0),
@@ -2734,13 +2734,13 @@ def get_monthly_financial_data():
 
             print(asset_date)
 
-            sheep_assets = db.session.query(
-                *[getattr(AnalysisSheepAsset, c.name)
-                  for c in AnalysisSheepAsset.__table__.columns
+            grass_assets = db.session.query(
+                *[getattr(AnalysisGrassAsset, c.name)
+                  for c in AnalysisGrassAsset.__table__.columns
                   if c.name not in ['id', 'f_date', 'belong']]
-            ).filter(AnalysisSheepAsset.f_date == asset_date).first()
-            sheep_total = sum([float(v) for v in sheep_assets]) if sheep_assets else 0
-            print(sheep_total)
+            ).filter(AnalysisGrassAsset.f_date == asset_date).first()
+            grass_total = sum([float(v) for v in grass_assets]) if grass_assets else 0
+            print(grass_total)
 
 
             stock_assets = db.session.query(
@@ -2751,7 +2751,7 @@ def get_monthly_financial_data():
             stock_total = sum([float(v) for v in stock_assets]) if stock_assets else 0
 
             # 计算本月盈利
-            profit = income_total - expense_total + (sheep_total - begin_assets)
+            profit = income_total - expense_total + (grass_total - begin_assets)
 
             result.append({
                 "date": month,
@@ -2767,15 +2767,15 @@ def get_monthly_financial_data():
                     "total": round(indirect_total, 2),
                     "detail": indirect_detail
                 },
-                "sheep_asset": round(sheep_total, 2),
+                "grass_asset": round(grass_total, 2),
                 "stock_asset": round(stock_total, 2),
-                "sheep_total": round(sheep_total, 2),
-                "sub_sheep_asset": round(sheep_total - begin_assets, 2),
-                "fixed_asset": round(sheep_total + stock_total, 2),
+                "grass_total": round(grass_total, 2),
+                "sub_grass_asset": round(grass_total - begin_assets, 2),
+                "fixed_asset": round(grass_total + stock_total, 2),
                 "profit": round(profit, 2)
             })
 
-            begin_assets = sheep_total
+            begin_assets = grass_total
             print("更新后的资产:", begin_assets)
 
         return jsonify({"code": 200, "data": result})
@@ -2849,11 +2849,11 @@ def get_quarterly_financial_data():
             ).filter(AnalysisDailyIncome.f_date.between(start_date, end_date)).first()
 
             income_sales = {
-                "breeding_sheep": {
+                "breeding_grass": {
                     "number": float(income_data[0] or 0),
                     "value": float(income_data[1] or 0)
                 },
-                "fattening_sheep": {
+                "fattening_grass": {
                     "number": float(income_data[2] or 0),
                     "value": float(income_data[3] or 0)
                 },
@@ -2861,7 +2861,7 @@ def get_quarterly_financial_data():
                     "number": float(income_data[4] or 0),
                     "value": float(income_data[5] or 0)
                 },
-                "other_sheep": {
+                "other_grass": {
                     "number": float(income_data[6] or 0),
                     "value": float(income_data[7] or 0)
                 }
@@ -2876,16 +2876,16 @@ def get_quarterly_financial_data():
                 "other": float(income_data[14] or 0)
             }
             income_total = sum([
-                income_sales["breeding_sheep"]["value"],
-                income_sales["fattening_sheep"]["value"],
+                income_sales["breeding_grass"]["value"],
+                income_sales["fattening_grass"]["value"],
                 income_sales["lamb"]["value"],
-                income_sales["other_sheep"]["value"],
+                income_sales["other_grass"]["value"],
                 sum(income_byproducts.values())
             ])
 
             # 2. 支出数据聚合（按季度求和）
             expense_data = db.session.query(
-                func.sum(Analysisdailysheet.buysheep_fees),
+                func.sum(Analysisdailysheet.buygrass_fees),
                 func.sum(Analysisdailysheet.caoliao_fees),
                 func.sum(Analysisdailysheet.jingliao_fees),
                 func.sum(Analysisdailysheet.yimiao_fees),
@@ -2902,7 +2902,7 @@ def get_quarterly_financial_data():
             ).filter(Analysisdailysheet.date.between(start_date, end_date)).first()
 
             direct_detail = {
-                "buysheep": float(expense_data[0] or 0),
+                "buygrass": float(expense_data[0] or 0),
                 "forage": float(expense_data[1] or 0),
                 "fine_fodder": float(expense_data[2] or 0),
                 "vaccine": float(expense_data[3] or 0),
@@ -2928,12 +2928,12 @@ def get_quarterly_financial_data():
             today_date = date.today()
             asset_date = end_date if end_date <= today_date else today_date
 
-            sheep_assets = db.session.query(
-                *[getattr(AnalysisSheepAsset, c.name)
-                  for c in AnalysisSheepAsset.__table__.columns
+            grass_assets = db.session.query(
+                *[getattr(AnalysisGrassAsset, c.name)
+                  for c in AnalysisGrassAsset.__table__.columns
                   if c.name not in ['id', 'f_date', 'belong']]
-            ).filter(AnalysisSheepAsset.f_date == asset_date).first()
-            sheep_total = sum([float(v) for v in sheep_assets]) if sheep_assets else 0
+            ).filter(AnalysisGrassAsset.f_date == asset_date).first()
+            grass_total = sum([float(v) for v in grass_assets]) if grass_assets else 0
 
             stock_assets = db.session.query(
                 *[getattr(Analysisdailystocksheet, c.name)
@@ -2942,7 +2942,7 @@ def get_quarterly_financial_data():
             ).filter(Analysisdailystocksheet.date == asset_date).first()
             stock_total = sum([float(v) for v in stock_assets]) if stock_assets else 0
 
-            profit = income_total - expense_total + (sheep_total - begin_assets)
+            profit = income_total - expense_total + (grass_total - begin_assets)
 
             result.append({
                 "date": q,  # 如 "2025-Q1"
@@ -2958,14 +2958,14 @@ def get_quarterly_financial_data():
                     "total": round(indirect_total, 2),
                     "detail": indirect_detail
                 },
-                "sheep_asset": round(sheep_total, 2),
+                "grass_asset": round(grass_total, 2),
                 "stock_asset": round(stock_total, 2),
-                "sub_sheep_asset": round(sheep_total - begin_assets, 2),
-                "fixed_asset": round(sheep_total + stock_total, 2),
+                "sub_grass_asset": round(grass_total - begin_assets, 2),
+                "fixed_asset": round(grass_total + stock_total, 2),
                 "profit": round(profit, 2)
             })
 
-            begin_assets = sheep_total
+            begin_assets = grass_total
 
         return jsonify({"code": 200, "data": result})
     except Exception as e:
@@ -3022,11 +3022,11 @@ def get_annual_financial_data():
             ).filter(AnalysisDailyIncome.f_date.between(start_date, end_date)).first()
 
             income_sales = {
-                "breeding_sheep": {
+                "breeding_grass": {
                     "number": float(income_data[0] or 0),
                     "value": float(income_data[1] or 0)
                 },
-                "fattening_sheep": {
+                "fattening_grass": {
                     "number": float(income_data[2] or 0),
                     "value": float(income_data[3] or 0)
                 },
@@ -3034,7 +3034,7 @@ def get_annual_financial_data():
                     "number": float(income_data[4] or 0),
                     "value": float(income_data[5] or 0)
                 },
-                "other_sheep": {
+                "other_grass": {
                     "number": float(income_data[6] or 0),
                     "value": float(income_data[7] or 0)
                 }
@@ -3049,16 +3049,16 @@ def get_annual_financial_data():
                 "other": float(income_data[14] or 0)
             }
             income_total = sum([
-                income_sales["breeding_sheep"]["value"],
-                income_sales["fattening_sheep"]["value"],
+                income_sales["breeding_grass"]["value"],
+                income_sales["fattening_grass"]["value"],
                 income_sales["lamb"]["value"],
-                income_sales["other_sheep"]["value"],
+                income_sales["other_grass"]["value"],
                 sum(income_byproducts.values())
             ])
 
             # 2. 支出数据聚合（按年求和）
             expense_data = db.session.query(
-                func.sum(Analysisdailysheet.buysheep_fees),
+                func.sum(Analysisdailysheet.buygrass_fees),
                 func.sum(Analysisdailysheet.caoliao_fees),
                 func.sum(Analysisdailysheet.jingliao_fees),
                 func.sum(Analysisdailysheet.yimiao_fees),
@@ -3075,7 +3075,7 @@ def get_annual_financial_data():
             ).filter(Analysisdailysheet.date.between(start_date, end_date)).first()
 
             direct_detail = {
-                "buysheep": float(expense_data[0] or 0),
+                "buygrass": float(expense_data[0] or 0),
                 "forage": float(expense_data[1] or 0),
                 "fine_fodder": float(expense_data[2] or 0),
                 "vaccine": float(expense_data[3] or 0),
@@ -3101,12 +3101,12 @@ def get_annual_financial_data():
             today_date = date.today()
             asset_date = end_date if end_date <= today_date else today_date
 
-            sheep_assets = db.session.query(
-                *[getattr(AnalysisSheepAsset, c.name)
-                  for c in AnalysisSheepAsset.__table__.columns
+            grass_assets = db.session.query(
+                *[getattr(AnalysisGrassAsset, c.name)
+                  for c in AnalysisGrassAsset.__table__.columns
                   if c.name not in ['id', 'f_date', 'belong']]
-            ).filter(AnalysisSheepAsset.f_date == asset_date).first()
-            sheep_total = sum([float(v) for v in sheep_assets]) if sheep_assets else 0
+            ).filter(AnalysisGrassAsset.f_date == asset_date).first()
+            grass_total = sum([float(v) for v in grass_assets]) if grass_assets else 0
 
             stock_assets = db.session.query(
                 *[getattr(Analysisdailystocksheet, c.name)
@@ -3115,7 +3115,7 @@ def get_annual_financial_data():
             ).filter(Analysisdailystocksheet.date == asset_date).first()
             stock_total = sum([float(v) for v in stock_assets]) if stock_assets else 0
 
-            profit = income_total - expense_total + (sheep_total - begin_assets)
+            profit = income_total - expense_total + (grass_total - begin_assets)
 
             result.append({
                 "date": yr,
@@ -3131,14 +3131,14 @@ def get_annual_financial_data():
                     "total": round(indirect_total, 2),
                     "detail": indirect_detail
                 },
-                "sheep_asset": round(sheep_total, 2),
+                "grass_asset": round(grass_total, 2),
                 "stock_asset": round(stock_total, 2),
-                "sub_sheep_asset": round(sheep_total - begin_assets, 2),
-                "fixed_asset": round(sheep_total + stock_total, 2),
+                "sub_grass_asset": round(grass_total - begin_assets, 2),
+                "fixed_asset": round(grass_total + stock_total, 2),
                 "profit": round(profit, 2)
             })
 
-            begin_assets = sheep_total
+            begin_assets = grass_total
 
         return jsonify({"code": 200, "data": result})
     except Exception as e:

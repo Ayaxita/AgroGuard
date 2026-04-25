@@ -27,7 +27,7 @@
         <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
       </template>
     </ProTable>
-    <SheepDrawer ref="drawerRef" />
+    <GrassDrawer ref="drawerRef" />
   </div>
 </template>
 
@@ -37,7 +37,7 @@ import { useRoute, useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
-import SheepDrawer from "../components/SheepDrawer.vue";
+import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, MessageBox, SetUp, View } from "@element-plus/icons-vue";
 import { getManuList, addManu, editManu, exportDailyreport } from "../api/manu";
@@ -101,7 +101,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
     label: "直接费用",
     _children: [
       {
-        prop: "buysheep_fees",
+        prop: "buygrass_fees",
         label: "种苗购买费用"
       },
       {
@@ -250,20 +250,20 @@ const downloadFile = async () => {
 //导出所选数据
 const downloadSelectFile = async selectedListIds => {
   // 获取用户在表格中所选的草地数据
-  const selectedSheepData = selectedListIds;
+  const selectedGrassData = selectedListIds;
 
-  if (!selectedSheepData || selectedSheepData.length === 0) {
+  if (!selectedGrassData || selectedGrassData.length === 0) {
     ElMessage.warning("请先选择要导出的草地记录数据！");
     return;
   }
 
-  ElMessageBox.confirm(`确认导出所选的${selectedSheepData.length}条日支出报表数据?`, "温馨提示", { type: "warning" }).then(() => {
+  ElMessageBox.confirm(`确认导出所选的${selectedGrassData.length}条日支出报表数据?`, "温馨提示", { type: "warning" }).then(() => {
     // 调用useDownload函数进行导出，并传入所选草地数据、导出文件名以及其他可能需要的参数（这里假设暂时不需要其他参数）
-    useDownload(() => exportDailyreport(selectedSheepData), `日支出报表导出结果`, null);
+    useDownload(() => exportDailyreport(selectedGrassData), `日支出报表导出结果`, null);
   });
 };
 // 打开 drawer(新增、查看、编辑)
-const drawerRef = ref<InstanceType<typeof SheepDrawer> | null>(null);
+const drawerRef = ref<InstanceType<typeof GrassDrawer> | null>(null);
 const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   const params = {
     title,

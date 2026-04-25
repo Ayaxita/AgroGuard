@@ -215,8 +215,8 @@ def add_rutinfo():
 
 #  母草地生长监测
 #获取月龄8以上的健康未销售的基础草地记录(在生长记录是12月，在生长监测和培育时8月).。。。。。。。。。。。。。改成6月了
-@e_breed.route('/e_breed/rutinfo/get_ewesheep', methods=['POST'])
-def get_ewesheep():
+@e_breed.route('/e_breed/rutinfo/get_ewegrass', methods=['POST'])
+def get_ewegrass():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
     # 当前日期
@@ -638,8 +638,8 @@ def export_semencollectinfo():
 
 # 病虫害繁殖周期采样
 #获取月龄8以上的健康未销售的公草地记录(在生长记录是12月，在生长监测和培育时8月)、、、、、、、、、、、、、、、、、、改成6月了
-@e_breed.route('/e_breed/semencollectinfo/get_ramsheep', methods=['POST'])
-def get_ramsheep():
+@e_breed.route('/e_breed/semencollectinfo/get_ramgrass', methods=['POST'])
+def get_ramgrass():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
     # 当前日期
@@ -1872,8 +1872,8 @@ def get_lamb():
 
 
 # 查询母草地信息记录是否已经在培育信息表中有记录（选择完分娩日期后进入）。。。。。。。。改成查7个月之内得了
-@e_breed.route('/e_breed/postnatalinfo/search_ewe_sheep', methods=['POST'])
-def search_ewe_sheep():
+@e_breed.route('/e_breed/postnatalinfo/search_ewe_grass', methods=['POST'])
+def search_ewe_grass():
     parms = request.get_json()
     d_date = parms['deliveryDate']  # 获取前端传递过来的字典数据
     ele_num = parms['eweEleNum']

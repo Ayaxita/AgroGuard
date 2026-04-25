@@ -143,16 +143,16 @@
       <el-row>
         <el-col :span="24">
           <div class="family-tree-item">
-            <div>种植区：{{ data.selected_sheep?.ele_num }}</div>
-            <div>播种日期：{{ data.selected_sheep?.birth }}</div>
-            <div>草地类型：{{ varietyType.find(item => item.value === data.selected_sheep?.variety)?.label }}</div>
+            <div>种植区：{{ data.selected_grass?.ele_num }}</div>
+            <div>播种日期：{{ data.selected_grass?.birth }}</div>
+            <div>草地类型：{{ varietyType.find(item => item.value === data.selected_grass?.variety)?.label }}</div>
             <el-image
               style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.selected_sheep?.img_positive}`"
+              :src="BASE_URL + `/basic/file/download/img?filename=${data.selected_grass?.img_positive}`"
               :zoom-rate="1.2"
               :max-scale="7"
               :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.selected_sheep?.img_positive}`]"
+              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.selected_grass?.img_positive}`]"
               :initial-index="4"
               fit="contain"
             >
@@ -171,15 +171,15 @@
 
 <script setup name="useProTableDetailFamilyTree">
 import { useRoute } from "vue-router";
-import { getSheepFamilyTree } from "../api/sheep";
+import { getGrassFamilyTree } from "../api/grass";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { varietyType } from "@/assets/json/typeListJson";
 const route = useRoute();
 const data = ref({});
 
 const BASE_URL = import.meta.env.VITE_API_URL;
-const getSheepFamilyTreeData = async () => {
-  const res = await getSheepFamilyTree({
+const getGrassFamilyTreeData = async () => {
+  const res = await getGrassFamilyTree({
     id: route.params.id
   });
   data.value = res;
@@ -188,7 +188,7 @@ const getSheepFamilyTreeData = async () => {
 };
 
 onBeforeMount(() => {
-  getSheepFamilyTreeData();
+  getGrassFamilyTreeData();
 });
 </script>
 

@@ -40,8 +40,8 @@ export const getRam = params => {
   return result;
 };
 // 查找记录是否在批次关联表中有记录
-export const searchEweSheep = params => {
-  const result = http.post(PORT1 + `/postnatalinfo/search_ewe_sheep`, params);
+export const searchEweGrass = params => {
+  const result = http.post(PORT1 + `/postnatalinfo/search_ewe_grass`, params);
   result.then(resp => console.log("返回的列表数据", resp));
   return result;
 };

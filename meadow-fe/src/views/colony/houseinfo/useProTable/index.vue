@@ -24,7 +24,7 @@
         <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
       </template>
     </ProTable>
-    <SheepDrawer ref="drawerRef" />
+    <GrassDrawer ref="drawerRef" />
     <ImportExcel ref="dialogRef" />
   </div>
 </template>
@@ -35,7 +35,7 @@ import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
-import SheepDrawer from "../components/SheepDrawer.vue";
+import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, EditPen, Refresh, View } from "@element-plus/icons-vue";
 import { getManuList, editManu, addManu, delManu, updateHouseNumber } from "../api/manu";
@@ -132,7 +132,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
     }
   },
   {
-    prop: "sheep_type",
+    prop: "grass_type",
     label: "草地类型",
     width: 110,
     enum: varietyType,
@@ -149,7 +149,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
     }
   },
   {
-    prop: "sheep_quantity",
+    prop: "grass_quantity",
     label: "地块数量",
     search: {
       el: "input",
@@ -234,7 +234,7 @@ const deleteHouseinfo = ids => {
   }
 };
 // 打开 drawer(新增、查看、编辑)
-const drawerRef = ref<InstanceType<typeof SheepDrawer> | null>(null);
+const drawerRef = ref<InstanceType<typeof GrassDrawer> | null>(null);
 const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   const params = {
     title,

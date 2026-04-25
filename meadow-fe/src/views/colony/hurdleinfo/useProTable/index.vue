@@ -31,7 +31,7 @@
         <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
       </template>
     </ProTable>
-    <SheepDrawer ref="drawerRef" />
+    <GrassDrawer ref="drawerRef" />
     <ImportExcel ref="dialogRef" />
   </div>
 </template>
@@ -42,7 +42,7 @@ import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { ElDatePicker, ElForm, ElFormItem, ElInput, ElMessage, ElMessageBox, ElOption, ElSelect } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
-import SheepDrawer from "../components/SheepDrawer.vue";
+import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import {
   CircleCheck,
@@ -160,7 +160,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
     }
   },
   {
-    prop: "sheep_type",
+    prop: "grass_type",
     label: "草地类型",
     enum: varietyType,
     fieldNames: { label: "label", value: "value" },
@@ -176,7 +176,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
     }
   },
   {
-    prop: "sheep_quantity",
+    prop: "grass_quantity",
     label: "地块数量",
     search: {
       el: "input",
@@ -237,17 +237,17 @@ onBeforeMount(() => {
 //合并所选监测地块
 const setHouseHurdle = async selectedListIds => {
   // 获取用户在表格中所选的监测地块
-  const selectedSheepData = selectedListIds;
+  const selectedGrassData = selectedListIds;
 
-  if (!selectedSheepData || selectedSheepData.length === 0) {
+  if (!selectedGrassData || selectedGrassData.length === 0) {
     ElMessage.warning("请先选择要合并的监测地块！");
     return;
   }
 
-  ElMessageBox.confirm(`确认将这${selectedSheepData.length}个监测地块合并为一个监测地块?`, "温馨提示", { type: "warning" }).then(
+  ElMessageBox.confirm(`确认将这${selectedGrassData.length}个监测地块合并为一个监测地块?`, "温馨提示", { type: "warning" }).then(
     () => {
       //通过这个函数把所选数据id传到后端
-      setHurdle(selectedSheepData).then(res => {
+      setHurdle(selectedGrassData).then(res => {
         if (res.code === 200) {
           ElMessage.success("合并成功！");
           proTable.value?.clearSelection();
@@ -262,16 +262,16 @@ const setHouseHurdle = async selectedListIds => {
 //拆分所选监测地块
 const unsealHouseHurdle = async selectedListIds => {
   // 获取用户在表格中所选的监测地块
-  const selectedSheepData = selectedListIds;
+  const selectedGrassData = selectedListIds;
 
-  if (!selectedSheepData || selectedSheepData.length === 0) {
+  if (!selectedGrassData || selectedGrassData.length === 0) {
     ElMessage.warning("请先选择要拆分的监测地块！");
     return;
   }
 
-  ElMessageBox.confirm(`确认将这${selectedSheepData.length}个监测地块拆分?`, "温馨提示", { type: "warning" }).then(() => {
+  ElMessageBox.confirm(`确认将这${selectedGrassData.length}个监测地块拆分?`, "温馨提示", { type: "warning" }).then(() => {
     //通过这个函数把所选数据id传到后端
-    unsealHurdle(selectedSheepData).then(res => {
+    unsealHurdle(selectedGrassData).then(res => {
       if (res.code === 200) {
         ElMessage.success("拆分成功！");
         proTable.value?.clearSelection();
@@ -335,7 +335,7 @@ const disinfect_info = ref<any>({
 //防疫处理
 const hurdleDisinfect = async ids => {
   if (ids.length !== 0) {
-    // console.log("好多条记录", sheepsinfo);
+    // console.log("好多条记录", grassinfo);
     ElMessageBox({
       title: "区域防疫处理",
       message: () => {
@@ -540,7 +540,7 @@ const hurdleDisinfect = async ids => {
 
 // 打开 drawer(新增、查看、编辑)
 // 由于后端逻辑，需要在编辑时不要house_id
-const drawerRef = ref<InstanceType<typeof SheepDrawer> | null>(null);
+const drawerRef = ref<InstanceType<typeof GrassDrawer> | null>(null);
 const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   const params = {
     title,

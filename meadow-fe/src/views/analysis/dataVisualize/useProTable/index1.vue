@@ -20,7 +20,7 @@
       <!-- 左侧资产图表 -->
       <el-card class="assets-section">
         <div class="chart-container">
-          <LineChart :chart-data="sheepAssetsData" title="草地库存资产" color="#8A2BE2" />
+          <LineChart :chart-data="grassAssetsData" title="草地库存资产" color="#8A2BE2" />
         </div>
         <div class="chart-container">
           <LineChart :chart-data="inventoryAssetsData" title="物料库存资产" color="#FF4500" />
@@ -68,7 +68,7 @@ const summaryData = ref([
 ]);
 
 // 资产数据
-const sheepAssetsData = ref({
+const grassAssetsData = ref({
   xData: ["2025/1/1", "2025/1/2", "2025/1/3", "2025/1/4", "2025/1/5", "2025/1/6", "2025/1/7"],
   series: [
     /* 填充实际数据 */

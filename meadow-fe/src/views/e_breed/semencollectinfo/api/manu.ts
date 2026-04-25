@@ -27,8 +27,8 @@ export const exportGrassInfo = params => {
   return http.download(PORT1 + `/semencollectinfo/export`, params);
 };
 //获取监测目标信息
-export const getRamSheep = params => {
-  const result = http.post(PORT1 + `/semencollectinfo/get_ramsheep`, params);
+export const getRamGrass = params => {
+  const result = http.post(PORT1 + `/semencollectinfo/get_ramgrass`, params);
   result.then(resp => console.log("返回的列表数据", resp));
   return result;
 };

@@ -25,7 +25,7 @@
         <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
       </template>
     </ProTable>
-    <SheepDrawer ref="drawerRef" />
+    <GrassDrawer ref="drawerRef" />
     <ImportExcel ref="dialogRef" />
   </div>
 </template>
@@ -36,7 +36,7 @@ import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
-import SheepDrawer from "../components/SheepDrawer.vue";
+import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, View } from "@element-plus/icons-vue";
 import { editManu, addManu, delManu, getSupplyList } from "../api/manu";
@@ -169,7 +169,7 @@ const downloadFile = async () => {
   // );
 };
 // 打开 drawer(新增、查看、编辑)
-const drawerRef = ref<InstanceType<typeof SheepDrawer> | null>(null);
+const drawerRef = ref<InstanceType<typeof GrassDrawer> | null>(null);
 const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   const params = {
     title,

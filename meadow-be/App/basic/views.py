@@ -280,8 +280,8 @@ def initManu():
     return jsonify(result)
 
 
-@basic.route('/basic/basicinfo/sheepTransfer', methods=['POST'])
-def sheepTransfer():
+@basic.route('/basic/basicinfo/grassTransfer', methods=['POST'])
+def grassTransfer():
     datas = request.get_json()
     for data in datas:
         basic_info = BasicBasicinfo.query.filter_by(id=data['id']).first()
@@ -483,12 +483,12 @@ def add_basic_info():
     if request.json.get('house_id') is not None:
         house_info = ColonyHouseinfo.query.filter_by(id=request.json.get('house_id')).first()
         hurdle_info = ColonyHouseinfo.query.filter_by(id=request.json.get('hurdle_id')).first()
-        if house_info.sheep_quantity is None:
-            house_info.sheep_quantity = 1
-            hurdle_info.sheep_quantity = 1
+        if house_info.grass_quantity is None:
+            house_info.grass_quantity = 1
+            hurdle_info.grass_quantity = 1
         else:
-            house_info.sheep_quantity += 1
-            hurdle_info.sheep_quantity += 1
+            house_info.grass_quantity += 1
+            hurdle_info.grass_quantity += 1
     basic_info = BasicBasicinfo()
     if data['f_ele_num'] == '000000000000000':
         basic_info.father_id = 0
@@ -519,8 +519,8 @@ def add_basic_info():
     return jsonify(result)
 
 
-@basic.route('/basic/basicinfo/validateSheepNum', methods=['POST'])
-def validate_sheep_num():
+@basic.route('/basic/basicinfo/validateGrassNum', methods=['POST'])
+def validate_grass_num():
     prop = request.json.get('prop')
     value = request.json.get('value')
     if prop == 'ele_num':
@@ -714,7 +714,7 @@ def edit_basic_info():
 
 # 标记田块淘汰，写入信息到淘汰记录，在标记绝收和标记淘汰时复写该条记录
 @basic.route('/basic/basicinfo/obsolete', methods=['POST'])
-def obsolete_sheep():
+def obsolete_grass():
     data = request.get_json()
     print(data)
 
@@ -754,15 +754,15 @@ def obsolete_sheep():
             # '''
             # ** insert_data 是Pythoninsert_data结合使用的写法。
             # 把 insert_data 字典中的每个键值对解包成关键字参数。
-            # 把这些关键字参数传递给 BasicObsoleteSheepinfo 类的构造函数。
-            # BasicObsoleteSheepinfo(**insert_data)
+            # 把这些关键字参数传递给 BasicObsoleteGrassinfo 类的构造函数。
+            # BasicObsoleteGrassinfo(**insert_data)
             # 就相当于
-            # BasicObsoleteSheepinfo(obsolete_date=datetime.now(), belong=0, basic_id=123)。
+            # BasicObsoleteGrassinfo(obsolete_date=datetime.now(), belong=0, basic_id=123)。
             # '''
 
 
-            obsoletesheep_info = BasicObsoleteSheepinfo(**insert_data)
-            db.session.add(obsoletesheep_info)
+            obsoletegrass_info = BasicObsoleteGrassinfo(**insert_data)
+            db.session.add(obsoletegrass_info)
             db.session.commit()
     except Exception as e:
         # 事务中任何操作出错，都会回滚整个事务
@@ -810,10 +810,10 @@ def obsolete_sheep():
 
 
 
-    # obsoletesheep_info= BasicObsoleteSheepinfo(**insert_data)
+    # obsoletegrass_info= BasicObsoleteGrassinfo(**insert_data)
     #
     # try:
-    #     db.session.add(obsoletesheep_info)
+    #     db.session.add(obsoletegrass_info)
     #     print('我要添加了')
     #     db.session.commit()
     # except Exception as e:
@@ -869,7 +869,7 @@ def get_family_tree():
         BasicBasicinfo.id == mother_info.mother_id).first() if mother_info else None
 
     family_tree = {
-        "selected_sheep": get_family_member_info(basic_info),
+        "selected_grass": get_family_member_info(basic_info),
         "father": get_family_member_info(father_info),
         "mother": get_family_member_info(mother_info),
         "grandfather": get_family_member_info(grandfather_info),
@@ -1141,9 +1141,9 @@ def update_house_and_hurdle():
     colony_infos = ColonyHouseinfo.query.all()
     for info in colony_infos:
         if info.pid == 0:
-            info.sheep_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
+            info.grass_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
         else:
-            info.sheep_quantity = BasicBasicinfo.query.filter_by(hurdle_id=info.id).count()
+            info.grass_quantity = BasicBasicinfo.query.filter_by(hurdle_id=info.id).count()
     try:
         db.session.commit()
     except Exception as e:
@@ -1162,8 +1162,8 @@ def update_house_and_hurdle():
 
 
 # 标记绝收
-@basic.route('/basic/basicinfo/markSheepDeath', methods=['POST'])
-def mark_sheep_death():
+@basic.route('/basic/basicinfo/markGrassDeath', methods=['POST'])
+def mark_grass_death():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
@@ -1174,8 +1174,8 @@ def mark_sheep_death():
         BasicBasicinfo.query.filter_by(id=info['basic_id']).update(
             {'state': 0,'house_id':deathHouse_info.id,'house_name':deathHouse_info.name,
              'hurdle_id':deathHurdle_info.id,'hurdle_name':deathHurdle_info.name})
-        # 查找并更新 BasicObsoleteSheepinfo 表的记录
-        obsolete_info = BasicObsoleteSheepinfo.query.filter_by(basic_id=info['basic_id']).first()
+        # 查找并更新 BasicObsoleteGrassinfo 表的记录
+        obsolete_info = BasicObsoleteGrassinfo.query.filter_by(basic_id=info['basic_id']).first()
         print(obsolete_info)
         if obsolete_info:
             obsolete_info.obsolete_type = 0
@@ -1209,8 +1209,8 @@ def mark_sheep_death():
 
 
 # 标记售出
-@basic.route('/basic/basicinfo/markSheepSale', methods=['POST'])
-def mark_sheep_sale():
+@basic.route('/basic/basicinfo/markGrassSale', methods=['POST'])
+def mark_grass_sale():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
@@ -1224,8 +1224,8 @@ def mark_sheep_sale():
             {'state': 2, 'house_id': saleHouse_info.id, 'house_name': saleHouse_info.name,
              'hurdle_id': saleHurdle_info.id, 'hurdle_name': saleHurdle_info.name})
 
-        # 查找并更新 BasicObsoleteSheepinfo 表的记录
-        obsolete_info = BasicObsoleteSheepinfo.query.filter_by(basic_id=info['basic_id']).first()
+        # 查找并更新 BasicObsoleteGrassinfo 表的记录
+        obsolete_info = BasicObsoleteGrassinfo.query.filter_by(basic_id=info['basic_id']).first()
         print(obsolete_info)
         if obsolete_info:
             obsolete_info.obsolete_type = 2
@@ -1740,8 +1740,8 @@ def update_grandparents():
         return jsonify(result)
 
 #获取状态为健康的草的基本信息
-@basic.route('/basic/breederconditioninfo/get_Goodsheep', methods=['POST'])
-def get_Goodsheep():
+@basic.route('/basic/breederconditioninfo/get_Goodgrass', methods=['POST'])
+def get_Goodgrass():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
 

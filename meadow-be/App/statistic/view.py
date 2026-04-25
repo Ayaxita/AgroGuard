@@ -306,8 +306,8 @@ def initManu():
     }
     return jsonify(result)
 
-@Statistic.route('/statistic/basicinfo/sheepTransfer', methods=['POST'])
-def sheepTransfer():
+@Statistic.route('/statistic/basicinfo/grassTransfer', methods=['POST'])
+def grassTransfer():
     datas = request.get_json()
     for data in datas:
         basic_info = BasicBasicinfo.query.filter_by(id=data['id']).first()
@@ -509,12 +509,12 @@ def add_basic_info():
     if request.json.get('house_id') is not None:
         house_info = ColonyHouseinfo.query.filter_by(id=request.json.get('house_id')).first()
         hurdle_info = ColonyHouseinfo.query.filter_by(id=request.json.get('hurdle_id')).first()
-        if house_info.sheep_quantity is None:
-            house_info.sheep_quantity = 1
-            hurdle_info.sheep_quantity = 1
+        if house_info.grass_quantity is None:
+            house_info.grass_quantity = 1
+            hurdle_info.grass_quantity = 1
         else:
-            house_info.sheep_quantity += 1
-            hurdle_info.sheep_quantity += 1
+            house_info.grass_quantity += 1
+            hurdle_info.grass_quantity += 1
     basic_info = BasicBasicinfo()
     if data['f_ele_num'] == '000000000000000':
         basic_info.father_id = 0
@@ -545,8 +545,8 @@ def add_basic_info():
     return jsonify(result)
 
 
-@Statistic.route('/statistic/basicinfo/validateSheepNum', methods=['POST'])
-def validate_sheep_num():
+@Statistic.route('/statistic/basicinfo/validateGrassNum', methods=['POST'])
+def validate_grass_num():
     prop = request.json.get('prop')
     value = request.json.get('value')
     if prop == 'ele_num':
@@ -765,7 +765,7 @@ def get_family_tree():
         BasicBasicinfo.id == mother_info.mother_id).first() if mother_info else None
 
     family_tree = {
-        "selected_sheep": get_family_member_info(basic_info),
+        "selected_grass": get_family_member_info(basic_info),
         "father": get_family_member_info(father_info),
         "mother": get_family_member_info(mother_info),
         "grandfather": get_family_member_info(grandfather_info),
@@ -1037,9 +1037,9 @@ def update_house_and_hurdle():
     colony_infos = ColonyHouseinfo.query.all()
     for info in colony_infos:
         if info.pid == 0:
-            info.sheep_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
+            info.grass_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
         else:
-            info.sheep_quantity = BasicBasicinfo.query.filter_by(hurdle_id=info.id).count()
+            info.grass_quantity = BasicBasicinfo.query.filter_by(hurdle_id=info.id).count()
     try:
         db.session.commit()
     except Exception as e:
@@ -1058,8 +1058,8 @@ def update_house_and_hurdle():
 
 
 # 标记绝收
-@Statistic.route('/statistic/basicinfo/markSheepDeath', methods=['POST'])
-def mark_sheep_death():
+@Statistic.route('/statistic/basicinfo/markGrassDeath', methods=['POST'])
+def mark_grass_death():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
@@ -1070,8 +1070,8 @@ def mark_sheep_death():
         BasicBasicinfo.query.filter_by(id=info['basic_id']).update(
             {'state': 0,'house_id':deathHouse_info.id,'house_name':deathHouse_info.name,
              'hurdle_id':deathHurdle_info.id,'hurdle_name':deathHurdle_info.name})
-        # 查找并更新 BasicObsoleteSheepinfo 表的记录
-        obsolete_info = BasicObsoleteSheepinfo.query.filter_by(basic_id=info['basic_id']).first()
+        # 查找并更新 BasicObsoleteGrassinfo 表的记录
+        obsolete_info = BasicObsoleteGrassinfo.query.filter_by(basic_id=info['basic_id']).first()
         print(obsolete_info)
         if obsolete_info:
             obsolete_info.obsolete_type = 0
@@ -1105,8 +1105,8 @@ def mark_sheep_death():
 
 
 # 标记已处理
-@Statistic.route('/statistic/basicinfo/markSheepSale', methods=['POST'])
-def mark_sheep_sale():
+@Statistic.route('/statistic/basicinfo/markGrassSale', methods=['POST'])
+def mark_grass_sale():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
@@ -1120,8 +1120,8 @@ def mark_sheep_sale():
             {'state': 2, 'house_id': saleHouse_info.id, 'house_name': saleHouse_info.name,
              'hurdle_id': saleHurdle_info.id, 'hurdle_name': saleHurdle_info.name})
 
-        # 查找并更新 BasicObsoleteSheepinfo 表的记录
-        obsolete_info = BasicObsoleteSheepinfo.query.filter_by(basic_id=info['basic_id']).first()
+        # 查找并更新 BasicObsoleteGrassinfo 表的记录
+        obsolete_info = BasicObsoleteGrassinfo.query.filter_by(basic_id=info['basic_id']).first()
         print(obsolete_info)
         if obsolete_info:
             obsolete_info.obsolete_type = 2
@@ -1301,7 +1301,7 @@ def get_makescoreTable():
         'gene_a': BasicMakescore.gene_a,
         'small_rum': BasicMakescore.small_rum,
         'fmd': BasicMakescore.fmd,
-        'sheep_pox': BasicMakescore.sheep_pox,
+        'grass_pox': BasicMakescore.grass_pox,
         'tnq': BasicMakescore.tnq,
         'brucella':BasicMakescore.brucella,
     }
@@ -1520,7 +1520,7 @@ def scoremake(basic_id):
         # 防疫信息
         immu_list = []
         yimiao = []
-        yimiao_quan = ['羊痘', '小反刍兽疫', '口蹄疫O型.A型二价苗', '多联必应']
+        yimiao_quan = ['草害', '草害疫病', '口蹄疫O型.A型二价苗', '多联必应']
         yangxing = False
         if immu:
 
@@ -1799,26 +1799,26 @@ def updateData():
         #     return jsonify({"code": 400, "msg": "参数错误: 缺少basic_id"}), 400
         #
         # basic_id = req_data['basic_id']
-        # sheep_ids = BasicBasicinfo.objects.filter(variety__in=[0,1], state=1).values_list('id', flat=True)
+        # grass_ids = BasicBasicinfo.objects.filter(variety__in=[0,1], state=1).values_list('id', flat=True)
         # 执行查询
 
-        sheep_ids = request.get_json()
-        print(f'sheep_ids{sheep_ids}')
-        if not sheep_ids:
-            sheep_ids = db.session.query(BasicBasicinfo.id).filter(
+        grass_ids = request.get_json()
+        print(f'grass_ids{grass_ids}')
+        if not grass_ids:
+            grass_ids = db.session.query(BasicBasicinfo.id).filter(
                 BasicBasicinfo.variety.in_([0, 1]),
                 BasicBasicinfo.state == 1
             ).all()
             # 将结果展平，类似于 Django 的 flat=True
-            sheep_ids = [id[0] for id in sheep_ids]
+            grass_ids = [id[0] for id in grass_ids]
 
         print('-------------------------')
-        print(sheep_ids)
-        # print(sheep_ids)
+        print(grass_ids)
+        # print(grass_ids)
         j = 0
-        # sheep_ids = [15473]
-        # sheep_ids = [1, 13834, 14216, 14396, 14550, 14597]
-        for i in sheep_ids:
+        # grass_ids = [15473]
+        # grass_ids = [1, 13834, 14216, 14396, 14550, 14597]
+        for i in grass_ids:
             print(i)
             result = scoremake(i)
             print('我已经打完分了')
@@ -1891,12 +1891,12 @@ def updateData():
 
 @Statistic.route('/statistic/xipu/export', methods=['POST'])  #下载系谱档案
 def xiazai_xipu():
-        selected_sheep = request.get_json()
-        if not selected_sheep:
+        selected_grass = request.get_json()
+        if not selected_grass:
             return jsonify({"error": "未接收到有效的草地数据"}), 400
         print('我进来了')
         try:
-            id = selected_sheep.get('id')
+            id = selected_grass.get('id')
             basic = BasicBasicinfo.query.filter_by(id = id).first()
 
             if basic.sex == 1:
@@ -2952,20 +2952,20 @@ def calculate_judge(basic_id):
 
 
 
-@Statistic.route('/statistic/obsoletesheepinfo', methods=['POST'])  #查看系谱档案
-def get_obsoletesheepinfo():
+@Statistic.route('/statistic/obsoletegrassinfo', methods=['POST'])  #查看系谱档案
+def get_obsoletegrassinfo():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
     print(pageSize)
 
     conditions = []
     search_params = {
-        'ele_num': BasicObsoleteSheepinfo.ele_num,
-        'pre_num': BasicObsoleteSheepinfo.pre_num,
-        'obsolete_type': BasicObsoleteSheepinfo.obsolete_type,
-        'obsolete_date': BasicObsoleteSheepinfo.obsolete_date,
-        'dead_date': BasicObsoleteSheepinfo.dead_date,
-        'sales_date': BasicObsoleteSheepinfo.sales_date
+        'ele_num': BasicObsoleteGrassinfo.ele_num,
+        'pre_num': BasicObsoleteGrassinfo.pre_num,
+        'obsolete_type': BasicObsoleteGrassinfo.obsolete_type,
+        'obsolete_date': BasicObsoleteGrassinfo.obsolete_date,
+        'dead_date': BasicObsoleteGrassinfo.dead_date,
+        'sales_date': BasicObsoleteGrassinfo.sales_date
 
     }
     for param, column in search_params.items():
@@ -2980,17 +2980,17 @@ def get_obsoletesheepinfo():
 
     # 使用 and_() 组合条件
     if conditions:
-        query = BasicObsoleteSheepinfo.query.filter(and_(*conditions))
+        query = BasicObsoleteGrassinfo.query.filter(and_(*conditions))
     else:
-        query = BasicObsoleteSheepinfo.query  # 如果没有条件，查询所有
+        query = BasicObsoleteGrassinfo.query  # 如果没有条件，查询所有
 
     # 并且根据id降序排列
 
-    query = query.filter(BasicObsoleteSheepinfo.belong == 0)
-    # query = query.filter(BasicObsoleteSheepinfo.belong == 0).order_by(BasicObsoleteSheepinfo.basic_id.desc())
+    query = query.filter(BasicObsoleteGrassinfo.belong == 0)
+    # query = query.filter(BasicObsoleteGrassinfo.belong == 0).order_by(BasicObsoleteGrassinfo.basic_id.desc())
     print(query)
     print('我要开始排序了')
-    infos = query.order_by(desc(BasicObsoleteSheepinfo.id)).paginate(page=pageNum, per_page=pageSize,
+    infos = query.order_by(desc(BasicObsoleteGrassinfo.id)).paginate(page=pageNum, per_page=pageSize,
                                                                   error_out=False)
     print('我排好序了')
     total = query.count()

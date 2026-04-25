@@ -3,7 +3,7 @@
   <el-container class="layout">
     <div class="aside-split">
       <div class="logo flx-center">
-        <img class="logo-img" src="@/assets/images/yang.png" alt="logo" />
+        <img class="logo-img" src="@/assets/images/cao.png" alt="logo" />
       </div>
       <el-scrollbar>
         <div class="split-list">

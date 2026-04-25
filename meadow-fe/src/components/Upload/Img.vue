@@ -65,7 +65,7 @@ interface UploadFileProps {
   height?: string; // 组件高度 ==> 非必传（默认为 150px）
   width?: string; // 组件宽度 ==> 非必传（默认为 150px）
   borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
-  sheepinfo?: any;
+  grassinfo?: any;
 }
 
 // 接受父组件参数
@@ -80,7 +80,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
   height: "150px",
   width: "150px",
   borderRadius: "8px",
-  sheepinfo: {}
+  grassinfo: {}
 });
 
 // 生成组件唯一id
@@ -107,7 +107,7 @@ const emit = defineEmits<{
 const handleHttpUpload = async (options: UploadRequestOptions) => {
   console.log(props);
   let formData = new FormData();
-  // let filename = props.sheepinfo.ele_num + "-" + props.name;
+  // let filename = props.grassinfo.ele_num + "-" + props.name;
   formData.append(props.name, options.file);
   try {
     const api = props.api ?? uploadImg;

@@ -55,6 +55,7 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@rollup/rollup-linux-x64-gnu": "^4.60.2",
     "@types/md5": "^2.3.5",
     "@types/nprogress": "^0.2.3",
     "@types/qs": "^6.9.15",

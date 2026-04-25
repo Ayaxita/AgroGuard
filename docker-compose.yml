@@ -14,13 +14,13 @@ services:
     hostname: mysql-db
     image: m.daocloud.io/docker.io/library/mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: sheep123
-      MYSQL_DATABASE: sheep_test
+      MYSQL_ROOT_PASSWORD: meadow123
+      MYSQL_DATABASE: meadow_test
     ports:
       - "5010:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./init-scripts:/docker-entrypoint-initdb.d:Z
+      - ./init-scripts/meadow_test-2025_03_21_18_30_21-dump.sql:/docker-entrypoint-initdb.d/dump.sql:Z
   vue:
     hostname: vue
     depends_on:

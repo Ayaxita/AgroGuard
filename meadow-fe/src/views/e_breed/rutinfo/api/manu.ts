@@ -27,8 +27,8 @@ export const exportGrassInfo = params => {
   return http.download(PORT1 + `/rutinfo/export`, params);
 };
 //获取监测目标信息
-export const getEweSheep = params => {
-  const result = http.post(PORT1 + `/rutinfo/get_ewesheep`, params);
+export const getEweGrass = params => {
+  const result = http.post(PORT1 + `/rutinfo/get_ewegrass`, params);
   result.then(resp => console.log("返回的列表数据", resp));
   return result;
 };

@@ -44,7 +44,7 @@
         </el-button>
       </template>
     </ProTable>
-    <SheepDrawer ref="drawerRef" />
+    <GrassDrawer ref="drawerRef" />
     <immunizationDrawer ref="drawerRef2" />
     <ImportExcel ref="dialogRef" />
   </div>
@@ -58,7 +58,7 @@ import { useDownload, useDownloadWord } from "@/hooks/useDownload";
 import { ElDatePicker, ElForm, ElFormItem, ElInput, ElMessage, ElMessageBox, ElOption, ElSelect } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "../components/ImportExcel/index.vue";
-import SheepDrawer from "../components/SheepDrawer.vue";
+import GrassDrawer from "../components/GrassDrawer.vue";
 import immunizationDrawer from "../components/immunizationDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import {
@@ -79,26 +79,26 @@ import {
 } from "@element-plus/icons-vue";
 import {
   addImmunization,
-  getSheepList,
-  editSheep,
-  addSheep,
+  getGrassList,
+  editGrass,
+  addGrass,
   exportGrassInfo,
-  BatchAddSheep,
-  markSheepDeath,
+  BatchAddGrass,
+  markGrassDeath,
   updateMonAge,
   initHouseAndHurdle,
-  sheepTransfer,
+  grassTransfer,
   updateHouseAndHurdle,
-  markSheepDieOut,
-  markSheepSale,
-  BatchAddSheepTemp,
+  markGrassDieOut,
+  markGrassSale,
+  BatchAddGrassTemp,
   initManu,
   updateGrandparents,
   MakeScore,
   exportxipuInfo,
   MakeAScore,
   openData
-} from "../api/sheep";
+} from "../api/grass";
 import {
   sexType,
   varietyType,
@@ -156,7 +156,7 @@ const getTableList = (params: any) => {
   newParams.createTime && (newParams.startTime = newParams.createTime[0]);
   newParams.createTime && (newParams.endTime = newParams.createTime[1]);
   delete newParams.createTime;
-  return getSheepList(newParams);
+  return getGrassList(newParams);
 };
 
 // 自定义渲染表头（使用tsx语法）
@@ -561,11 +561,11 @@ const new_model = computed(() => {
   };
 });
 // 草地分区调整
-const openTransfer = async sheepsinfo => {
-  if (sheepsinfo.length !== 0) {
-    if (sheepsinfo.some(item => datas.list.find(data => data.id === item).state === 2))
+const openTransfer = async grassinfo => {
+  if (grassinfo.length !== 0) {
+    if (grassinfo.some(item => datas.list.find(data => data.id === item).state === 2))
       return ElMessage.warning("不能选中已售出的记录！");
-    //console.log("多条记录", sheepsinfo);
+    //console.log("多条记录", grassinfo);
     ElMessageBox({
       title: "草地分区调整",
       message: () => {
@@ -642,12 +642,12 @@ const openTransfer = async sheepsinfo => {
               )
             ]
           ),
-          h("p", `已选${sheepsinfo.length}条记录`)
+          h("p", `已选${grassinfo.length}条记录`)
         ]);
       },
       showCancelButton: true
     }).then(() => {
-      let params = sheepsinfo.map(item => ({
+      let params = grassinfo.map(item => ({
         id: item,
         new_house_id: new_house.value,
         new_house_name: houses.value.find(item => item.house_id === new_house.value).house_name,
@@ -659,7 +659,7 @@ const openTransfer = async sheepsinfo => {
       new_house.value = null;
       new_hurdle.value = null;
       // console.log(params);
-      sheepTransfer(params).then(res => {
+      grassTransfer(params).then(res => {
         if (res.code === 200) {
           ElMessage.success("转圈成功！");
           // console.log("表的value", proTable.value);
@@ -676,11 +676,11 @@ const openTransfer = async sheepsinfo => {
 
 // 跳转草地档案详情页
 //需要到authMenuList.json下面写路由
-const toFamilyTree = sheepid => {
-  // console.log(sheepid);
-  if (sheepid.length === 1) {
-    router.push(`/basic/basicinfo/useProTable/familyTree/${sheepid}?params=detail-page`);
-  } else if (sheepid.length === 0) {
+const toFamilyTree = grassid => {
+  // console.log(grassid);
+  if (grassid.length === 1) {
+    router.push(`/basic/basicinfo/useProTable/familyTree/${grassid}?params=detail-page`);
+  } else if (grassid.length === 0) {
     ElMessage.warning("请先选择要查看的记录！");
   } else {
     ElMessage.warning("一次只能选择一条记录查看详情！");
@@ -706,9 +706,9 @@ const saleProps = ref<any>({
   notes: null
 });
 // 标记售出
-const markSale = async sheepsinfo => {
-  if (sheepsinfo.length !== 0) {
-    if (sheepsinfo.some(item => datas.list.find(data => data.id === item).state === 2))
+const markSale = async grassinfo => {
+  if (grassinfo.length !== 0) {
+    if (grassinfo.some(item => datas.list.find(data => data.id === item).state === 2))
       return ElMessage.warning("不能选中已售出的记录！");
     ElMessageBox({
       title: "标记售出",
@@ -1049,12 +1049,12 @@ const markSale = async sheepsinfo => {
               )
             ]
           ),
-          h("p", `已选${sheepsinfo.length}条记录`)
+          h("p", `已选${grassinfo.length}条记录`)
         ]);
       },
       showCancelButton: true
     }).then(() => {
-      let params = sheepsinfo.map(item => {
+      let params = grassinfo.map(item => {
         return {
           ...saleProps.value,
           basic_id: item
@@ -1078,7 +1078,7 @@ const markSale = async sheepsinfo => {
         medical_leave: null,
         notes: null
       };
-      markSheepSale(params).then(res => {
+      markGrassSale(params).then(res => {
         if (res.code === 200) {
           ElMessage.success("标记成功！");
           proTable.value?.clearSelection();
@@ -1105,9 +1105,9 @@ const deathProps = ref<any>({
   notes: null
 });
 // 标记死亡
-const markDeath = async sheepsinfo => {
-  if (sheepsinfo.length !== 0) {
-    if (sheepsinfo.some(item => datas.list.find(data => data.id === item).state === 2))
+const markDeath = async grassinfo => {
+  if (grassinfo.length !== 0) {
+    if (grassinfo.some(item => datas.list.find(data => data.id === item).state === 2))
       return ElMessage.warning("不能选中已售出的记录！");
     ElMessageBox({
       title: "标记死亡",
@@ -1306,12 +1306,12 @@ const markDeath = async sheepsinfo => {
               )
             ]
           ),
-          h("p", `已选${sheepsinfo.length}条记录`)
+          h("p", `已选${grassinfo.length}条记录`)
         ]);
       },
       showCancelButton: true
     }).then(() => {
-      let params = sheepsinfo.map(item => {
+      let params = grassinfo.map(item => {
         return {
           ...deathProps.value,
           basic_id: item
@@ -1328,7 +1328,7 @@ const markDeath = async sheepsinfo => {
         t_staff: null,
         notes: null
       };
-      markSheepDeath(params).then(res => {
+      markGrassDeath(params).then(res => {
         if (res.code === 200) {
           ElMessage.success("标记成功！");
           proTable.value?.clearSelection();
@@ -1344,18 +1344,18 @@ const markDeath = async sheepsinfo => {
 };
 
 // 标记淘汰
-const markDieOut = async sheepsinfo => {
-  console.log("选中的淘汰信息", sheepsinfo);
-  if (sheepsinfo.length !== 0) {
-    if (sheepsinfo.some(item => item.state === 2)) return ElMessage.warning("不能选中已售出的记录！");
-    sheepsinfo.forEach(item => {
+const markDieOut = async grassinfo => {
+  console.log("选中的淘汰信息", grassinfo);
+  if (grassinfo.length !== 0) {
+    if (grassinfo.some(item => item.state === 2)) return ElMessage.warning("不能选中已售出的记录！");
+    grassinfo.forEach(item => {
       item.state = -1;
     });
-    ElMessageBox.confirm(`确认标记淘汰地块?<br/>已选${sheepsinfo.length}条记录`, "温馨提示", {
+    ElMessageBox.confirm(`确认标记淘汰地块?<br/>已选${grassinfo.length}条记录`, "温馨提示", {
       type: "warning",
       dangerouslyUseHTMLString: true
     }).then(() => {
-      markSheepDieOut(sheepsinfo).then(res => {
+      markGrassDieOut(grassinfo).then(res => {
         if (res === 200) {
           ElMessage.success("标记成功！");
           proTable.value?.clearSelection();
@@ -1372,11 +1372,11 @@ const markDieOut = async sheepsinfo => {
 
 // 批量导入添加草地记录
 const dialogRef = ref<InstanceType<typeof ImportExcel> | null>(null);
-const batchAddSheep = () => {
+const batchAddGrass = () => {
   const params = {
     title: "草地",
-    tempApi: BatchAddSheepTemp,
-    importApi: BatchAddSheep,
+    tempApi: BatchAddGrassTemp,
+    importApi: BatchAddGrass,
     getTableList: proTable.value?.getTableList
   };
   dialogRef.value?.acceptParams(params);
@@ -1399,9 +1399,9 @@ const generateQRCode = async params => {
 // const openxipuData = async params => {
 //   console.log(params);
 //   console.log(params.id);
-//   // const sheepId = params.id;
+//   // const grassId = params.id;
 
-//   // openData(sheepId).then(res => openDetail(res));
+//   // openData(grassId).then(res => openDetail(res));
 //   // 调用 openData 获取数据
 //   const res = await openData(params);
 //   console.log(res);
@@ -1441,17 +1441,17 @@ const openDetail = async params => {
 //草地评分，所选
 const updateAscore = async selectedListIds => {
   // 获取用户在表格中所选的数据
-  const selectedSheepData = selectedListIds;
+  const selectedGrassData = selectedListIds;
 
-  if (!selectedSheepData || selectedSheepData.length === 0) {
+  if (!selectedGrassData || selectedGrassData.length === 0) {
     ElMessage.warning("请先选择要导出的数据！");
     return;
   }
 
-  ElMessageBox.confirm(`确认导出所选的${selectedSheepData.length}条数据`, "温馨提示", {
+  ElMessageBox.confirm(`确认导出所选的${selectedGrassData.length}条数据`, "温馨提示", {
     type: "warning"
   }).then(() => {
-    MakeAScore(selectedSheepData).then(res => {
+    MakeAScore(selectedGrassData).then(res => {
       if (res.code === 200) {
         ElMessage.success("打分成功！");
       } else {
@@ -1480,17 +1480,17 @@ const updatescore = async () => {
 //下载所选草地档案
 const downloadSelectFile = async selectedList => {
   // 获取用户在表格中所选数据
-  const selectedSheepData = selectedList;
-  console.log(selectedSheepData);
+  const selectedGrassData = selectedList;
+  console.log(selectedGrassData);
 
-  if (!selectedSheepData || selectedSheepData.length === 0) {
+  if (!selectedGrassData || selectedGrassData.length === 0) {
     ElMessage.warning("请先选择要导出的数据！");
     return;
   }
 
-  ElMessageBox.confirm(`确认导出所选草地编号为${selectedSheepData.ele_num}的数据?`, "温馨提示", { type: "warning" }).then(() => {
+  ElMessageBox.confirm(`确认导出所选草地编号为${selectedGrassData.ele_num}的数据?`, "温馨提示", { type: "warning" }).then(() => {
     // 调用useDownload函数进行导出，并传入所选数据
-    useDownloadWord(() => exportxipuInfo(selectedSheepData), `${selectedSheepData.ele_num}草地档案`, null);
+    useDownloadWord(() => exportxipuInfo(selectedGrassData), `${selectedGrassData.ele_num}草地档案`, null);
   });
 };
 
@@ -1514,7 +1514,7 @@ const updateGrand = async () => {
   });
 };
 // 打开 drawer(新增、查看、编辑)
-const drawerRef = ref<InstanceType<typeof SheepDrawer> | null>(null);
+const drawerRef = ref<InstanceType<typeof GrassDrawer> | null>(null);
 const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   const params = {
     title,
@@ -1522,7 +1522,7 @@ const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
     row: { ...row },
     house_hurdle_list: houses.value,
     manu_list: manus.value,
-    api: title === "新增" ? addSheep : title === "编辑" ? editSheep : undefined,
+    api: title === "新增" ? addGrass : title === "编辑" ? editGrass : undefined,
     getTableList: proTable.value?.getTableList
   };
   console.log(params);
@@ -1530,16 +1530,16 @@ const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
 };
 const drawerRef2 = ref<InstanceType<typeof immunizationDrawer> | null>(null);
 
-const openimmunizationDrawer = (title: string, sheepList: Array<any>, row: Partial<User.ResUserList> = {}) => {
+const openimmunizationDrawer = (title: string, grassList: Array<any>, row: Partial<User.ResUserList> = {}) => {
   //row: Partial<User.ResUserList> = {},
-  if (sheepList.length !== 0) {
-    if (sheepList.some(item => item.state === 2)) return ElMessage.warning("不能选中已售出的记录！");
+  if (grassList.length !== 0) {
+    if (grassList.some(item => item.state === 2)) return ElMessage.warning("不能选中已售出的记录！");
     else {
       const params = {
         title,
         isView: title === "查看",
         row: { ...row },
-        sheepList: sheepList,
+        grassList: grassList,
         api: addImmunization,
         clearSelection: proTable.value?.clearSelection,
         getTableList: proTable.value?.getTableList

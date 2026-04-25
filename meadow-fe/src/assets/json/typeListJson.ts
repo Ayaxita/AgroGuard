@@ -45,7 +45,7 @@ export const ingredientsType = [
   }
 ];
 
-export const goodsheepAgetype = [
+export const goodgrassAgetype = [
   {
     label: "2月生长周期",
     value: 2
