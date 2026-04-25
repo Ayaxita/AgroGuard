@@ -1,3 +1,5 @@
+import os
+
 from flask import Blueprint, jsonify, request, Response
 from zhipuai import ZhipuAI
 import json
@@ -6,7 +8,7 @@ from App.chatbox.tools_schema import TOOLS, SYSTEM_PROMPT
 
 chatbox = Blueprint('chatbox', __name__)
 
-ZHIPU_API_KEY = "c22e75ec763e4b7183a3eb24e3232c76.MOHB0b4CS5wZS6Zs"
+ZHIPU_API_KEY = os.environ.get("ZHIPU_API_KEY", "")
 
 MODEL_MAP = {
     "GLM-4.7-Flash": "glm-4-flash",
