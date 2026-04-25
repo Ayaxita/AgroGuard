@@ -1,8 +1,5 @@
-# Large SQL dump files
-init-scripts/*.sql
-!init-scripts/init.sql
+# Large SQL dump files (too big for GitHub)
 *.sql
-!init.sql
 
 # Python cache
 __pycache__/
@@ -35,4 +32,9 @@ PROJECT_GUIDE.md
 开题报告*
 中期答辩*
 
-# Keep the auto-generated README.md
+# Build artifacts
+dist/
+
+# Database files
+*.db
+instance/*.db
