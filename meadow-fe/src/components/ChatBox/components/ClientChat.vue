@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// @ts-nocheck
 import { ref, computed, watch } from "vue";
 import { useChatMsgStore, useChatStateStore } from "../stores/chatStore";
 import { MsgContent, MsgThought } from "lke-component-vue3";

@@ -48,7 +48,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-nocheck
 import { computed } from "vue";
 import { ChatBubbleLeftIcon, TrashIcon } from "@heroicons/vue/24/outline";
 import HistoryCloseButton from "./buttons/HistoryCloseButton.vue";
