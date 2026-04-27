@@ -560,20 +560,20 @@ class BasicBasicinfo(db.Model):
     score_24 = db.Column(db.Integer)
 
     # 父亲和母亲的祖父母字段
-    ram_grandfather_id = db.Column(db.Integer)
-    ram_grandfather_ele_num = db.Column(db.String(20))
-    ram_grandfather_pre_num = db.Column(db.String(16))
-    ewe_grandfather_id = db.Column(db.Integer)
-    ewe_grandfather_ele_num = db.Column(db.String(20))
-    ewe_grandfather_pre_num = db.Column(db.String(16))
+    paternal_grandfather_id = db.Column(db.Integer)
+    paternal_grandfather_ele_num = db.Column(db.String(20))
+    paternal_grandfather_pre_num = db.Column(db.String(16))
+    maternal_grandfather_id = db.Column(db.Integer)
+    maternal_grandfather_ele_num = db.Column(db.String(20))
+    maternal_grandfather_pre_num = db.Column(db.String(16))
 
     # 父亲和母亲的祖母字段
-    ram_grandmother_id = db.Column(db.Integer)
-    ram_grandmother_ele_num = db.Column(db.String(20))
-    ram_grandmother_pre_num = db.Column(db.String(16))
-    ewe_grandmother_id = db.Column(db.Integer)
-    ewe_grandmother_ele_num = db.Column(db.String(20))
-    ewe_grandmother_pre_num = db.Column(db.String(16))
+    paternal_grandmother_id = db.Column(db.Integer)
+    paternal_grandmother_ele_num = db.Column(db.String(20))
+    paternal_grandmother_pre_num = db.Column(db.String(16))
+    maternal_grandmother_id = db.Column(db.Integer)
+    maternal_grandmother_ele_num = db.Column(db.String(20))
+    maternal_grandmother_pre_num = db.Column(db.String(16))
 
 
 
@@ -629,7 +629,7 @@ class BasicFieldconditioninfo(db.Model):
 
     bust = db.Column(db.Double(asdecimal=True))
 
-    testis_shape = db.Column(db.String(20))
+    root_shape = db.Column(db.String(20))
 
     t_staff = db.Column(db.String(8))
 
@@ -637,7 +637,7 @@ class BasicFieldconditioninfo(db.Model):
 
     performance_traits = db.Column(db.String(40))
 
-    with_births = db.Column(db.Integer)
+    with_plantings = db.Column(db.Integer)
 
     wea_weight = db.Column(db.Double(asdecimal=True))
 
@@ -783,7 +783,7 @@ class BasicHarvestinfo(db.Model):
 
     variety = db.Column(db.Integer)
 
-    cut_time = db.Column(db.Date)
+    harvest_time = db.Column(db.Date)
 
     rank = db.Column(db.Integer)
 
@@ -799,7 +799,7 @@ class BasicHarvestinfo(db.Model):
 
     f_date = db.Column(db.Date, nullable=False)
 
-    cut_num = db.Column(db.Integer, nullable=False)
+    harvest_num = db.Column(db.Integer, nullable=False)
 
 
 

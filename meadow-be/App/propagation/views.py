@@ -1044,10 +1044,10 @@ def check_self_pollination():
             male_ele_num,
             male_record.f_ele_num,  # 父亲
             male_record.m_ele_num,  # 母亲
-            male_record.ram_grandfather_ele_num,  # 父方祖父
-            male_record.ram_grandmother_ele_num,  # 父方祖母
-            male_record.ewe_grandfather_ele_num,  # 父方外祖父
-            male_record.ewe_grandmother_ele_num  # 父方外祖母
+            male_record.paternal_grandfather_ele_num,  # 父方祖父
+            male_record.paternal_grandmother_ele_num,  # 父方祖母
+            male_record.maternal_grandfather_ele_num,  # 父方外祖父
+            male_record.maternal_grandmother_ele_num  # 父方外祖母
         ]
 
         # 提取母草地的相关祖先信息
@@ -1055,10 +1055,10 @@ def check_self_pollination():
             female_ele_num,
             female_record.f_ele_num,  # 父亲
             female_record.m_ele_num,  # 母亲
-            female_record.ram_grandfather_ele_num,  # 母方祖父
-            female_record.ram_grandmother_ele_num,  # 母方祖母
-            female_record.ewe_grandfather_ele_num,  # 母方外祖父
-            female_record.ewe_grandmother_ele_num  # 母方外祖母
+            female_record.paternal_grandfather_ele_num,  # 母方祖父
+            female_record.paternal_grandmother_ele_num,  # 母方祖母
+            female_record.maternal_grandfather_ele_num,  # 母方外祖父
+            female_record.maternal_grandmother_ele_num  # 母方外祖母
         ]
 
         # 去除 None、空字符串和无效值 "0000000000000000"

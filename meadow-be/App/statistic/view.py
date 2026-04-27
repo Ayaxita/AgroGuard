@@ -2167,7 +2167,7 @@ def get_second_table(basic_id):
                     'm_ele_num': basic.m_ele_num.strip(),
                     'f_pre_num': basic.f_pre_num.strip(),
                     'm_pre_num': basic.m_pre_num.strip(),
-                    'with_births': breeder.with_births if breeder else '',
+                    'with_plantings': breeder.with_plantings if breeder else '',
                     'wea_weight': breeder.wea_weight if breeder else '',
                     'zf_ele_num': father.f_ele_num.strip() if father.f_ele_num else ' ',
                     'zf_pre_num': father.f_pre_num.strip() if father.f_pre_num else ' ',

@@ -1473,7 +1473,7 @@ def export_nursinginfo():
 
         data_list = []
         for info, ele_num, pre_num in nursing_info:
-            dataroot_shape = d_plantcareTestis_shapeType.get(info.testis_shape, " ")
+            dataroot_shape = d_plantcareTestis_shapeType.get(info.root_shape, " ")
             dataprenatal_paralysi = prenatal_paralysi.get(info.prenatal_paralysi, " ")
             datauterus_fall = uterus_fall.get(info.uterus_fall, " ")
             dataswelling = swelling.get(info.swelling, " ")

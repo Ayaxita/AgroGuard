@@ -1441,11 +1441,11 @@ def get_fieldcondition_info():
         'bust': BasicFieldconditioninfo.bust,
         'back_fat': BasicFieldconditioninfo.back_fat,
         'eye': BasicFieldconditioninfo.eye,
-        'testis_shape': BasicFieldconditioninfo.testis_shape,
+        'root_shape': BasicFieldconditioninfo.root_shape,
         't_staff': BasicFieldconditioninfo.t_staff,
         'AE': BasicFieldconditioninfo.AE,
         'performance_traits': BasicFieldconditioninfo.performance_traits,
-        'with_births': BasicFieldconditioninfo.with_births,
+        'with_plantings': BasicFieldconditioninfo.with_plantings,
         'wea_weight': BasicFieldconditioninfo.wea_weight,
         'June_heavy': BasicFieldconditioninfo.June_heavy,
         'health': BasicFieldconditioninfo.health,
@@ -1704,18 +1704,18 @@ def update_grandparents():
 
             # 更新当前记录的祖父母信息
             rows_affected = BasicBasicinfo.query.filter_by(id=record.id).update({
-                'ram_grandfather_id': father_grandfather_id,
-                'ram_grandfather_ele_num': father_grandfather_ele_num,
-                'ram_grandfather_pre_num': father_grandfather_pre_num,
-                'ewe_grandfather_id': mother_grandfather_id,
-                'ewe_grandfather_ele_num': mother_grandfather_ele_num,
-                'ewe_grandfather_pre_num': mother_grandfather_pre_num,
-                'ram_grandmother_id': father_grandmother_id,
-                'ram_grandmother_ele_num': father_grandmother_ele_num,
-                'ram_grandmother_pre_num': father_grandmother_pre_num,
-                'ewe_grandmother_id': mother_grandmother_id,
-                'ewe_grandmother_ele_num': mother_grandmother_ele_num,
-                'ewe_grandmother_pre_num': mother_grandmother_pre_num
+                'paternal_grandfather_id': father_grandfather_id,
+                'paternal_grandfather_ele_num': father_grandfather_ele_num,
+                'paternal_grandfather_pre_num': father_grandfather_pre_num,
+                'maternal_grandfather_id': mother_grandfather_id,
+                'maternal_grandfather_ele_num': mother_grandfather_ele_num,
+                'maternal_grandfather_pre_num': mother_grandfather_pre_num,
+                'paternal_grandmother_id': father_grandmother_id,
+                'paternal_grandmother_ele_num': father_grandmother_ele_num,
+                'paternal_grandmother_pre_num': father_grandmother_pre_num,
+                'maternal_grandmother_id': mother_grandmother_id,
+                'maternal_grandmother_ele_num': mother_grandmother_ele_num,
+                'maternal_grandmother_pre_num': mother_grandmother_pre_num
             })
             total_rows_affected += rows_affected  # 累加影响行数
 
@@ -1852,11 +1852,11 @@ def add_harvest_info():
     ctime = datetime.now().strftime("%Y-%m-%d")
     data['belong'] = 0
     data['f_date'] = ctime
-    if data['cut_time']:
-        date_obj = datetime.strptime(data['cut_time'], '%Y-%m-%d')
+    if data['harvest_time']:
+        date_obj = datetime.strptime(data['harvest_time'], '%Y-%m-%d')
         # 将 datetime 对象转换为指定格式的字符串
         formatted_date = date_obj.strftime('%Y-%m-%d')
-        data['cut_time'] = formatted_date
+        data['harvest_time'] = formatted_date
     if data['house_name']:
         del data['house_name']
 
@@ -1899,19 +1899,19 @@ def get_harvest_info():
         'house_name': BasicHarvestinfo.house_id,
         'ele_quantity': BasicHarvestinfo.ele_quantity,
         'variety': BasicHarvestinfo.variety,
-        'cut_time': BasicHarvestinfo.cut_time,
+        'harvest_time': BasicHarvestinfo.harvest_time,
         'rank': BasicHarvestinfo.rank,
         'color': BasicHarvestinfo.color,
         'weight': BasicHarvestinfo.weight,
         'staff': BasicHarvestinfo.staff,
         'notes': BasicHarvestinfo.notes,
         'f_date': BasicHarvestinfo.f_date,
-        'cut_num': BasicHarvestinfo.cut_num,
+        'harvest_num': BasicHarvestinfo.harvest_num,
     }
     for param, column in search_params.items():
         value = request.json.get(param)
         if value is not None:  # 检查值不为 None
-            if param == 'cut_time' or param == 'f_date':  # 日期需要转换
+            if param == 'harvest_time' or param == 'f_date':  # 日期需要转换
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'house_name':
