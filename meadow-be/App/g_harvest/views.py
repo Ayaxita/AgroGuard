@@ -1,5 +1,5 @@
 # views.py: 路由 + 视图函数
-import datetime
+from datetime import datetime
 import random
 
 from flask import Blueprint, render_template, request, make_response, Response, redirect, url_for, session, jsonify, \
@@ -281,3 +281,218 @@ def del_g_saleinfo():
         "code": 200,
         "msg": '删除成功'
     })
+
+@g_harvest.route('/g_harvest/binformationinfo', methods=['POST'])
+def get_g_harvest_binformationinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'belong': GHarvestBinformationinfo.belong,
+        'date': GHarvestBinformationinfo.date,
+        'month': GHarvestBinformationinfo.month,
+        'basic_id': GHarvestBinformationinfo.basic_id,
+        'variety': GHarvestBinformationinfo.variety,
+        'source': GHarvestBinformationinfo.source,
+        'back_fat_thickness': GHarvestBinformationinfo.back_fat_thickness,
+        'net_meat_ratio': GHarvestBinformationinfo.net_meat_ratio,
+        'CWT': GHarvestBinformationinfo.CWT,
+        'emuscle_area': GHarvestBinformationinfo.emuscle_area,
+        'back_thickness': GHarvestBinformationinfo.back_thickness,
+        'level': GHarvestBinformationinfo.level,
+        'recorder': GHarvestBinformationinfo.recorder,
+        'notes': GHarvestBinformationinfo.notes,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = GHarvestBinformationinfo.query.filter(and_(*conditions))
+    else:
+        query = GHarvestBinformationinfo.query
+    infos = query.filter(GHarvestBinformationinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'belong': info.belong,
+            'date': info.date,
+            'month': info.month,
+            'basic_id': info.basic_id,
+            'variety': info.variety,
+            'source': info.source,
+            'back_fat_thickness': info.back_fat_thickness,
+            'net_meat_ratio': info.net_meat_ratio,
+            'CWT': info.CWT,
+            'emuscle_area': info.emuscle_area,
+            'back_thickness': info.back_thickness,
+            'level': info.level,
+            'recorder': info.recorder,
+            'notes': info.notes,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@g_harvest.route('/g_harvest/binformationinfo/add', methods=['POST'])
+def add_g_harvest_binformationinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = GHarvestBinformationinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@g_harvest.route('/g_harvest/binformationinfo/edit', methods=['POST'])
+def edit_g_harvest_binformationinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    GHarvestBinformationinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@g_harvest.route('/g_harvest/binformationinfo/del', methods=['POST'])
+def del_g_harvest_binformationinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = GHarvestBinformationinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})
+
+
+@g_harvest.route('/g_harvest/economicinfo', methods=['POST'])
+def get_g_harvest_economicinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'belong': GHarvestEconomicinfo.belong,
+        'basic_id': GHarvestEconomicinfo.basic_id,
+        'age': GHarvestEconomicinfo.age,
+        'house_id': GHarvestEconomicinfo.house_id,
+        'in_weight': GHarvestEconomicinfo.in_weight,
+        'in_1_5': GHarvestEconomicinfo.in_1_5,
+        'in_3': GHarvestEconomicinfo.in_3,
+        'in_4_5': GHarvestEconomicinfo.in_4_5,
+        'out_weight': GHarvestEconomicinfo.out_weight,
+        'put_volume': GHarvestEconomicinfo.put_volume,
+        'intake': GHarvestEconomicinfo.intake,
+        'menu': GHarvestEconomicinfo.menu,
+        'cost': GHarvestEconomicinfo.cost,
+        'FCR': GHarvestEconomicinfo.FCR,
+        'ADG': GHarvestEconomicinfo.ADG,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = GHarvestEconomicinfo.query.filter(and_(*conditions))
+    else:
+        query = GHarvestEconomicinfo.query
+    infos = query.filter(GHarvestEconomicinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'belong': info.belong,
+            'basic_id': info.basic_id,
+            'age': info.age,
+            'house_id': info.house_id,
+            'in_weight': info.in_weight,
+            'in_1_5': info.in_1_5,
+            'in_3': info.in_3,
+            'in_4_5': info.in_4_5,
+            'out_weight': info.out_weight,
+            'put_volume': info.put_volume,
+            'intake': info.intake,
+            'menu': info.menu,
+            'cost': info.cost,
+            'FCR': info.FCR,
+            'ADG': info.ADG,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@g_harvest.route('/g_harvest/economicinfo/add', methods=['POST'])
+def add_g_harvest_economicinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = GHarvestEconomicinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@g_harvest.route('/g_harvest/economicinfo/edit', methods=['POST'])
+def edit_g_harvest_economicinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    GHarvestEconomicinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@g_harvest.route('/g_harvest/economicinfo/del', methods=['POST'])
+def del_g_harvest_economicinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = GHarvestEconomicinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})

@@ -221,8 +221,7 @@ const sortTable = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: numbe
 };
 //todo
 //删除
-const deleteProductivity = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: number }) => {
-  console.log(newIndex, oldIndex);
+const deleteProductivity = () => {
   console.log(proTable.value?.tableData);
   ElMessage.success("修改列表排序成功");
 };

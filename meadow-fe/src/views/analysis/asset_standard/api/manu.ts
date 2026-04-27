@@ -1,6 +1,6 @@
 // import { PORT1 } from "@/api/config/servicePort";
 import http from "@/api";
-const PORT1 = "analysis";
+const PORT1 = "/analysis";
 
 // 获取列表
 export const getManuList = params => {

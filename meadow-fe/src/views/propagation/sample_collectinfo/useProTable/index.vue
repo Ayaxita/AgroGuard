@@ -202,8 +202,7 @@ const deleteData = datasinfo => {
   }
 };
 
-// const deleteData = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: number }) => {
-//   console.log(newIndex, oldIndex);
+// const deleteData = () => {
 //   console.log(proTable.value?.tableData);
 //   ElMessage.success("修改列表排序成功");
 // };

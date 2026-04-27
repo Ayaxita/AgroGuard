@@ -1,5 +1,5 @@
 # views.py: 路由 + 视图函数
-import datetime
+from datetime import datetime
 import random
 import os
 from flask import Blueprint, render_template, request, make_response, Response, redirect, url_for, session, jsonify, \

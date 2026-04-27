@@ -1,7 +1,7 @@
 import { PORT1 } from "@/api/config/servicePort";
 import http from "@/api";
 
-const PORT2 = "/colony";
+const PORT2 = "/field";
 // 获取列表
 export const getHouseList = params => {
   const result = http.post(PORT2 + `/houseinfo`, params);

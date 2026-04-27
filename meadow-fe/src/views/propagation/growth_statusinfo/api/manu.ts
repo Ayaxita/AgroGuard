@@ -1,7 +1,7 @@
 // import { PORT1 } from "@/api/config/servicePort";
 import http from "@/api";
 
-const PORT1 = "propagation";
+const PORT1 = "/propagation";
 // 获取记录列表
 export const getManuList = params => {
   const result = http.post(PORT1 + `/growth_statusinfo`, params);

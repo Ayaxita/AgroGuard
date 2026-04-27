@@ -179,7 +179,8 @@ def get_inventory():
         data = json.loads(data)
         # print(data)
         if data['type'] == 0 or data['type'] == 1:
-            data['maker_name'] = SupplyVSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
+            maker = SupplyVSuppliersinfo.query.filter_by(id=data['maker_id']).first()
+            data['maker_name'] = maker.supplier_name if maker else ''
         # else:
         #     data['maker_name'] = SupplyFSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
         list.append(data)
@@ -258,7 +259,8 @@ def get_inventoryForage():
         # if data['type'] == 0 or data['type'] == 1:
         #     data['maker_name'] = SupplyVSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
         if data['type'] == 2 or data['type'] == 3:
-            data['maker_name'] = SupplyFSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
+            maker = SupplyFSuppliersinfo.query.filter_by(id=data['maker_id']).first()
+            data['maker_name'] = maker.supplier_name if maker else ''
         list.append(data)
         print(list)
     result = {
@@ -426,7 +428,8 @@ def get_vaccine_in():
     for info in infos:
         data = json.dumps(info, cls=AlchemyEncoder, ensure_ascii=False)
         data = json.loads(data)
-        data['maker_name'] = SupplyVSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
+        maker = SupplyVSuppliersinfo.query.filter_by(id=data['maker_id']).first()
+        data['maker_name'] = maker.supplier_name if maker else ''
         list.append(data)
     result = {
         "code": 200,
@@ -633,7 +636,8 @@ def get_vaccine_out():
     for info in infos:
         data = json.dumps(info, cls=AlchemyEncoder, ensure_ascii=False)
         data = json.loads(data)
-        data['maker_name'] = SupplyVSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
+        maker = SupplyVSuppliersinfo.query.filter_by(id=data['maker_id']).first()
+        data['maker_name'] = maker.supplier_name if maker else ''
         list.append(data)
     result = {
         "code": 200,
@@ -773,7 +777,7 @@ def edit_vaccine_out():
         if data["type"] == 0:  # 说明是药品，更改的是药品支出费用
             dailySheet.yimiao_fees -= result_quantity * maker.first().out_price
         else:
-            dailySheet.yaoping_fees -= result_quantity * maker.first().out_price
+            dailySheet.yaopin_fees -= result_quantity * maker.first().out_price
     else:  # 两个日期不相等 , 还需要考虑新的日期是否再数据库中存在：暂时避免这种情况可以按照自动化程序每天自动生成一条当天的日支出报表信息，全部为0
 
         old_dailySheet = Analysisdailysheet.query.filter_by(date=maker.first().delivery_time).first()
@@ -890,7 +894,8 @@ def get_feedingin():
     for info in infos:
         data = json.dumps(info, cls=AlchemyEncoder, ensure_ascii=False)
         data = json.loads(data)
-        data['maker_name'] = SupplyFSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
+        maker = SupplyFSuppliersinfo.query.filter_by(id=data['maker_id']).first()
+        data['maker_name'] = maker.supplier_name if maker else ''
         list.append(data)
     result = {
         "code": 200,
@@ -1109,7 +1114,8 @@ def get_feeding_out():
     for info in infos:
         data = json.dumps(info, cls=AlchemyEncoder, ensure_ascii=False)
         data = json.loads(data)
-        data['maker_name'] = SupplyFSuppliersinfo.query.filter_by(id=data['maker_id']).first().supplier_name
+        maker = SupplyFSuppliersinfo.query.filter_by(id=data['maker_id']).first()
+        data['maker_name'] = maker.supplier_name if maker else ''
         list.append(data)
     result = {
         "code": 200,

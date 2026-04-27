@@ -1,7 +1,9 @@
-import datetime
+from datetime import datetime, timedelta, date
 import random
 import os
 import traceback
+import json
+import calendar
 
 from flask import Blueprint, render_template, request, make_response, Response, redirect, url_for, session, jsonify, \
     send_file
@@ -10,21 +12,9 @@ import pandas as pd
 
 from ..modelsReverse import *
 from ..utils.AlchemyEncoder import AlchemyEncoder
-from flask import Blueprint, request, jsonify
-from sqlalchemy import and_, desc, or_
-from datetime import datetime
-import datetime as dt
-import json
-from datetime import datetime,timedelta,date
-import calendar
-
-from flask import request, jsonify
-from sqlalchemy import func
 from decimal import Decimal
 import itertools
-import pandas as pd
 from io import BytesIO
-from flask import send_file
 
 analysis = Blueprint('analysis', __name__)
 # today = datetime(2025, 1, 2).date()
@@ -1203,7 +1193,7 @@ def update_select__daily_income():
             print(date)
             if not date:
                 # 如果请求数据中没有 f_date 字段，使用当前日期
-                date = datetime.datetime.now().strftime('%Y-%m-%d')
+                date = datetime.now().strftime('%Y-%m-%d')
         else:
             date = datetime.now().strftime('%Y-%m-%d')
         print(date)
@@ -1342,7 +1332,7 @@ def commit_update__daily_income():
             print(date)
             if not date:
                 # 如果请求数据中没有 f_date 字段，使用当前日期
-                date = datetime.datetime.now().strftime('%Y-%m-%d')
+                date = datetime.now().strftime('%Y-%m-%d')
         else:
             date = datetime.now().strftime('%Y-%m-%d')
         print(date)

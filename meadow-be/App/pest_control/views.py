@@ -1,5 +1,5 @@
 # views.py: 路由 + 视图函数
-import datetime
+from datetime import datetime
 import random
 import os
 from flask import Blueprint, render_template, request, make_response, Response, redirect, url_for, session, jsonify, \
@@ -1473,7 +1473,7 @@ def export_nursinginfo():
 
         data_list = []
         for info, ele_num, pre_num in nursing_info:
-            dataroot_shape = d_plantcareTestis_shapeType.get(info.root_shape, " ")
+            dataroot_shape = d_plantcareTestis_shapeType.get(info.testis_shape, " ")
             dataprenatal_paralysi = prenatal_paralysi.get(info.prenatal_paralysi, " ")
             datauterus_fall = uterus_fall.get(info.uterus_fall, " ")
             dataswelling = swelling.get(info.swelling, " ")

@@ -143,8 +143,7 @@ const sortTable = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: numbe
 };
 //todo
 //删除
-const deleteTransfer = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: number }) => {
-  console.log(newIndex, oldIndex);
+const deleteTransfer = () => {
   console.log(proTable.value?.tableData);
   ElMessage.success("修改列表排序成功");
 };

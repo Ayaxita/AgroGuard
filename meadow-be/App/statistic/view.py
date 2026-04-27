@@ -1,7 +1,9 @@
 # views.py: 路由 + 视图函数
-import datetime
+from datetime import datetime
+import datetime as dt
 import random
 import os
+import json
 from flask import Blueprint, render_template, request, make_response, Response, redirect, url_for, session, jsonify, \
     send_file
 from sqlalchemy import desc, and_, or_, not_, text, func
@@ -9,30 +11,11 @@ import pandas as pd
 
 from ..basic.views import load_data_from_yaml
 from ..modelsReverse import *
-import json
 from ..utils.AlchemyEncoder import AlchemyEncoder
-from flask import Blueprint, request, jsonify
-from sqlalchemy import and_, desc, or_
-from datetime import datetime
-import datetime as dt
-import json
 from docxtpl import DocxTemplate
-
-import datetime
-import os
-import random
-import json
+from flask_jwt_extended import jwt_required
 import shutil
 import yaml
-from flask import Blueprint, render_template, request, make_response, Response, redirect, url_for, session, jsonify, \
-    send_file
-from flask_jwt_extended import jwt_required
-from sqlalchemy import desc, and_, or_, not_, text
-import pandas as pd
-
-# from .models import *
-from ..modelsReverse import *
-from ..utils.AlchemyEncoder import AlchemyEncoder
 
 
 Statistic = Blueprint('statistic', __name__)
@@ -1171,96 +1154,7 @@ def fun(param):
     return id1
 
 
-# http://127.0.0.1:5000/basic/basicinfo/update_grandparents
-@Statistic.route('/basic/basicinfo/update_grandparents', methods=['POST'])
-def update_grandparents():
-    # 查询 BasicBasicinfo 表中的所有记录
-    all_records = BasicBasicinfo.query.all()
-    print(all_records)
 
-    # 如果没有找到任何记录，返回404错误
-    if not all_records:
-        return jsonify({"code": 404, "msg": "获取记录出错"})
-
-    total_rows_affected = 0  # 初始化计数器
-
-    try:
-        for record in all_records:
-            # 获取父母ID
-            father_id = record.father_id if record.father_id else 0
-            mother_id = record.mother_id if record.mother_id else 0
-
-            # 初始化祖父母信息为默认值
-            father_grandfather_id = 0
-            father_grandfather_ele_num = "0000000000000000"
-            father_grandfather_pre_num = "00000000000"
-
-            father_grandmother_id = 0
-            father_grandmother_ele_num = "0000000000000000"
-            father_grandmother_pre_num = "00000000000"
-
-            mother_grandfather_id = 0
-            mother_grandfather_ele_num = "0000000000000000"
-            mother_grandfather_pre_num = "00000000000"
-
-            mother_grandmother_id = 0
-            mother_grandmother_ele_num = "0000000000000000"
-            mother_grandmother_pre_num = "00000000000"
-
-            # 查询父亲的父母（祖父母）信息
-            if father_id != 0:
-                father_record = BasicBasicinfo.query.filter_by(id=father_id).first()
-                if father_record:
-                    # 父亲的父信息（祖父）
-                    father_grandfather_id = father_record.father_id if father_record.father_id else 0
-                    father_grandfather_ele_num = father_record.f_ele_num if father_record.f_ele_num else "0000000000000000"
-                    father_grandfather_pre_num = father_record.f_pre_num if father_record.f_pre_num else "00000000000"
-
-                    # 父亲的母信息（祖母）
-                    father_grandmother_id = father_record.mother_id if father_record.mother_id else 0
-                    father_grandmother_ele_num = father_record.m_ele_num if father_record.m_ele_num else "0000000000000000"
-                    father_grandmother_pre_num = father_record.m_pre_num if father_record.m_pre_num else "00000000000"
-
-            # 查询母亲的父母（祖父母）信息
-            if mother_id != 0:
-                mother_record = BasicBasicinfo.query.filter_by(id=mother_id).first()
-                if mother_record:
-                    # 母亲的父信息（祖父）
-                    mother_grandfather_id = mother_record.father_id if mother_record.father_id else 0
-                    mother_grandfather_ele_num = mother_record.f_ele_num if mother_record.f_ele_num else "0000000000000000"
-                    mother_grandfather_pre_num = mother_record.f_pre_num if mother_record.f_pre_num else "00000000000"
-
-                    # 母亲的母信息（祖母）
-                    mother_grandmother_id = mother_record.mother_id if mother_record.mother_id else 0
-                    mother_grandmother_ele_num = mother_record.m_ele_num if mother_record.m_ele_num else "0000000000000000"
-                    mother_grandmother_pre_num = mother_record.m_pre_num if mother_record.m_pre_num else "00000000000"
-
-            # 更新当前记录的祖父母信息
-            rows_affected = BasicBasicinfo.query.filter_by(id=record.id).update({
-                'paternal_grandfather_id': father_grandfather_id,
-                'paternal_grandfather_ele_num': father_grandfather_ele_num,
-                'paternal_grandfather_pre_num': father_grandfather_pre_num,
-                'maternal_grandfather_id': mother_grandfather_id,
-                'maternal_grandfather_ele_num': mother_grandfather_ele_num,
-                'maternal_grandfather_pre_num': mother_grandfather_pre_num,
-                'paternal_grandmother_id': father_grandmother_id,
-                'paternal_grandmother_ele_num': father_grandmother_ele_num,
-                'paternal_grandmother_pre_num': father_grandmother_pre_num,
-                'maternal_grandmother_id': mother_grandmother_id,
-                'maternal_grandmother_ele_num': mother_grandmother_ele_num,
-                'maternal_grandmother_pre_num': mother_grandmother_pre_num
-            })
-            total_rows_affected += rows_affected  # 累加影响行数
-
-        # 提交事务
-        db.session.commit()
-        print(f'提交了！！！！！！！！！ 总影响行数：{total_rows_affected}')
-
-        result = {
-            "code": 200,
-            "msg": f'更新成功，总影响行数：{total_rows_affected}'
-        }
-        return jsonify(result)
 
     except Exception as e:
         # 出现异常时回滚
@@ -2286,7 +2180,7 @@ def get_second_table(basic_id):
                     'm_ele_num': basic.m_ele_num.strip(),
                     'f_pre_num': basic.f_pre_num.strip(),
                     'm_pre_num': basic.m_pre_num.strip(),
-                    'with_plantings': breeder.with_plantings if breeder else '',
+                    'with_births': breeder.with_births if breeder else '',
                     'wea_weight': breeder.wea_weight if breeder else '',
                     'zf_ele_num': father.f_ele_num.strip() if father.f_ele_num else ' ',
                     'zf_pre_num': father.f_pre_num.strip() if father.f_pre_num else ' ',

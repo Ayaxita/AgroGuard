@@ -324,7 +324,7 @@
       "redirect": "/propagation/growth_statusinfo/useProTable",
       "meta": {
         "icon": "Female",
-            "title": "批次管理",
+        "title": "批次管理",
         "isLink": "",
         "isHide": false,
         "isFull": false,

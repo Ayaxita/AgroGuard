@@ -1,6 +1,5 @@
 # views.py: 路由 + 视图函数
-import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 import os
 import random
 import json
@@ -23,27 +22,12 @@ def md5(text):
 login_auth = Blueprint('login_auth', __name__)
 
 
-def md5(text):
-    return hashlib.md5(text.encode()).hexdigest()
-
-# 蓝图
-login_auth = Blueprint('login_auth', __name__)
-
-
 @login_auth.route('/login', methods=['GET', 'POST'])
 def login():
-    import sys
-    print(f"DEBUG: sys.version = {sys.version}", flush=True)
     data = request.get_json()
     name = data['username']
     pwd = data['password']
-    print(f"DEBUG: name={name}, pwd={pwd}, pwd type={type(pwd)}", flush=True)
     user = Testuser.query.filter_by(username=name).first()
-    if user:
-        print(f"DEBUG: user.username={user.username}, user.password={user.password}, type={type(user.password)}", flush=True)
-        print(f"DEBUG: pwd==user.password: {pwd == user.password}", flush=True)
-        print(f"DEBUG: md5(pwd)={md5(pwd)}, user.password={user.password}", flush=True)
-        print(f"DEBUG: md5(pwd)==user.password: {md5(pwd) == user.password}", flush=True)
     if user and name == user.username and md5(pwd) == user.password:
         # 'b8f994d0c9e22cb4c365915254cb0d2c'
         ctime = datetime.now()
@@ -100,14 +84,14 @@ def reset_password():
     name = data['username']
     pwd_old = data['password_old']
     user = Testuser.query.filter_by(username=name).first()
-    if pwd_old != user.password:
+    if hashlib.md5(pwd_old.encode()).hexdigest() != user.password:
         result = {
             'code': 400,
             'msg': '旧密码错误',
         }
         return jsonify(result)
     pwd_new = data['password_new']
-    user.password = pwd_new
+    user.password = hashlib.md5(pwd_new.encode()).hexdigest()
     try:
         db.session.commit()
     except Exception as e:

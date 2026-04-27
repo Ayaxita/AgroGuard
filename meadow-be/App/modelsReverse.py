@@ -471,9 +471,9 @@ class BasicBasicinfo(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    ele_num = db.Column(db.String(16), nullable=False, unique=True)#nullable=False，不能为空
+    ele_num = db.Column(db.String(20), nullable=False, unique=True)#nullable=False，不能为空
 
-    pre_num = db.Column(db.String(16), nullable=False, unique=True)#unique=True，唯一的
+    pre_num = db.Column(db.String(20), nullable=False, unique=True)#unique=True，唯一的
 
     purpose = db.Column(db.Integer)
 
@@ -491,7 +491,7 @@ class BasicBasicinfo(db.Model):
 
     birth = db.Column(db.Date, nullable=False)
 
-    wea_date = db.Column(db.Date, nullable=False)
+    wea_date = db.Column(db.Date, nullable=True)
 
     bir_weight = db.Column(db.Double(asdecimal=True))
 
@@ -511,11 +511,11 @@ class BasicBasicinfo(db.Model):
 
     mother_id = db.Column(db.Integer)
 
-    f_ele_num = db.Column(db.String(16))
+    f_ele_num = db.Column(db.String(20))
 
     f_pre_num = db.Column(db.String(16))
 
-    m_ele_num = db.Column(db.String(16))
+    m_ele_num = db.Column(db.String(20))
 
     m_pre_num = db.Column(db.String(16))
 
@@ -529,7 +529,11 @@ class BasicBasicinfo(db.Model):
 
     img_right = db.Column(db.String(100))
 
-    note = db.Column(db.String(255))
+    note = db.Column(db.Date)
+
+    note1 = db.Column(db.Text)
+
+    localization_num = db.Column(db.String(11))
 
     belong = db.Column(db.Integer, nullable=False)
 
@@ -556,20 +560,20 @@ class BasicBasicinfo(db.Model):
     score_24 = db.Column(db.Integer)
 
     # 父亲和母亲的祖父母字段
-    paternal_grandfather_id = db.Column(db.Integer)
-    paternal_grandfather_ele_num = db.Column(db.String(20))
-    paternal_grandfather_pre_num = db.Column(db.String(16))
-    maternal_grandfather_id = db.Column(db.Integer)
-    maternal_grandfather_ele_num = db.Column(db.String(20))
-    maternal_grandfather_pre_num = db.Column(db.String(16))
+    ram_grandfather_id = db.Column(db.Integer)
+    ram_grandfather_ele_num = db.Column(db.String(20))
+    ram_grandfather_pre_num = db.Column(db.String(16))
+    ewe_grandfather_id = db.Column(db.Integer)
+    ewe_grandfather_ele_num = db.Column(db.String(20))
+    ewe_grandfather_pre_num = db.Column(db.String(16))
 
     # 父亲和母亲的祖母字段
-    paternal_grandmother_id = db.Column(db.Integer)
-    paternal_grandmother_ele_num = db.Column(db.String(20))
-    paternal_grandmother_pre_num = db.Column(db.String(16))
-    maternal_grandmother_id = db.Column(db.Integer)
-    maternal_grandmother_ele_num = db.Column(db.String(20))
-    maternal_grandmother_pre_num = db.Column(db.String(16))
+    ram_grandmother_id = db.Column(db.Integer)
+    ram_grandmother_ele_num = db.Column(db.String(20))
+    ram_grandmother_pre_num = db.Column(db.String(16))
+    ewe_grandmother_id = db.Column(db.Integer)
+    ewe_grandmother_ele_num = db.Column(db.String(20))
+    ewe_grandmother_pre_num = db.Column(db.String(16))
 
 
 
@@ -625,7 +629,7 @@ class BasicFieldconditioninfo(db.Model):
 
     bust = db.Column(db.Double(asdecimal=True))
 
-    root_shape = db.Column(db.String(20))
+    testis_shape = db.Column(db.String(20))
 
     t_staff = db.Column(db.String(8))
 
@@ -633,7 +637,7 @@ class BasicFieldconditioninfo(db.Model):
 
     performance_traits = db.Column(db.String(40))
 
-    with_plantings = db.Column(db.Integer)
+    with_births = db.Column(db.Integer)
 
     wea_weight = db.Column(db.Double(asdecimal=True))
 
@@ -675,25 +679,25 @@ class BasicYieldCapacity(db.Model):
 
     capa_id = db.Column(db.String(100))
 
-    pollination_rate = db.Column(db.Double(asdecimal=True))
+    mating_rate = db.Column(db.Double(asdecimal=True))
 
-    total_flowering_rate = db.Column(db.Double(asdecimal=True))
+    total_conception_rate = db.Column(db.Double(asdecimal=True))
 
-    sprout_num = db.Column(db.Integer)
+    lamb_num = db.Column(db.Integer)
 
-    live_sprout_num = db.Column(db.Integer)
+    live_lamb_num = db.Column(db.Integer)
 
-    germinate_sprout_num = db.Column(db.Integer)
+    wean_lamb_num = db.Column(db.Integer)
 
-    harvest_rate = db.Column(db.Double(asdecimal=True))
+    deliver_rate = db.Column(db.Double(asdecimal=True))
 
-    maturation_rate = db.Column(db.Double(asdecimal=True))
+    lambing_rate = db.Column(db.Double(asdecimal=True))
 
-    germinate_live_rate = db.Column(db.Double(asdecimal=True))
+    wean_live_rate = db.Column(db.Double(asdecimal=True))
 
-    yield_rate = db.Column(db.Double(asdecimal=True))
+    reproductive_rate = db.Column(db.Double(asdecimal=True))
 
-    yield_live_rate = db.Column(db.Double(asdecimal=True))
+    reproductive_live_rate = db.Column(db.Double(asdecimal=True))
 
     start_date = db.Column(db.Date)
 
@@ -701,31 +705,31 @@ class BasicYieldCapacity(db.Model):
 
     belong = db.Column(db.Integer, nullable=False)
 
-    cultivation = db.Column(db.Integer)
+    breed = db.Column(db.Integer)
 
-    flowering_num = db.Column(db.Integer)
+    conception_num = db.Column(db.Integer)
 
-    harvest_num = db.Column(db.Integer)
+    deliver_num = db.Column(db.Integer)
 
-    fit_cultivation = db.Column(db.Integer)
+    fit_reproduction = db.Column(db.Integer)
 
-    flowering_num = db.Column(db.Integer)
+    pregnancy_num = db.Column(db.Integer)
 
-    plant_daily_gain = db.Column(db.Double(asdecimal=True))
+    ewes_daily_gain = db.Column(db.Double(asdecimal=True))
 
-    germinate_daily_gain = db.Column(db.Double(asdecimal=True))
+    wean_lamb_daily_gain = db.Column(db.Double(asdecimal=True))
 
-    five_year_pollen = db.Column(db.Double(asdecimal=True))
+    five_year_ram = db.Column(db.Double(asdecimal=True))
 
-    four_year_pollen = db.Column(db.Double(asdecimal=True))
+    four_year_ram = db.Column(db.Double(asdecimal=True))
 
-    one_year_pollen = db.Column(db.Double(asdecimal=True))
+    one_year_ram = db.Column(db.Double(asdecimal=True))
 
-    six_year_pollen = db.Column(db.Double(asdecimal=True))
+    six_year_ram = db.Column(db.Double(asdecimal=True))
 
-    three_year_pollen = db.Column(db.Double(asdecimal=True))
+    three_year_ram = db.Column(db.Double(asdecimal=True))
 
-    two_year_pollen = db.Column(db.Double(asdecimal=True))
+    two_year_ram = db.Column(db.Double(asdecimal=True))
 
     mate_success_rate = db.Column(db.Double(asdecimal=True))
 
@@ -779,7 +783,7 @@ class BasicHarvestinfo(db.Model):
 
     variety = db.Column(db.Integer)
 
-    harvest_time = db.Column(db.Date, nullable=False)
+    cut_time = db.Column(db.Date)
 
     rank = db.Column(db.Integer)
 
@@ -795,7 +799,7 @@ class BasicHarvestinfo(db.Model):
 
     f_date = db.Column(db.Date, nullable=False)
 
-    harvest_num = db.Column(db.Integer, nullable=False)
+    cut_num = db.Column(db.Integer, nullable=False)
 
 
 
@@ -811,21 +815,21 @@ class BasicGroupmalecapacity(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    one_year_male = db.Column(db.Double(asdecimal=True))
+    one_year_ram = db.Column(db.Double(asdecimal=True))
 
-    two_year_male = db.Column(db.Double(asdecimal=True))
+    two_year_ram = db.Column(db.Double(asdecimal=True))
 
-    three_year_male = db.Column(db.Double(asdecimal=True))
+    three_year_ram = db.Column(db.Double(asdecimal=True))
 
-    four_year_male = db.Column(db.Double(asdecimal=True))
+    four_year_ram = db.Column(db.Double(asdecimal=True))
 
-    five_year_male = db.Column(db.Double(asdecimal=True))
+    five_year_ram = db.Column(db.Double(asdecimal=True))
 
-    six_year_male = db.Column(db.Double(asdecimal=True))
+    six_year_ram = db.Column(db.Double(asdecimal=True))
 
     belong = db.Column(db.Integer, nullable=False)
 
-    capa_male = db.Column(db.String(100))
+    capa_ram = db.Column(db.String(100))
 
 
 

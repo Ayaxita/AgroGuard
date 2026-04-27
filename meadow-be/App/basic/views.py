@@ -1,5 +1,5 @@
 # views.py: 路由 + 视图函数
-import datetime
+from datetime import datetime
 import os
 import random
 import json
@@ -1441,11 +1441,11 @@ def get_fieldcondition_info():
         'bust': BasicFieldconditioninfo.bust,
         'back_fat': BasicFieldconditioninfo.back_fat,
         'eye': BasicFieldconditioninfo.eye,
-        'root_shape': BasicFieldconditioninfo.root_shape,
+        'testis_shape': BasicFieldconditioninfo.testis_shape,
         't_staff': BasicFieldconditioninfo.t_staff,
         'AE': BasicFieldconditioninfo.AE,
         'performance_traits': BasicFieldconditioninfo.performance_traits,
-        'with_plantings': BasicFieldconditioninfo.with_plantings,
+        'with_births': BasicFieldconditioninfo.with_births,
         'wea_weight': BasicFieldconditioninfo.wea_weight,
         'June_heavy': BasicFieldconditioninfo.June_heavy,
         'health': BasicFieldconditioninfo.health,
@@ -1704,18 +1704,18 @@ def update_grandparents():
 
             # 更新当前记录的祖父母信息
             rows_affected = BasicBasicinfo.query.filter_by(id=record.id).update({
-                'paternal_grandfather_id': father_grandfather_id,
-                'paternal_grandfather_ele_num': father_grandfather_ele_num,
-                'paternal_grandfather_pre_num': father_grandfather_pre_num,
-                'maternal_grandfather_id': mother_grandfather_id,
-                'maternal_grandfather_ele_num': mother_grandfather_ele_num,
-                'maternal_grandfather_pre_num': mother_grandfather_pre_num,
-                'paternal_grandmother_id': father_grandmother_id,
-                'paternal_grandmother_ele_num': father_grandmother_ele_num,
-                'paternal_grandmother_pre_num': father_grandmother_pre_num,
-                'maternal_grandmother_id': mother_grandmother_id,
-                'maternal_grandmother_ele_num': mother_grandmother_ele_num,
-                'maternal_grandmother_pre_num': mother_grandmother_pre_num
+                'ram_grandfather_id': father_grandfather_id,
+                'ram_grandfather_ele_num': father_grandfather_ele_num,
+                'ram_grandfather_pre_num': father_grandfather_pre_num,
+                'ewe_grandfather_id': mother_grandfather_id,
+                'ewe_grandfather_ele_num': mother_grandfather_ele_num,
+                'ewe_grandfather_pre_num': mother_grandfather_pre_num,
+                'ram_grandmother_id': father_grandmother_id,
+                'ram_grandmother_ele_num': father_grandmother_ele_num,
+                'ram_grandmother_pre_num': father_grandmother_pre_num,
+                'ewe_grandmother_id': mother_grandmother_id,
+                'ewe_grandmother_ele_num': mother_grandmother_ele_num,
+                'ewe_grandmother_pre_num': mother_grandmother_pre_num
             })
             total_rows_affected += rows_affected  # 累加影响行数
 
@@ -1852,11 +1852,11 @@ def add_harvest_info():
     ctime = datetime.now().strftime("%Y-%m-%d")
     data['belong'] = 0
     data['f_date'] = ctime
-    if data['harvest_time']:
-        date_obj = datetime.strptime(data['harvest_time'], '%Y-%m-%d')
+    if data['cut_time']:
+        date_obj = datetime.strptime(data['cut_time'], '%Y-%m-%d')
         # 将 datetime 对象转换为指定格式的字符串
         formatted_date = date_obj.strftime('%Y-%m-%d')
-        data['harvest_time'] = formatted_date
+        data['cut_time'] = formatted_date
     if data['house_name']:
         del data['house_name']
 
@@ -1899,19 +1899,19 @@ def get_harvest_info():
         'house_name': BasicHarvestinfo.house_id,
         'ele_quantity': BasicHarvestinfo.ele_quantity,
         'variety': BasicHarvestinfo.variety,
-        'harvest_time': BasicHarvestinfo.harvest_time,
+        'cut_time': BasicHarvestinfo.cut_time,
         'rank': BasicHarvestinfo.rank,
         'color': BasicHarvestinfo.color,
         'weight': BasicHarvestinfo.weight,
         'staff': BasicHarvestinfo.staff,
         'notes': BasicHarvestinfo.notes,
         'f_date': BasicHarvestinfo.f_date,
-        'harvest_num': BasicHarvestinfo.harvest_num,
+        'cut_num': BasicHarvestinfo.cut_num,
     }
     for param, column in search_params.items():
         value = request.json.get(param)
         if value is not None:  # 检查值不为 None
-            if param == 'harvest_time' or param == 'f_date':  # 日期需要转换
+            if param == 'cut_time' or param == 'f_date':  # 日期需要转换
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'house_name':
@@ -2065,3 +2065,463 @@ def del_harvest_info():
         "code": 200,
         "msg": '删除成功'
     })
+
+@basic.route('/basic/sportsinfo', methods=['POST'])
+def get_basic_sportsinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'basic_id': BasicSportsinfo.basic_id,
+        'exercise_time': BasicSportsinfo.exercise_time,
+        'exercise': BasicSportsinfo.exercise,
+        'belong': BasicSportsinfo.belong,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = BasicSportsinfo.query.filter(and_(*conditions))
+    else:
+        query = BasicSportsinfo.query
+    infos = query.filter(BasicSportsinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'basic_id': info.basic_id,
+            'exercise_time': info.exercise_time,
+            'exercise': info.exercise,
+            'belong': info.belong,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@basic.route('/basic/sportsinfo/add', methods=['POST'])
+def add_basic_sportsinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = BasicSportsinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@basic.route('/basic/sportsinfo/edit', methods=['POST'])
+def edit_basic_sportsinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    BasicSportsinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@basic.route('/basic/sportsinfo/del', methods=['POST'])
+def del_basic_sportsinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = BasicSportsinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})
+
+
+@basic.route('/basic/canopyperformance', methods=['POST'])
+def get_basic_canopyperformance_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'basic_id': BasicCanopyperformance.basic_id,
+        'skin_area': BasicCanopyperformance.skin_area,
+        'skin_thick': BasicCanopyperformance.skin_thick,
+        'date': BasicCanopyperformance.date,
+        'f_staff': BasicCanopyperformance.f_staff,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = BasicCanopyperformance.query.filter(and_(*conditions))
+    else:
+        query = BasicCanopyperformance.query
+    infos = query.filter(BasicCanopyperformance.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'basic_id': info.basic_id,
+            'skin_area': info.skin_area,
+            'skin_thick': info.skin_thick,
+            'date': info.date,
+            'f_staff': info.f_staff,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@basic.route('/basic/canopyperformance/add', methods=['POST'])
+def add_basic_canopyperformance():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = BasicCanopyperformance()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@basic.route('/basic/canopyperformance/edit', methods=['POST'])
+def edit_basic_canopyperformance():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    BasicCanopyperformance.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@basic.route('/basic/canopyperformance/del', methods=['POST'])
+def del_basic_canopyperformance():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = BasicCanopyperformance.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})
+
+
+@basic.route('/basic/productivityinfo', methods=['POST'])
+def get_basic_productivityinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'basic_id': BasicProductivityinfo.basic_id,
+        'weight': BasicProductivityinfo.weight,
+        'high': BasicProductivityinfo.high,
+        'Llong': BasicProductivityinfo.Llong,
+        'bust': BasicProductivityinfo.bust,
+        'month_age': BasicProductivityinfo.month_age,
+        'fecundity': BasicProductivityinfo.fecundity,
+        'per_meat': BasicProductivityinfo.per_meat,
+        'per_milk': BasicProductivityinfo.per_milk,
+        'per_hair': BasicProductivityinfo.per_hair,
+        'per_skin': BasicProductivityinfo.per_skin,
+        'growth_rate': BasicProductivityinfo.growth_rate,
+        'FCR': BasicProductivityinfo.FCR,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = BasicProductivityinfo.query.filter(and_(*conditions))
+    else:
+        query = BasicProductivityinfo.query
+    infos = query.filter(BasicProductivityinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'basic_id': info.basic_id,
+            'weight': info.weight,
+            'high': info.high,
+            'Llong': info.Llong,
+            'bust': info.bust,
+            'month_age': info.month_age,
+            'fecundity': info.fecundity,
+            'per_meat': info.per_meat,
+            'per_milk': info.per_milk,
+            'per_hair': info.per_hair,
+            'per_skin': info.per_skin,
+            'growth_rate': info.growth_rate,
+            'FCR': info.FCR,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@basic.route('/basic/productivityinfo/add', methods=['POST'])
+def add_basic_productivityinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = BasicProductivityinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@basic.route('/basic/productivityinfo/edit', methods=['POST'])
+def edit_basic_productivityinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    BasicProductivityinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@basic.route('/basic/productivityinfo/del', methods=['POST'])
+def del_basic_productivityinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = BasicProductivityinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})
+
+
+@basic.route('/basic/fertilizerinfo', methods=['POST'])
+def get_basic_fertilizerinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'house_id': BasicFertilizerinfo.house_id,
+        'num': BasicFertilizerinfo.num,
+        'weight': BasicFertilizerinfo.weight,
+        'notes': BasicFertilizerinfo.notes,
+        'f_staff': BasicFertilizerinfo.f_staff,
+        'f_date': BasicFertilizerinfo.f_date,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = BasicFertilizerinfo.query.filter(and_(*conditions))
+    else:
+        query = BasicFertilizerinfo.query
+    infos = query.filter(BasicFertilizerinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'house_id': info.house_id,
+            'num': info.num,
+            'weight': info.weight,
+            'notes': info.notes,
+            'f_staff': info.f_staff,
+            'f_date': info.f_date,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@basic.route('/basic/fertilizerinfo/add', methods=['POST'])
+def add_basic_fertilizerinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = BasicFertilizerinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@basic.route('/basic/fertilizerinfo/edit', methods=['POST'])
+def edit_basic_fertilizerinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    BasicFertilizerinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@basic.route('/basic/fertilizerinfo/del', methods=['POST'])
+def del_basic_fertilizerinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = BasicFertilizerinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})
+
+
+@basic.route('/basic/yieldperformance', methods=['POST'])
+def get_basic_yieldperformance_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'basic_id': BasicYieldperformance.basic_id,
+        'milk_volume': BasicYieldperformance.milk_volume,
+        'lamb_num': BasicYieldperformance.lamb_num,
+        'date': BasicYieldperformance.date,
+        'f_staff': BasicYieldperformance.f_staff,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = BasicYieldperformance.query.filter(and_(*conditions))
+    else:
+        query = BasicYieldperformance.query
+    infos = query.filter(BasicYieldperformance.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'basic_id': info.basic_id,
+            'milk_volume': info.milk_volume,
+            'lamb_num': info.lamb_num,
+            'date': info.date,
+            'f_staff': info.f_staff,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@basic.route('/basic/yieldperformance/add', methods=['POST'])
+def add_basic_yieldperformance():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = BasicYieldperformance()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@basic.route('/basic/yieldperformance/edit', methods=['POST'])
+def edit_basic_yieldperformance():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    BasicYieldperformance.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@basic.route('/basic/yieldperformance/del', methods=['POST'])
+def del_basic_yieldperformance():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = BasicYieldperformance.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})

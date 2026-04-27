@@ -1,5 +1,5 @@
 # views.py: 路由 + 视图函数
-import datetime
+from datetime import datetime
 import random
 
 from flask import Blueprint, render_template, request, make_response, Response, redirect, url_for, session, jsonify, \
@@ -775,3 +775,191 @@ def del_test():
         "code": 200,
         "msg": '删除成功'
     })
+
+
+@field.route('/field/maintenanceinfo', methods=['POST'])
+def get_field_maintenanceinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'house_id': FieldMaintenanceinfo.house_id,
+        'M_condition': FieldMaintenanceinfo.M_condition,
+        'M_details': FieldMaintenanceinfo.M_details,
+        'M_time': FieldMaintenanceinfo.M_time,
+        'M_cost': FieldMaintenanceinfo.M_cost,
+        'f_date': FieldMaintenanceinfo.f_date,
+        'f_staff': FieldMaintenanceinfo.f_staff,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = FieldMaintenanceinfo.query.filter(and_(*conditions))
+    else:
+        query = FieldMaintenanceinfo.query
+    infos = query.filter(FieldMaintenanceinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'house_id': info.house_id,
+            'M_condition': info.M_condition,
+            'M_details': info.M_details,
+            'M_time': info.M_time,
+            'M_cost': info.M_cost,
+            'f_date': info.f_date,
+            'f_staff': info.f_staff,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@field.route('/field/maintenanceinfo/add', methods=['POST'])
+def add_field_maintenanceinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = FieldMaintenanceinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@field.route('/field/maintenanceinfo/edit', methods=['POST'])
+def edit_field_maintenanceinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    FieldMaintenanceinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@field.route('/field/maintenanceinfo/del', methods=['POST'])
+def del_field_maintenanceinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = FieldMaintenanceinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})
+
+
+@field.route('/field/transferinfo', methods=['POST'])
+def get_field_transferinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'basic_id': FieldTransferinfo.basic_id,
+        'new_house_id': FieldTransferinfo.new_house_id,
+        'old_house_id': FieldTransferinfo.old_house_id,
+        'reason': FieldTransferinfo.reason,
+        'trans_time': FieldTransferinfo.trans_time,
+        'grass_type': FieldTransferinfo.grass_type,
+        'f_date': FieldTransferinfo.f_date,
+        'f_staff': FieldTransferinfo.f_staff,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = FieldTransferinfo.query.filter(and_(*conditions))
+    else:
+        query = FieldTransferinfo.query
+    infos = query.filter(FieldTransferinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'basic_id': info.basic_id,
+            'new_house_id': info.new_house_id,
+            'old_house_id': info.old_house_id,
+            'reason': info.reason,
+            'trans_time': info.trans_time,
+            'grass_type': info.grass_type,
+            'f_date': info.f_date,
+            'f_staff': info.f_staff,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@field.route('/field/transferinfo/add', methods=['POST'])
+def add_field_transferinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = FieldTransferinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@field.route('/field/transferinfo/edit', methods=['POST'])
+def edit_field_transferinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    FieldTransferinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@field.route('/field/transferinfo/del', methods=['POST'])
+def del_field_transferinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = FieldTransferinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})

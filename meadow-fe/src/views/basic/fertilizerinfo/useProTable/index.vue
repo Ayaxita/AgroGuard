@@ -142,8 +142,7 @@ const sortTable = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: numbe
 };
 //todo
 //删除
-const deleteManure = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: number }) => {
-  console.log(newIndex, oldIndex);
+const deleteManure = () => {
   console.log(proTable.value?.tableData);
   ElMessage.success("修改列表排序成功");
 };
