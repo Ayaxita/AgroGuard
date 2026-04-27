@@ -102,7 +102,7 @@
 <script setup lang="ts" name="GrassDrawer">
 import { ref, reactive } from "vue";
 import { datePickTypes, ElMessage, ElMessageBox, FormInstance } from "element-plus";
-import { colonyTransferReasonType, DailyreportType } from "@/assets/json/typeListJson";
+import { fieldTransferReasonType, DailyreportType } from "@/assets/json/typeListJson";
 import { searchDate } from "../api/manu";
 
 const activeIndex = ref("1");

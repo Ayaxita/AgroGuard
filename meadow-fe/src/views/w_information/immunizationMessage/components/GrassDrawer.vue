@@ -100,7 +100,7 @@
 <script setup lang="ts" name="GrassDrawer">
 import { ref, reactive } from "vue";
 import { ElMessage, FormInstance } from "element-plus";
-import { colonyTransferReasonType } from "@/assets/json/typeListJson";
+import { fieldTransferReasonType } from "@/assets/json/typeListJson";
 
 const rules = reactive({
   // basic_id: [

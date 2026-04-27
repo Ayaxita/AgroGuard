@@ -42,7 +42,7 @@ import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, MessageBox, SetUp, View } from "@element-plus/icons-vue";
 import { exportStockasset, getManuList, updatestocksheet } from "../api/manu";
-import { colonyTransferReasonType, manuScaleType, manutypeType, sexType, DailyreportType } from "@/assets/json/typeListJson";
+import { fieldTransferReasonType, manuScaleType, manutypeType, sexType, DailyreportType } from "@/assets/json/typeListJson";
 import { useDownload } from "@/hooks/useDownload";
 import { useTable } from "@/hooks/useTable";
 import { useTempStore } from "@/stores/modules/apiStore";

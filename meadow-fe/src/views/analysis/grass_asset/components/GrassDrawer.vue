@@ -101,7 +101,7 @@ import { ElMessage, ElMessageBox, FormInstance } from "element-plus";
 import {
   assetStandardType,
   BooleanType,
-  colonyDisinfectionMethodType,
+  fieldDisinfectionMethodType,
   colorType,
   gene_aType,
   purposeType,
@@ -112,7 +112,7 @@ import {
 import { ColumnProps } from "@/components/ProTable/interface";
 import { User } from "@/api/interface";
 import { getGrassList } from "@/views/basic/basicinfo/api/grass";
-import { getEweGrass } from "../api/manu";
+import { getFemaleGrass } from "../api/manu";
 
 const rules = reactive({
   // basic_id: [
@@ -313,8 +313,8 @@ const getTableList = (params: any) => {
   newParams.createTime && (newParams.startTime = newParams.createTime[0]);
   newParams.createTime && (newParams.endTime = newParams.createTime[1]);
   delete newParams.createTime;
-  console.log("getEweGrass", getEweGrass(newParams));
-  return getEweGrass(newParams);
+  console.log("getFemaleGrass", getFemaleGrass(newParams));
+  return getFemaleGrass(newParams);
 };
 
 // dataCallback 是对于返回的表格数据做处理，如果你后台返回的数据不是 list && total 这些字段，可以在这里进行处理成这些字段

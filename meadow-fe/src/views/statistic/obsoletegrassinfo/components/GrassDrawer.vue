@@ -95,8 +95,8 @@
 import { ref, reactive } from "vue";
 import { ElMessage, FormInstance } from "element-plus";
 import {
-  colonyFuntionType,
-  colonyH_typeType,
+  fieldFuntionType,
+  fieldH_typeType,
   DeathCauseType,
   DeathHarmless_treatmentType,
   manuScaleType,

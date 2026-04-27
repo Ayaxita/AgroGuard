@@ -273,11 +273,11 @@ def get_basic_info():
 
 @Statistic.route('/statistic/basicinfo/initHouseAndHurdle', methods=['POST'])
 def initHouseAndHurdle():
-    house_data = ColonyHouseinfo.query.filter_by(belong=0, pid=0).all()
+    house_data = FieldHouseinfo.query.filter_by(belong=0, pid=0).all()
 
     list = []
     for house in house_data:
-        hurdle_data = ColonyHouseinfo.query.filter_by(pid=house.id)
+        hurdle_data = FieldHouseinfo.query.filter_by(pid=house.id)
         list.append({"house_id": house.id, "house_name": house.name,
                      "hurdle_list": [{"hurdle_id": hurdle.id, "hurdle_name": hurdle.name} for hurdle in hurdle_data]})
     result = {
@@ -507,8 +507,8 @@ def add_basic_info():
 
     # 在圈舍表中添加草地数量
     if request.json.get('house_id') is not None:
-        house_info = ColonyHouseinfo.query.filter_by(id=request.json.get('house_id')).first()
-        hurdle_info = ColonyHouseinfo.query.filter_by(id=request.json.get('hurdle_id')).first()
+        house_info = FieldHouseinfo.query.filter_by(id=request.json.get('house_id')).first()
+        hurdle_info = FieldHouseinfo.query.filter_by(id=request.json.get('hurdle_id')).first()
         if house_info.grass_quantity is None:
             house_info.grass_quantity = 1
             hurdle_info.grass_quantity = 1
@@ -659,8 +659,8 @@ def edit_basic_info():
     if data['state']:
         state = data['state']
         if (state == -1):
-            dieoutHurdle_info = ColonyHouseinfo.query.filter_by(name="淘汰栏").first()
-            dieoutHouse_info = ColonyHouseinfo.query.filter_by(id=dieoutHurdle_info.pid).first()
+            dieoutHurdle_info = FieldHouseinfo.query.filter_by(name="淘汰栏").first()
+            dieoutHouse_info = FieldHouseinfo.query.filter_by(id=dieoutHurdle_info.pid).first()
             data['house_id'] = dieoutHouse_info.id
             data['house_name'] = dieoutHouse_info.name
             data['hurdle_id'] = dieoutHurdle_info.id
@@ -700,24 +700,24 @@ def edit_basic_info():
     wea_weight = data['wea_weight']
     wea_date = data['wea_date']
 
-    lamb_info = db.session.query(ECultivationSproutinfo).filter_by(pre_num=data['pre_num']).first()
-    if lamb_info:
-        lamb_id = lamb_info.id
-        lamb_info.wea_weight = wea_weight
-        lamb_info.wea_date = wea_date
-        lamb_info.birth = birth
-        lamb_info.bir_weight = bir_weighht
+    seedling_info = db.session.query(ECultivationSproutinfo).filter_by(pre_num=data['pre_num']).first()
+    if seedling_info:
+        lamb_id = seedling_info.id
+        seedling_info.wea_weight = wea_weight
+        seedling_info.wea_date = wea_date
+        seedling_info.birth = birth
+        seedling_info.bir_weight = bir_weighht
         db.session.commit()
 
-        weaning_info = db.session.query(ECultivationGerminationinfo).filter_by(lamb_id=lamb_id).first()
+        hardening_info = db.session.query(ECultivationGerminationinfo).filter_by(lamb_id=lamb_id).first()
 
-        if weaning_info:
-                weaning_info.wea_weight = wea_weight
-                weaning_info.Delivery_date = wea_date
-                weaning_info.Bir_weight = bir_weighht
+        if hardening_info:
+                hardening_info.wea_weight = wea_weight
+                hardening_info.Delivery_date = wea_date
+                hardening_info.Seedling_weight = bir_weighht
                 db.session.commit()
     else:
-        # 当 lamb_info 为 None 时，不执行依赖 lamb_id 的操作
+        # 当 seedling_info 为 None 时，不执行依赖 lamb_id 的操作
         pass
     try:
         BasicBasicinfo.query.filter_by(ele_num=ele_num).update(data)
@@ -927,9 +927,9 @@ def import_basic_info():
                 basic_info.birth = df.iloc[r, 9]
             basic_info.bir_weight = df.iloc[r, 10]
             basic_info.wea_weight = df.iloc[r, 11]
-            basic_info.house_id = ColonyHouseinfo.query.filter_by(name=df.iloc[r, 7]).first().id
+            basic_info.house_id = FieldHouseinfo.query.filter_by(name=df.iloc[r, 7]).first().id
             basic_info.house_name = df.iloc[r, 7]
-            basic_info.hurdle_id = ColonyHouseinfo.query.filter_by(name=df.iloc[r, 8]).first().id
+            basic_info.hurdle_id = FieldHouseinfo.query.filter_by(name=df.iloc[r, 8]).first().id
             basic_info.hurdle_name = df.iloc[r, 8]
             basic_info.mon_age = df.iloc[r, 12]
             # 如果父母id在数据库里没有怎么办,
@@ -1034,7 +1034,7 @@ def update_mon_age():
 
 @Statistic.route('/statistic/basicinfo/updateHouseAndHurdle', methods=['POST'])
 def update_house_and_hurdle():
-    colony_infos = ColonyHouseinfo.query.all()
+    colony_infos = FieldHouseinfo.query.all()
     for info in colony_infos:
         if info.pid == 0:
             info.grass_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
@@ -1063,8 +1063,8 @@ def mark_grass_death():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
-    deathHurdle_info = ColonyHouseinfo.query.filter_by(name="死亡栏").first()
-    deathHouse_info = ColonyHouseinfo.query.filter_by(id=deathHurdle_info.pid).first()
+    deathHurdle_info = FieldHouseinfo.query.filter_by(name="死亡栏").first()
+    deathHouse_info = FieldHouseinfo.query.filter_by(id=deathHurdle_info.pid).first()
     for info in basic_infos:
         print(info)
         BasicBasicinfo.query.filter_by(id=info['basic_id']).update(
@@ -1077,14 +1077,14 @@ def mark_grass_death():
             obsolete_info.obsolete_type = 0
             obsolete_info.dead_date = info['date']
             # db.session.commit()
-        death_info = DPlantcareDeathinfo()
+        wither_info = DPlantcareDeathinfo()
         for key, value in info.items():
-            setattr(death_info, key, value)
-            death_info.belong = 0
-            death_info.f_date = datetime.now()
-            death_info.age = (datetime.now().year - BasicBasicinfo.query.filter_by(
+            setattr(wither_info, key, value)
+            wither_info.belong = 0
+            wither_info.f_date = datetime.now()
+            wither_info.age = (datetime.now().year - BasicBasicinfo.query.filter_by(
                 id=info['basic_id']).first().birth.year)
-        list.append(death_info)
+        list.append(wither_info)
     try:
         db.session.add_all(list)
         db.session.commit()
@@ -1110,8 +1110,8 @@ def mark_grass_sale():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
-    saleHurdle_info = ColonyHouseinfo.query.filter_by(name="销售栏").first()
-    saleHouse_info = ColonyHouseinfo.query.filter_by(id=saleHurdle_info.pid).first()
+    saleHurdle_info = FieldHouseinfo.query.filter_by(name="销售栏").first()
+    saleHouse_info = FieldHouseinfo.query.filter_by(id=saleHurdle_info.pid).first()
     today = datetime.today()
 
     for info in basic_infos:
@@ -1237,18 +1237,18 @@ def update_grandparents():
 
             # 更新当前记录的祖父母信息
             rows_affected = BasicBasicinfo.query.filter_by(id=record.id).update({
-                'ram_grandfather_id': father_grandfather_id,
-                'ram_grandfather_ele_num': father_grandfather_ele_num,
-                'ram_grandfather_pre_num': father_grandfather_pre_num,
-                'ewe_grandfather_id': mother_grandfather_id,
-                'ewe_grandfather_ele_num': mother_grandfather_ele_num,
-                'ewe_grandfather_pre_num': mother_grandfather_pre_num,
-                'ram_grandmother_id': father_grandmother_id,
-                'ram_grandmother_ele_num': father_grandmother_ele_num,
-                'ram_grandmother_pre_num': father_grandmother_pre_num,
-                'ewe_grandmother_id': mother_grandmother_id,
-                'ewe_grandmother_ele_num': mother_grandmother_ele_num,
-                'ewe_grandmother_pre_num': mother_grandmother_pre_num
+                'paternal_grandfather_id': father_grandfather_id,
+                'paternal_grandfather_ele_num': father_grandfather_ele_num,
+                'paternal_grandfather_pre_num': father_grandfather_pre_num,
+                'maternal_grandfather_id': mother_grandfather_id,
+                'maternal_grandfather_ele_num': mother_grandfather_ele_num,
+                'maternal_grandfather_pre_num': mother_grandfather_pre_num,
+                'paternal_grandmother_id': father_grandmother_id,
+                'paternal_grandmother_ele_num': father_grandmother_ele_num,
+                'paternal_grandmother_pre_num': father_grandmother_pre_num,
+                'maternal_grandmother_id': mother_grandmother_id,
+                'maternal_grandmother_ele_num': mother_grandmother_ele_num,
+                'maternal_grandmother_pre_num': mother_grandmother_pre_num
             })
             total_rows_affected += rows_affected  # 累加影响行数
 
@@ -1383,10 +1383,10 @@ def scoremake(basic_id):
         # basic_id = req_data['basic_id']
 
         basic = db.session.query(BasicBasicinfo).filter(BasicBasicinfo.id == basic_id).first()
-        breeder = db.session.query(BasicBreederconditioninfo).filter(
-            BasicBreederconditioninfo.basic_id == basic_id).first()
-        first = db.session.query(BasicBreederconditioninfo).filter(
-            BasicBreederconditioninfo.basic_id == basic_id).order_by(BasicBreederconditioninfo.age).all()
+        breeder = db.session.query(BasicFieldconditioninfo).filter(
+            BasicFieldconditioninfo.basic_id == basic_id).first()
+        first = db.session.query(BasicFieldconditioninfo).filter(
+            BasicFieldconditioninfo.basic_id == basic_id).order_by(BasicFieldconditioninfo.age).all()
         postnatal = []
         lambs = []
 
@@ -1397,15 +1397,15 @@ def scoremake(basic_id):
         if basic:
             lamb_self = db.session.query(ECultivationSproutinfo).filter(ECultivationSproutinfo.basic_id == basic_id).first()
             if lamb_self:  # 如果新草地信息表中存在该basic_id
-                breed_id = lamb_self.breeding_id  # 获取培育信息id
+                breed_id = lamb_self.propagation_id  # 获取培育信息id
                 postna = db.session.query(ECultivationMaturationinfo).filter(
-                    ECultivationMaturationinfo.breeding_id == breed_id).first()  # 获取self的生长记录
+                    ECultivationMaturationinfo.propagation_id == breed_id).first()  # 获取self的生长记录
                 postnatal = db.session.query(ECultivationMaturationinfo).filter(
-                    ECultivationMaturationinfo.breeding_id == breed_id).all()
-                lambs = db.session.query(ECultivationSproutinfo).filter(ECultivationSproutinfo.breeding_id == breed_id).all()
+                    ECultivationMaturationinfo.propagation_id == breed_id).all()
+                lambs = db.session.query(ECultivationSproutinfo).filter(ECultivationSproutinfo.propagation_id == breed_id).all()
 
                 if postna:
-                    together_num = postna.live_num  # 获取self的出生数
+                    together_num = postna.live_seedling_num  # 获取self的出生数
         score_all = 0
         basic_score = 0
         benshen_score = 0
@@ -1551,12 +1551,12 @@ def scoremake(basic_id):
 
         # 后裔信息
         if mu:
-            postnatal = db.session.query(ECultivationMaturationinfo).filter(ECultivationMaturationinfo.ewe_id == basic_id).all()
+            postnatal = db.session.query(ECultivationMaturationinfo).filter(ECultivationMaturationinfo.mother_id == basic_id).all()
             lambs = db.session.query(ECultivationSproutinfo).filter(ECultivationSproutinfo.mother_id == basic_id).all()
 
             true_mon_age = (dt.datetime.now().date() - basic.birth).days // 30
             bred_age = true_mon_age - 13
-            lamb_num = len(lambs)
+            sprout_num = len(lambs)
             twoyear = True
             if bred_age < 0:
                 houyi_score += 5  # 平均年生产次数
@@ -1570,7 +1570,7 @@ def scoremake(basic_id):
                 else:
                     twoyear = False
 
-                if lamb_num >= 1:
+                if sprout_num >= 1:
                     houyi_score += 10
             elif bred_age < 24:
                 born_times = len(postnatal)
@@ -1582,7 +1582,7 @@ def scoremake(basic_id):
                 else:
                     houyi_score += 10
 
-                lamb_ratio = lamb_num / round(bred_age / 12)
+                lamb_ratio = sprout_num / round(bred_age / 12)
                 if lamb_ratio >= 1.7:
                     houyi_score += 10
             else:
@@ -1595,7 +1595,7 @@ def scoremake(basic_id):
                 else:
                     houyi_score += 10
 
-                lamb_ratio = lamb_num / round(bred_age / 12)
+                lamb_ratio = sprout_num / round(bred_age / 12)
                 if lamb_ratio >= 2.4:
                     houyi_score += 10
             if not twoyear:
@@ -1603,26 +1603,26 @@ def scoremake(basic_id):
 
             # 繁殖成活率
             if lambs:
-                live_num = 0
+                live_seedling_num = 0
                 for i in lambs:
                     if i.state:
-                        live_num += 1
-                if live_num / len(lambs) >= 0.75:
+                        live_seedling_num += 1
+                if live_seedling_num / len(lambs) >= 0.75:
                     houyi_score += 15
         else:
             basic1 = basic_id
-            # unique_years = [year[0] for year in db.session.query(ECultivationCultivationinfo.breeding_date.year).filter(
-            #     ECultivationCultivationinfo.ram_id == basic_id).distinct().all()]
+            # unique_years = [year[0] for year in db.session.query(ECultivationCultivationinfo.propagation_date.year).filter(
+            #     ECultivationCultivationinfo.father_id == basic_id).distinct().all()]
             # yupeitime = sorted(unique_years, reverse=True)
             # year_date = yupeitime[0] if unique_years else None
-            # yupei = db.session.query(ECultivationCultivationinfo).filter(ECultivationCultivationinfo.ram_id == basic_id,
-            #                                                     ECultivationCultivationinfo.breeding_date.year == year_date).all()
+            # yupei = db.session.query(ECultivationCultivationinfo).filter(ECultivationCultivationinfo.father_id == basic_id,
+            #                                                     ECultivationCultivationinfo.propagation_date.year == year_date).all()
 
 
             # 修改这里，使用 func.extract 函数提取年份
             unique_years = [year[0] for year in
-                            db.session.query(func.extract('year', ECultivationCultivationinfo.breeding_date)).filter(
-                                ECultivationCultivationinfo.ram_id == basic_id).distinct().all()]
+                            db.session.query(func.extract('year', ECultivationCultivationinfo.propagation_date)).filter(
+                                ECultivationCultivationinfo.father_id == basic_id).distinct().all()]
             print(unique_years)
             yupeitime = sorted(unique_years, reverse=True)
             print(yupeitime)
@@ -1630,26 +1630,26 @@ def scoremake(basic_id):
             print(year_date)
             if year_date is not None:
                 yupei = db.session.query(ECultivationCultivationinfo).filter(
-                    ECultivationCultivationinfo.ram_id == basic_id,
-                    ECultivationCultivationinfo.breeding_date >= dt.datetime(year_date, 1, 1),
-                    ECultivationCultivationinfo.breeding_date < dt.datetime(year_date + 1, 1, 1)
+                    ECultivationCultivationinfo.father_id == basic_id,
+                    ECultivationCultivationinfo.propagation_date >= dt.datetime(year_date, 1, 1),
+                    ECultivationCultivationinfo.propagation_date < dt.datetime(year_date + 1, 1, 1)
                 ).all()
             else:
                 yupei = db.session.query(ECultivationCultivationinfo).filter(
-                    ECultivationCultivationinfo.ram_id == basic_id
+                    ECultivationCultivationinfo.father_id == basic_id
                 ).all()
-            # yupei = db.session.query(ECultivationCultivationinfo).filter(ECultivationCultivationinfo.ram_id == basic_id,
-            #                                                     ECultivationCultivationinfo.breeding_date >= dt.datetime(
+            # yupei = db.session.query(ECultivationCultivationinfo).filter(ECultivationCultivationinfo.father_id == basic_id,
+            #                                                     ECultivationCultivationinfo.propagation_date >= dt.datetime(
             #                                                         year_date, 1, 1),
-            #                                                     ECultivationCultivationinfo.breeding_date < dt.datetime(
+            #                                                     ECultivationCultivationinfo.propagation_date < dt.datetime(
             #                                                         year_date + 1, 1, 1)).all()
 
             yupeishu = len(yupei)
             shoutai = []
             for i in yupei:
-                breeding_id = i.id
+                propagation_id = i.id
                 shoutai1 = db.session.query(ECultivationMaturationinfo).filter(
-                    ECultivationMaturationinfo.breeding_id == breeding_id).first()
+                    ECultivationMaturationinfo.propagation_id == propagation_id).first()
                 if shoutai1:
                     shoutai.append(shoutai1)
             shoutaishu = len(shoutai)
@@ -1657,16 +1657,16 @@ def scoremake(basic_id):
 
             fenmian = []
             for i in yupei:
-                breeding_id = i.id
+                propagation_id = i.id
                 fenmian1 = db.session.query(ECultivationMaturationinfo).filter(
-                    ECultivationMaturationinfo.breeding_id == breeding_id).first()
+                    ECultivationMaturationinfo.propagation_id == propagation_id).first()
                 if fenmian1:
                     fenmian.append(fenmian1)
             fenmianshu = len(fenmian)
             hege = []
             buhege = 0
             for i in fenmian:
-                basic_id = i.ewe_id
+                basic_id = i.mother_id
                 hege1 = db.session.query(DPlantcareDamageinfo).filter(DPlantcareDamageinfo.basic_id == basic_id).all()
                 buhege += len(hege1)
                 if hege1:
@@ -1677,16 +1677,16 @@ def scoremake(basic_id):
             lambs = []
             huogaoshu = 0
             for i in fenmian:
-                basic_id = i.ewe_id
-                breeding_id = i.breeding_id
+                basic_id = i.mother_id
+                propagation_id = i.propagation_id
                 lamba = db.session.query(ECultivationSproutinfo).filter(ECultivationSproutinfo.mother_id == basic_id,
-                                                                ECultivationSproutinfo.breeding_id == breeding_id).all()
-                changaoshu += i.live_num
+                                                                ECultivationSproutinfo.propagation_id == propagation_id).all()
+                changaoshu += i.live_seedling_num
                 lamb = db.session.query(ECultivationSproutinfo).filter(
                     and_(
                         ECultivationSproutinfo.mother_id == basic_id,
                         not_(ECultivationSproutinfo.state == 0),
-                        ECultivationSproutinfo.breeding_id == breeding_id
+                        ECultivationSproutinfo.propagation_id == propagation_id
                     )
                 ).all()
                 if lamb:
@@ -2093,13 +2093,13 @@ def get_basic(basic_id):
         print(lamb_self)
         together_num = 2
         if lamb_self:
-            breed_id = lamb_self.breeding_id
+            breed_id = lamb_self.propagation_id
             print(breed_id)
-            postna = ECultivationMaturationinfo.query.filter_by(breeding_id=breed_id).first()
+            postna = ECultivationMaturationinfo.query.filter_by(propagation_id=breed_id).first()
             print(postna)
             wea = ECultivationGerminationinfo.query.filter_by(lamb_id=lamb_self.id).first()
             if postna:
-                together_num = postna.live_num
+                together_num = postna.live_seedling_num
                 if together_num == 1:
                     together_num = 2
         print(variety_choices[basic.variety])
@@ -2127,17 +2127,17 @@ def get_basic(basic_id):
         return dict_1
 
 
-# 第一个table 只有一个表 BasicBreederconditioninfo 草种体况
+# 第一个table 只有一个表 BasicFieldconditioninfo 草种体况
 def get_first_table(basic_id):
         """获取第一个表格数据"""
-        first = BasicBreederconditioninfo.query.filter_by(basic_id=basic_id).all()
+        first = BasicFieldconditioninfo.query.filter_by(basic_id=basic_id).all()
         basic = BasicBasicinfo.query.filter_by(id=basic_id).first()
 
         if not first:
             return []
 
-        # mon_age_choice = dict(BasicBreederconditioninfo.mon_age_choice)
-        # rank_choice = dict(BasicBreederconditioninfo.rank_choice)
+        # mon_age_choice = dict(BasicFieldconditioninfo.mon_age_choice)
+        # rank_choice = dict(BasicFieldconditioninfo.rank_choice)
         rank_choice = {item["value"]: item["label"] for item in rank_type}
 
         age = (first[-1].date - datetime.now().date()).days // 30  # 最近一次体况时的月龄
@@ -2181,8 +2181,8 @@ def get_second_table(basic_id):
             variety_choices = {item["value"]: item["label"] for item in variety_type}
 
             lamb = ECultivationSproutinfo.query.filter_by(basic_id=basic_id).first()
-            breeder = BasicBreederconditioninfo.query.filter_by(basic_id=basic_id).first()
-            breeder1 = BasicBreederconditioninfo.query.filter_by(basic_id=basic_id)
+            breeder = BasicFieldconditioninfo.query.filter_by(basic_id=basic_id).first()
+            breeder1 = BasicFieldconditioninfo.query.filter_by(basic_id=basic_id)
             # ##pi = postnatalInfo.objects.filter(id=basic_id).first()  id不对
 
             mon_age = basic.mon_age
@@ -2191,31 +2191,31 @@ def get_second_table(basic_id):
             sex = basic.sex
             print(sex)
             if sex == 0:
-                breeding = ECultivationCultivationinfo.query.filter_by(ram_id=basic_id)  #
+                breeding = ECultivationCultivationinfo.query.filter_by(male_id=basic_id)  #
             else:
-                breeding = ECultivationCultivationinfo.query.filter_by(ewe_id=basic_id)
+                breeding = ECultivationCultivationinfo.query.filter_by(female_id=basic_id)
 
             father = BasicBasicinfo.query.filter_by(id=basic.father_id).first()
             mother = BasicBasicinfo.query.filter_by(id=basic.mother_id).first()
 
-            # father_a = BasicBreederconditioninfo.query.filter_by(basic_id=basic.father_id).latest(
-            #     'mon_age') if BasicBreederconditioninfo.query.filter_by(basic_id=basic.father_id) else 0
-            # mother_a = BasicBreederconditioninfo.query.filter_by(basic_id=basic.mother_id).latest(
-            #     'mon_age') if BasicBreederconditioninfo.query.filter_by(basic_id=basic.mother_id) else 0
+            # father_a = BasicFieldconditioninfo.query.filter_by(basic_id=basic.father_id).latest(
+            #     'mon_age') if BasicFieldconditioninfo.query.filter_by(basic_id=basic.father_id) else 0
+            # mother_a = BasicFieldconditioninfo.query.filter_by(basic_id=basic.mother_id).latest(
+            #     'mon_age') if BasicFieldconditioninfo.query.filter_by(basic_id=basic.mother_id) else 0
 
             # 获取父亲的最新繁殖条件信息
-            father_breeder_condition_query = BasicBreederconditioninfo.query.filter_by(
-                basic_id=basic.father_id).order_by(BasicBreederconditioninfo.mon_age.desc())
+            father_breeder_condition_query = BasicFieldconditioninfo.query.filter_by(
+                basic_id=basic.father_id).order_by(BasicFieldconditioninfo.mon_age.desc())
             father_a = father_breeder_condition_query.first()
             # 获取母亲的最新繁殖条件信息
-            mother_breeder_condition_query = BasicBreederconditioninfo.query.filter_by(
-                basic_id=basic.mother_id).order_by(BasicBreederconditioninfo.mon_age.desc())
+            mother_breeder_condition_query = BasicFieldconditioninfo.query.filter_by(
+                basic_id=basic.mother_id).order_by(BasicFieldconditioninfo.mon_age.desc())
             mother_a = mother_breeder_condition_query.first()
 
             print(f'father_a  {father_a}')
 
-            # mon_age_choice = dict(BasicBreederconditioninfo.mon_age_choice)
-            # rank_choice = dict(BasicBreederconditioninfo.rank_choice)
+            # mon_age_choice = dict(BasicFieldconditioninfo.mon_age_choice)
+            # rank_choice = dict(BasicFieldconditioninfo.rank_choice)
             rank_choice = {item["value"]: item["label"] for item in rank_type}
 
             list = []
@@ -2286,7 +2286,7 @@ def get_second_table(basic_id):
                     'm_ele_num': basic.m_ele_num.strip(),
                     'f_pre_num': basic.f_pre_num.strip(),
                     'm_pre_num': basic.m_pre_num.strip(),
-                    'with_births': breeder.with_births if breeder else '',
+                    'with_plantings': breeder.with_plantings if breeder else '',
                     'wea_weight': breeder.wea_weight if breeder else '',
                     'zf_ele_num': father.f_ele_num.strip() if father.f_ele_num else ' ',
                     'zf_pre_num': father.f_pre_num.strip() if father.f_pre_num else ' ',
@@ -2321,11 +2321,11 @@ def get_second_table(basic_id):
             ff_id = father.father_id if father else 0
             if ff_id:
                 ff = BasicBasicinfo.query.filter_by(id=ff_id).first()
-                # ff_a = BasicBreederconditioninfo.query.filter_by(basic_id=ff_id).latest(
-                #     'mon_age') if BasicBreederconditioninfo.query.filter_by(basic_id=ff_id) else 0
-                # 构建一次 BasicBreederconditioninfo 的查询
-                breeder_condition_query = BasicBreederconditioninfo.query.filter_by(basic_id=ff_id).order_by(
-                    BasicBreederconditioninfo.mon_age.desc())
+                # ff_a = BasicFieldconditioninfo.query.filter_by(basic_id=ff_id).latest(
+                #     'mon_age') if BasicFieldconditioninfo.query.filter_by(basic_id=ff_id) else 0
+                # 构建一次 BasicFieldconditioninfo 的查询
+                breeder_condition_query = BasicFieldconditioninfo.query.filter_by(basic_id=ff_id).order_by(
+                    BasicFieldconditioninfo.mon_age.desc())
                 # 获取排序后的第一条记录（即 mon_age 最大的记录）
                 ff_a = breeder_condition_query.first()
                 print(ff_a)
@@ -2344,12 +2344,12 @@ def get_second_table(basic_id):
                 fm = BasicBasicinfo.query.filter_by(id=fm_id).first()
 
 
-                # fm_a = BasicBreederconditioninfo.query.filter_by(basic_id=fm_id).latest(
-                #     'mon_age') if BasicBreederconditioninfo.query.filter_by(basic_id=fm_id) else 0
+                # fm_a = BasicFieldconditioninfo.query.filter_by(basic_id=fm_id).latest(
+                #     'mon_age') if BasicFieldconditioninfo.query.filter_by(basic_id=fm_id) else 0
 
                 # 一次查询并按 mon_age 降序排序
-                query = BasicBreederconditioninfo.query.filter_by(basic_id=fm_id).order_by(
-                    BasicBreederconditioninfo.mon_age.desc())
+                query = BasicFieldconditioninfo.query.filter_by(basic_id=fm_id).order_by(
+                    BasicFieldconditioninfo.mon_age.desc())
                 # 获取排序后的第一条记录，如果没有记录则为 None
                 fm_a = query.first()
 
@@ -2368,12 +2368,12 @@ def get_second_table(basic_id):
                 mf = BasicBasicinfo.query.filter_by(id=mf_id).first()
 
 
-                # mf_a = BasicBreederconditioninfo.query.filter_by(basic_id=mf_id).latest(
-                #     'mon_age') if BasicBreederconditioninfo.query.filter_by(basic_id=mf_id) else 0
+                # mf_a = BasicFieldconditioninfo.query.filter_by(basic_id=mf_id).latest(
+                #     'mon_age') if BasicFieldconditioninfo.query.filter_by(basic_id=mf_id) else 0
 
                 # 只进行一次查询，按照 mon_age 字段降序排序
-                query = BasicBreederconditioninfo.query.filter_by(basic_id=mf_id).order_by(
-                    BasicBreederconditioninfo.mon_age.desc())
+                query = BasicFieldconditioninfo.query.filter_by(basic_id=mf_id).order_by(
+                    BasicFieldconditioninfo.mon_age.desc())
                 # 获取排序后的第一条记录，如果没有记录则返回 None
                 mf_a = query.first()
 
@@ -2390,12 +2390,12 @@ def get_second_table(basic_id):
             if mm_id:
                 mm = BasicBasicinfo.query.filter_by(id=mm_id).first()
 
-                # mm_a = BasicBreederconditioninfo.query.filter_by(basic_id=mm_id).latest(
-                #     'mon_age') if BasicBreederconditioninfo.query.filter_by(basic_id=mm_id) else 0
+                # mm_a = BasicFieldconditioninfo.query.filter_by(basic_id=mm_id).latest(
+                #     'mon_age') if BasicFieldconditioninfo.query.filter_by(basic_id=mm_id) else 0
 
                 # 构建查询对象，按 mon_age 字段降序排序
-                query = BasicBreederconditioninfo.query.filter_by(basic_id=mm_id).order_by(
-                    BasicBreederconditioninfo.mon_age.desc())
+                query = BasicFieldconditioninfo.query.filter_by(basic_id=mm_id).order_by(
+                    BasicFieldconditioninfo.mon_age.desc())
                 # 获取排序后的第一条记录，如果没有记录则返回 None
                 mm_a = query.first()
 
@@ -2417,17 +2417,17 @@ def get_second_table(basic_id):
 # 涉及到的表 BasicBasicinfo ECultivationSproutinfo ECultivationCultivationinfo ECultivationMaturationinfo
 def get_third_table_gong(basic_id):
         """获取第三个表格数据（父系草地）"""
-        yupei = ECultivationCultivationinfo.query.filter_by(ram_id=basic_id).all()
+        yupei = ECultivationCultivationinfo.query.filter_by(male_id=basic_id).all()
         print(f'yupei{yupei}')
         datalist = []
         # unique_years = []
         # # for i in yupei:
-        # #     if i.breeding_date:
-        # #         unique_years.append(i.breeding_date.year)
+        # #     if i.propagation_date:
+        # #         unique_years.append(i.propagation_date.year)
         # # print(unique_years)
         # # yupeitime = sorted(list(set(unique_years)), reverse=True)
         # # print(yupeitime)
-        unique_years = [i.breeding_date.year for i in yupei]
+        unique_years = [i.propagation_date.year for i in yupei]
         print(f'unique_years{unique_years}')
         yupeitime = sorted(list(set(unique_years)), reverse=True)
         print(f'yupeitime{yupeitime}')
@@ -2455,24 +2455,24 @@ def get_third_table_mu(basic_id):
         breeding_way_choices1 = {item["value"]: item["label"] for item in breeding_way_choices}
 
         if basic.sex == 1:
-            breeding = ECultivationCultivationinfo.query.filter_by(ewe_id=basic_id).all()
+            breeding = ECultivationCultivationinfo.query.filter_by(female_id=basic_id).all()
         else:
-            breeding = ECultivationCultivationinfo.query.filter_by(ram_id=basic_id).all()
+            breeding = ECultivationCultivationinfo.query.filter_by(male_id=basic_id).all()
 
         data = []
         for i in breeding:
-            friend = BasicBasicinfo.query.filter_by(id=i.ewe_id if basic.sex == 0 else i.ram_id).first()
+            friend = BasicBasicinfo.query.filter_by(id=i.mother_id if basic.sex == 0 else i.father_id).first()
             breed_id = i.id
-            postnatal = ECultivationMaturationinfo.query.filter_by(breeding_id=breed_id).first()
-            lambs = ECultivationSproutinfo.query.filter_by(breeding_id=breed_id).all()
+            postnatal = ECultivationMaturationinfo.query.filter_by(propagation_id=breed_id).first()
+            lambs = ECultivationSproutinfo.query.filter_by(propagation_id=breed_id).all()
 
             if postnatal:
                 dict_init = {
-                    'breeding_date': i.breeding_date,
+                    'propagation_date': i.propagation_date,
                     'breeding_way': breeding_way_choices1[i.breeding_way] if i.breeding_way else '',
                     'friend_pre_num': friend.pre_num if friend else '',
                     'delivery_date': postnatal.delivery_date if postnatal else '',
-                    'live_num': postnatal.live_num if postnatal else '',
+                    'live_seedling_num': postnatal.live_seedling_num if postnatal else '',
                     'third': []
                 }
                 for index, j in enumerate(lambs):
@@ -2572,19 +2572,19 @@ def third_gong(basic_id, year_date):
         """第三个表格的计算逻辑"""
         basic1 = basic_id
 
-        # yupei = ECultivationCultivationinfo.query.filter_by(ram_id=basic_id, breeding_date__year=year_date).all()
+        # yupei = ECultivationCultivationinfo.query.filter_by(male_id=basic_id, propagation_date__year=year_date).all()
         # 使用 func 来筛选年份
         yupei = ECultivationCultivationinfo.query.filter(
-            ECultivationCultivationinfo.ram_id == basic_id,
-            func.extract('year', ECultivationCultivationinfo.breeding_date) == year_date
+            ECultivationCultivationinfo.father_id == basic_id,
+            func.extract('year', ECultivationCultivationinfo.propagation_date) == year_date
         ).all()
 
         yupeishu = len(yupei)
         print(yupei)
         shoutai = []
         for i in yupei:
-            breeding_id = i.id
-            shoutai1 = ECultivationMaturationinfo.query.filter_by(breeding_id=breeding_id).first()
+            propagation_id = i.id
+            shoutai1 = ECultivationMaturationinfo.query.filter_by(propagation_id=propagation_id).first()
             if shoutai1:
                 shoutai.append(shoutai1)
         shoutaishu = len(shoutai)
@@ -2592,15 +2592,15 @@ def third_gong(basic_id, year_date):
 
         fenmian = []
         for i in yupei:
-            breeding_id = i.id
-            fenmian1 = ECultivationMaturationinfo.query.filter_by(breeding_id=breeding_id).first()
+            propagation_id = i.id
+            fenmian1 = ECultivationMaturationinfo.query.filter_by(propagation_id=propagation_id).first()
             if fenmian1:
                 fenmian.append(fenmian1)
         fenmianshu = len(fenmian)
         hege = []
         buhege = 0
         for i in fenmian:
-            basic_id = i.ewe_id
+            basic_id = i.mother_id
             hege1 = DPlantcareDamageinfo.query.filter_by(basic_id=basic_id).all()
             buhege += len(hege1)
             if hege1:
@@ -2613,16 +2613,16 @@ def third_gong(basic_id, year_date):
         for i in fenmian:
             print(f"year: {year_date}")
             print(f"basic_id: {i.id}")
-            basic_id = i.ewe_id
-            breeding_id = i.breeding_id
-            lamba = ECultivationSproutinfo.query.filter_by(mother_id=basic_id, breeding_id=breeding_id).all()
-            changaoshu += i.live_num
+            basic_id = i.mother_id
+            propagation_id = i.propagation_id
+            lamba = ECultivationSproutinfo.query.filter_by(mother_id=basic_id, propagation_id=propagation_id).all()
+            changaoshu += i.live_seedling_num
             print(f"fenmian: {i}")
-            print(f"changao: {i.live_num}")
+            print(f"changao: {i.live_seedling_num}")
             lamb = ECultivationSproutinfo.query.filter(
                 (ECultivationSproutinfo.mother_id == basic_id) &
                 (ECultivationSproutinfo.state != 0) &
-                (ECultivationSproutinfo.breeding_id == breeding_id) &
+                (ECultivationSproutinfo.propagation_id == propagation_id) &
                 (ECultivationSproutinfo.father_id == basic1)
             ).all()
             if lamb:

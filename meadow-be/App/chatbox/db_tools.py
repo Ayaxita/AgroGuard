@@ -19,7 +19,7 @@ from App.modelsReverse import (
     HStoreInventory,
     HStoreProtectionIn,
     HStoreProtectionOut,
-    ColonyDisinfectioninfo,
+    FieldDisinfectioninfo,
 )
 
 VARIETY_MAP = {0: "小麦", 1: "玉米", 2: "水稻", 3: "大豆", 4: "苜蓿", 5: "黑麦草", 6: "燕麦", 7: "高粱", 8: "谷子", 9: "油菜", 10: "其他"}

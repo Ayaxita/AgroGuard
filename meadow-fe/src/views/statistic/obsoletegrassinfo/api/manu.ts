@@ -11,14 +11,14 @@ export const getManuList = params => {
 
 // 新增
 export const addManu = params => {
-  return http.post(PORT1 + `/deathinfo/add`, params);
+  return http.post(PORT1 + `/witherinfo/add`, params);
 };
 
 // 编辑
 export const editManu = params => {
-  return http.post(PORT1 + `/deathinfo/edit`, params);
+  return http.post(PORT1 + `/witherinfo/edit`, params);
 };
 // 删除记录
 export const delManu = params => {
-  return http.post(PORT1 + `/deathinfo/del`, params);
+  return http.post(PORT1 + `/witherinfo/del`, params);
 };

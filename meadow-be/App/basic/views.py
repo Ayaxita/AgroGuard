@@ -246,11 +246,11 @@ def get_basic_info():
 
 @basic.route('/basic/basicinfo/initHouseAndHurdle', methods=['POST'])
 def initHouseAndHurdle():
-    house_data = ColonyHouseinfo.query.filter_by(belong=0, pid=0).all()
+    house_data = FieldHouseinfo.query.filter_by(belong=0, pid=0).all()
 
     list = []
     for house in house_data:
-        hurdle_data = ColonyHouseinfo.query.filter_by(pid=house.id)
+        hurdle_data = FieldHouseinfo.query.filter_by(pid=house.id)
         list.append({"house_id": house.id, "house_name": house.name,
                      "hurdle_list": [{"hurdle_id": hurdle.id, "hurdle_name": hurdle.name} for hurdle in hurdle_data]})
     result = {
@@ -481,8 +481,8 @@ def add_basic_info():
 
     # 在圈舍表中添加草地数量
     if request.json.get('house_id') is not None:
-        house_info = ColonyHouseinfo.query.filter_by(id=request.json.get('house_id')).first()
-        hurdle_info = ColonyHouseinfo.query.filter_by(id=request.json.get('hurdle_id')).first()
+        house_info = FieldHouseinfo.query.filter_by(id=request.json.get('house_id')).first()
+        hurdle_info = FieldHouseinfo.query.filter_by(id=request.json.get('hurdle_id')).first()
         if house_info.grass_quantity is None:
             house_info.grass_quantity = 1
             hurdle_info.grass_quantity = 1
@@ -633,8 +633,8 @@ def edit_basic_info():
     if data['state']:
         state = data['state']
         if (state == -1):
-            dieoutHurdle_info = ColonyHouseinfo.query.filter_by(name="淘汰栏").first()
-            dieoutHouse_info = ColonyHouseinfo.query.filter_by(id=dieoutHurdle_info.pid).first()
+            dieoutHurdle_info = FieldHouseinfo.query.filter_by(name="淘汰栏").first()
+            dieoutHouse_info = FieldHouseinfo.query.filter_by(id=dieoutHurdle_info.pid).first()
             data['house_id'] = dieoutHouse_info.id
             data['house_name'] = dieoutHouse_info.name
             data['hurdle_id'] = dieoutHurdle_info.id
@@ -674,24 +674,24 @@ def edit_basic_info():
     wea_weight = data['wea_weight']
     wea_date = data['wea_date']
 
-    lamb_info = db.session.query(ECultivationSproutinfo).filter_by(pre_num=data['pre_num']).first()
-    if lamb_info:
-        lamb_id = lamb_info.id
-        lamb_info.wea_weight = wea_weight
-        lamb_info.wea_date = wea_date
-        lamb_info.birth = birth
-        lamb_info.bir_weight = bir_weighht
+    seedling_info = db.session.query(ECultivationSproutinfo).filter_by(pre_num=data['pre_num']).first()
+    if seedling_info:
+        lamb_id = seedling_info.id
+        seedling_info.wea_weight = wea_weight
+        seedling_info.wea_date = wea_date
+        seedling_info.birth = birth
+        seedling_info.bir_weight = bir_weighht
         db.session.commit()
 
-        weaning_info = db.session.query(ECultivationGerminationinfo).filter_by(lamb_id=lamb_id).first()
+        hardening_info = db.session.query(ECultivationGerminationinfo).filter_by(lamb_id=lamb_id).first()
 
-        if weaning_info:
-                weaning_info.wea_weight = wea_weight
-                weaning_info.Delivery_date = wea_date
-                weaning_info.Bir_weight = bir_weighht
+        if hardening_info:
+                hardening_info.wea_weight = wea_weight
+                hardening_info.Delivery_date = wea_date
+                hardening_info.Seedling_weight = bir_weighht
                 db.session.commit()
     else:
-        # 当 lamb_info 为 None 时，不执行依赖 lamb_id 的操作
+        # 当 seedling_info 为 None 时，不执行依赖 lamb_id 的操作
         pass
     try:
         BasicBasicinfo.query.filter_by(ele_num=ele_num).update(data)
@@ -722,8 +722,8 @@ def obsolete_grass():
     state = data['state']
     ele_num = data['ele_num']
     if (state == -1):
-            dieoutHurdle_info = ColonyHouseinfo.query.filter_by(name="淘汰栏").first()
-            dieoutHouse_info = ColonyHouseinfo.query.filter_by(id=dieoutHurdle_info.pid).first()
+            dieoutHurdle_info = FieldHouseinfo.query.filter_by(name="淘汰栏").first()
+            dieoutHouse_info = FieldHouseinfo.query.filter_by(id=dieoutHurdle_info.pid).first()
             original_data = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
             data['house_id'] = dieoutHouse_info.id
             data['house_name'] = dieoutHouse_info.name
@@ -1031,9 +1031,9 @@ def import_basic_info():
                 basic_info.birth = df.iloc[r, 9]
             basic_info.bir_weight = df.iloc[r, 10]
             basic_info.wea_weight = df.iloc[r, 11]
-            basic_info.house_id = ColonyHouseinfo.query.filter_by(name=df.iloc[r, 7]).first().id
+            basic_info.house_id = FieldHouseinfo.query.filter_by(name=df.iloc[r, 7]).first().id
             basic_info.house_name = df.iloc[r, 7]
-            basic_info.hurdle_id = ColonyHouseinfo.query.filter_by(name=df.iloc[r, 8]).first().id
+            basic_info.hurdle_id = FieldHouseinfo.query.filter_by(name=df.iloc[r, 8]).first().id
             basic_info.hurdle_name = df.iloc[r, 8]
             basic_info.mon_age = df.iloc[r, 12]
             # 如果父母id在数据库里没有怎么办,
@@ -1138,7 +1138,7 @@ def update_mon_age():
 
 @basic.route('/basic/basicinfo/updateHouseAndHurdle', methods=['POST'])
 def update_house_and_hurdle():
-    colony_infos = ColonyHouseinfo.query.all()
+    colony_infos = FieldHouseinfo.query.all()
     for info in colony_infos:
         if info.pid == 0:
             info.grass_quantity = BasicBasicinfo.query.filter_by(house_id=info.id).count()
@@ -1167,8 +1167,8 @@ def mark_grass_death():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
-    deathHurdle_info = ColonyHouseinfo.query.filter_by(name="死亡栏").first()
-    deathHouse_info = ColonyHouseinfo.query.filter_by(id=deathHurdle_info.pid).first()
+    deathHurdle_info = FieldHouseinfo.query.filter_by(name="死亡栏").first()
+    deathHouse_info = FieldHouseinfo.query.filter_by(id=deathHurdle_info.pid).first()
     for info in basic_infos:
         print(info)
         BasicBasicinfo.query.filter_by(id=info['basic_id']).update(
@@ -1181,14 +1181,14 @@ def mark_grass_death():
             obsolete_info.obsolete_type = 0
             obsolete_info.dead_date = info['date']
             # db.session.commit()
-        death_info = DPlantcareDeathinfo()
+        wither_info = DPlantcareDeathinfo()
         for key, value in info.items():
-            setattr(death_info, key, value)
-            death_info.belong = 0
-            death_info.f_date = datetime.now()
-            death_info.age = (datetime.now().year - BasicBasicinfo.query.filter_by(
+            setattr(wither_info, key, value)
+            wither_info.belong = 0
+            wither_info.f_date = datetime.now()
+            wither_info.age = (datetime.now().year - BasicBasicinfo.query.filter_by(
                 id=info['basic_id']).first().birth.year)
-        list.append(death_info)
+        list.append(wither_info)
     try:
         db.session.add_all(list)
         db.session.commit()
@@ -1214,8 +1214,8 @@ def mark_grass_sale():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
-    saleHurdle_info = ColonyHouseinfo.query.filter_by(name="销售栏").first()
-    saleHouse_info = ColonyHouseinfo.query.filter_by(id=saleHurdle_info.pid).first()
+    saleHurdle_info = FieldHouseinfo.query.filter_by(name="销售栏").first()
+    saleHouse_info = FieldHouseinfo.query.filter_by(id=saleHurdle_info.pid).first()
     today = datetime.today()
 
     for info in basic_infos:
@@ -1421,42 +1421,42 @@ def fun(param):
     return id1
 
 
-@basic.route('/basic/breederconditioninfo', methods=['POST'])
-def get_breedercondition_info():
+@basic.route('/basic/fieldconditioninfo', methods=['POST'])
+def get_fieldcondition_info():
     pageNum = int(request.json.get('pageNum'))
     # pageNum = int(request.form.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
     conditions = []
     search_params = {
-        'id': BasicBreederconditioninfo.id,
-        'date': BasicBreederconditioninfo.date,
-        'basic_id': BasicBreederconditioninfo.basic_id,
-        'age': BasicBreederconditioninfo.age,
-        'mon_age': BasicBreederconditioninfo.mon_age,
-        # 'color': BasicBreederconditioninfo.color,
-        'rank': BasicBreederconditioninfo.rank,
-        'high': BasicBreederconditioninfo.high,
-        'weight': BasicBreederconditioninfo.weight,
-        'Llong': BasicBreederconditioninfo.Llong,
-        'bust': BasicBreederconditioninfo.bust,
-        'back_fat': BasicBreederconditioninfo.back_fat,
-        'eye': BasicBreederconditioninfo.eye,
-        'testis_shape': BasicBreederconditioninfo.testis_shape,
-        't_staff': BasicBreederconditioninfo.t_staff,
-        'AE': BasicBreederconditioninfo.AE,
-        'performance_traits': BasicBreederconditioninfo.performance_traits,
-        'with_births': BasicBreederconditioninfo.with_births,
-        'wea_weight': BasicBreederconditioninfo.wea_weight,
-        'June_heavy': BasicBreederconditioninfo.June_heavy,
-        'health': BasicBreederconditioninfo.health,
-        'f_date': BasicBreederconditioninfo.f_date,
-        'f_staff': BasicBreederconditioninfo.f_staff,
-        'notes': BasicBreederconditioninfo.notes,
-        'belong': BasicBreederconditioninfo.belong,
+        'id': BasicFieldconditioninfo.id,
+        'date': BasicFieldconditioninfo.date,
+        'basic_id': BasicFieldconditioninfo.basic_id,
+        'age': BasicFieldconditioninfo.age,
+        'mon_age': BasicFieldconditioninfo.mon_age,
+        # 'color': BasicFieldconditioninfo.color,
+        'rank': BasicFieldconditioninfo.rank,
+        'high': BasicFieldconditioninfo.high,
+        'weight': BasicFieldconditioninfo.weight,
+        'Llong': BasicFieldconditioninfo.Llong,
+        'bust': BasicFieldconditioninfo.bust,
+        'back_fat': BasicFieldconditioninfo.back_fat,
+        'eye': BasicFieldconditioninfo.eye,
+        'root_shape': BasicFieldconditioninfo.root_shape,
+        't_staff': BasicFieldconditioninfo.t_staff,
+        'AE': BasicFieldconditioninfo.AE,
+        'performance_traits': BasicFieldconditioninfo.performance_traits,
+        'with_plantings': BasicFieldconditioninfo.with_plantings,
+        'wea_weight': BasicFieldconditioninfo.wea_weight,
+        'June_heavy': BasicFieldconditioninfo.June_heavy,
+        'health': BasicFieldconditioninfo.health,
+        'f_date': BasicFieldconditioninfo.f_date,
+        'f_staff': BasicFieldconditioninfo.f_staff,
+        'notes': BasicFieldconditioninfo.notes,
+        'belong': BasicFieldconditioninfo.belong,
 
-        'ele_num': BasicBreederconditioninfo.basic_id,
-        'variety': BasicBreederconditioninfo.basic_id,
-        'color': BasicBreederconditioninfo.basic_id
+        'ele_num': BasicFieldconditioninfo.basic_id,
+        'variety': BasicFieldconditioninfo.basic_id,
+        'color': BasicFieldconditioninfo.basic_id
     }
     for param, column in search_params.items():
         value = request.json.get(param)
@@ -1493,19 +1493,19 @@ def get_breedercondition_info():
     #     for info in basic_query:
     #         basic_ids.append(info.id)
     #     # print(basic_ids)
-    #     conditions.append(BasicBreederconditioninfo.basic_id.in_(basic_ids))
+    #     conditions.append(BasicFieldconditioninfo.basic_id.in_(basic_ids))
     # 使用 and_() 组合条件
     if conditions:
-        query = BasicBreederconditioninfo.query.filter(and_(*conditions))
+        query = BasicFieldconditioninfo.query.filter(and_(*conditions))
     else:
-        query = BasicBreederconditioninfo.query  # 如果没有条件，查询所有
+        query = BasicFieldconditioninfo.query  # 如果没有条件，查询所有
 
-    breederconditioninfos = query.filter(BasicBreederconditioninfo.belong == 0).paginate(page=pageNum,
+    fieldconditioninfos = query.filter(BasicFieldconditioninfo.belong == 0).paginate(page=pageNum,
                                                                                          per_page=pageSize,
                                                                                          error_out=False)
     total = query.count()
     list = []
-    for info in breederconditioninfos:
+    for info in fieldconditioninfos:
         data = json.dumps(info, cls=AlchemyEncoder, ensure_ascii=False)
         data = json.loads(data)
         data['ele_num'] = BasicBasicinfo.query.filter_by(id=data['basic_id']).first().ele_num
@@ -1526,8 +1526,8 @@ def get_breedercondition_info():
     return jsonify(result)
 
 
-@basic.route('/basic/breederconditioninfo/add', methods=['POST'])
-def add_breedercondition_info():
+@basic.route('/basic/fieldconditioninfo/add', methods=['POST'])
+def add_fieldcondition_info():
     data = request.get_json()
     ctime = datetime.now().strftime("%Y-%m-%d")
     data['belong'] = 0
@@ -1544,7 +1544,7 @@ def add_breedercondition_info():
     # print(f'data----->{data}')
     # print(type(data))
     # print(data.keys())
-    breeder_condition_info = BasicBreederconditioninfo()
+    breeder_condition_info = BasicFieldconditioninfo()
 
     for key, value in data.items():
         if value == "":
@@ -1570,8 +1570,8 @@ def add_breedercondition_info():
     return jsonify(result)
 
 
-@basic.route('/basic/breederconditioninfo/edit', methods=['POST'])
-def edit_breedercondition_info():
+@basic.route('/basic/fieldconditioninfo/edit', methods=['POST'])
+def edit_fieldcondition_info():
     data = request.get_json()
     # print("--data-->", data)
 
@@ -1579,10 +1579,10 @@ def edit_breedercondition_info():
     data.pop('ele_num')
     data.pop('variety')
     data.pop('color')
-    BasicBreederconditioninfo.query.filter_by(id=data['id']).update(data)
-    # breeder_condition_info = BasicBreederconditioninfo()
-    # breederconditioninfo = BasicBreederconditioninfo.query.filter(
-    #     BasicBreederconditioninfo.id == request.json.get('id')).first()
+    BasicFieldconditioninfo.query.filter_by(id=data['id']).update(data)
+    # breeder_condition_info = BasicFieldconditioninfo()
+    # fieldconditioninfo = BasicFieldconditioninfo.query.filter(
+    #     BasicFieldconditioninfo.id == request.json.get('id')).first()
     #
     # id = data['id']
     # date_obj = datetime.strptime(data['date'], '%m/%d/%Y')
@@ -1595,8 +1595,8 @@ def edit_breedercondition_info():
     # formatted_date = date_obj.strftime('%Y-%m-%d')
     # data['f_date'] = formatted_date
     #
-    # data['back_fat'] = breederconditioninfo.back_fat
-    # data['eye'] = breederconditioninfo.eye
+    # data['back_fat'] = fieldconditioninfo.back_fat
+    # data['eye'] = fieldconditioninfo.eye
 
     # breeder_condition_info.query.filter_by(id=id).update(data)
 
@@ -1617,11 +1617,11 @@ def edit_breedercondition_info():
     return jsonify(result)
 
 
-@basic.route('/basic/breederconditioninfo/del', methods=['POST'])
-def del_breederconditioninfo():
+@basic.route('/basic/fieldconditioninfo/del', methods=['POST'])
+def del_fieldconditioninfo():
     ids = request.get_json()
     for i in ids:
-        BasicBreederconditioninfo.query.filter_by(id=i).delete()
+        BasicFieldconditioninfo.query.filter_by(id=i).delete()
     try:
         db.session.commit()
     except Exception as e:
@@ -1704,18 +1704,18 @@ def update_grandparents():
 
             # 更新当前记录的祖父母信息
             rows_affected = BasicBasicinfo.query.filter_by(id=record.id).update({
-                'ram_grandfather_id': father_grandfather_id,
-                'ram_grandfather_ele_num': father_grandfather_ele_num,
-                'ram_grandfather_pre_num': father_grandfather_pre_num,
-                'ewe_grandfather_id': mother_grandfather_id,
-                'ewe_grandfather_ele_num': mother_grandfather_ele_num,
-                'ewe_grandfather_pre_num': mother_grandfather_pre_num,
-                'ram_grandmother_id': father_grandmother_id,
-                'ram_grandmother_ele_num': father_grandmother_ele_num,
-                'ram_grandmother_pre_num': father_grandmother_pre_num,
-                'ewe_grandmother_id': mother_grandmother_id,
-                'ewe_grandmother_ele_num': mother_grandmother_ele_num,
-                'ewe_grandmother_pre_num': mother_grandmother_pre_num
+                'paternal_grandfather_id': father_grandfather_id,
+                'paternal_grandfather_ele_num': father_grandfather_ele_num,
+                'paternal_grandfather_pre_num': father_grandfather_pre_num,
+                'maternal_grandfather_id': mother_grandfather_id,
+                'maternal_grandfather_ele_num': mother_grandfather_ele_num,
+                'maternal_grandfather_pre_num': mother_grandfather_pre_num,
+                'paternal_grandmother_id': father_grandmother_id,
+                'paternal_grandmother_ele_num': father_grandmother_ele_num,
+                'paternal_grandmother_pre_num': father_grandmother_pre_num,
+                'maternal_grandmother_id': mother_grandmother_id,
+                'maternal_grandmother_ele_num': mother_grandmother_ele_num,
+                'maternal_grandmother_pre_num': mother_grandmother_pre_num
             })
             total_rows_affected += rows_affected  # 累加影响行数
 
@@ -1740,7 +1740,7 @@ def update_grandparents():
         return jsonify(result)
 
 #获取状态为健康的草的基本信息
-@basic.route('/basic/breederconditioninfo/get_Goodgrass', methods=['POST'])
+@basic.route('/basic/fieldconditioninfo/get_Goodgrass', methods=['POST'])
 def get_Goodgrass():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
@@ -1821,23 +1821,23 @@ def get_Goodgrass():
     return jsonify(result)
 
 #通过父系id和母系id和出生日期寻找生长记录，然后找出苗数
-@basic.route('/basic/breederconditioninfo/getWith_births', methods=['POST'])
+@basic.route('/basic/fieldconditioninfo/getWith_births', methods=['POST'])
 def getWith_births():
-    ewe_id = request.json.get('m_id')
+    female_id = request.json.get('m_id')
     # pageNum = int(request.form.get('pageNum'))
-    ram_id = request.json.get('f_id')
+    male_id = request.json.get('f_id')
 
     birth = request.json.get('birth')
 
     # 构造查询条件
     conditions = []
 
-    conditions.append(ECultivationMaturationinfo.ewe_id == ewe_id)
-    conditions.append(ECultivationMaturationinfo.ram_id == ram_id)
+    conditions.append(ECultivationMaturationinfo.mother_id == female_id)
+    conditions.append(ECultivationMaturationinfo.father_id == male_id)
     conditions.append(ECultivationMaturationinfo.delivery_date == birth)
 
     # 查询数据库，获取符合条件的记录
-    num = ECultivationMaturationinfo.query.filter(and_(*conditions)).first().live_num
+    num = ECultivationMaturationinfo.query.filter(and_(*conditions)).first().live_seedling_num
 
     result = {
         "code": 200,
@@ -1846,33 +1846,33 @@ def getWith_births():
     }
     return jsonify(result)
 
-@basic.route('/basic/cutinfo/add', methods=['POST'])
-def add_cut_info():
+@basic.route('/basic/harvestinfo/add', methods=['POST'])
+def add_harvest_info():
     data = request.get_json()
     ctime = datetime.now().strftime("%Y-%m-%d")
     data['belong'] = 0
     data['f_date'] = ctime
-    if data['cut_time']:
-        date_obj = datetime.strptime(data['cut_time'], '%Y-%m-%d')
+    if data['harvest_time']:
+        date_obj = datetime.strptime(data['harvest_time'], '%Y-%m-%d')
         # 将 datetime 对象转换为指定格式的字符串
         formatted_date = date_obj.strftime('%Y-%m-%d')
-        data['cut_time'] = formatted_date
+        data['harvest_time'] = formatted_date
     if data['house_name']:
         del data['house_name']
 
     # print(f'data----->{data}')
     # print(type(data))
     # print(data.keys())
-    cut_info = BasicCutinfo()
+    harvest_info = BasicHarvestinfo()
 
     for key, value in data.items():
         if value == "":
-            setattr(cut_info, key, None)  # 或者设置一个默认值
+            setattr(harvest_info, key, None)  # 或者设置一个默认值
         else:
-            setattr(cut_info, key, value)
+            setattr(harvest_info, key, value)
 
     try:
-        db.session.add(cut_info)
+        db.session.add(harvest_info)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
@@ -1888,54 +1888,54 @@ def add_cut_info():
     }
     return jsonify(result)
 
-@basic.route('/basic/cutinfo', methods=['POST'])
-def get_cut_info():
+@basic.route('/basic/harvestinfo', methods=['POST'])
+def get_harvest_info():
     pageNum = int(request.json.get('pageNum'))
     # pageNum = int(request.form.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
 
     conditions = []
     search_params = {
-        'house_name': BasicCutinfo.id,
-        'ele_quantity': BasicCutinfo.ele_quantity,
-        'variety': BasicCutinfo.variety,
-        'cut_time': BasicCutinfo.cut_time,
-        'rank': BasicCutinfo.rank,
-        'color': BasicCutinfo.color,
-        'weight': BasicCutinfo.weight,
-        'staff': BasicCutinfo.staff,
-        'notes': BasicCutinfo.notes,
-        'f_date': BasicCutinfo.f_date,
-        'cut_num': BasicCutinfo.cut_num,
+        'house_name': BasicHarvestinfo.house_id,
+        'ele_quantity': BasicHarvestinfo.ele_quantity,
+        'variety': BasicHarvestinfo.variety,
+        'harvest_time': BasicHarvestinfo.harvest_time,
+        'rank': BasicHarvestinfo.rank,
+        'color': BasicHarvestinfo.color,
+        'weight': BasicHarvestinfo.weight,
+        'staff': BasicHarvestinfo.staff,
+        'notes': BasicHarvestinfo.notes,
+        'f_date': BasicHarvestinfo.f_date,
+        'harvest_num': BasicHarvestinfo.harvest_num,
     }
     for param, column in search_params.items():
         value = request.json.get(param)
         if value is not None:  # 检查值不为 None
-            if param == 'cut_time' or param == 'f_date':  # 日期需要转换
+            if param == 'harvest_time' or param == 'f_date':  # 日期需要转换
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'house_name':
-                house_id = ColonyHouseinfo.query.filter(
-                    ColonyHouseinfo.house_name.like(f'%{value}%')).first().id
+                house_id = FieldHouseinfo.query.filter(
+                    FieldHouseinfo.name.like(f'%{value}%')).first().id
                 conditions.append(column == house_id)
             else:
                 conditions.append(column == value)
 
     # 使用 and_() 组合条件
     if conditions:
-        query = BasicCutinfo.query.filter(and_(*conditions))
+        query = BasicHarvestinfo.query.filter(and_(*conditions))
     else:
-        query = BasicCutinfo.query  # 如果没有条件，查询所有
+        query = BasicHarvestinfo.query  # 如果没有条件，查询所有
 
     # 筛选出未淘汰(状态-1)和未绝收(状态0)的田块记录
     # 并且根据id降序排列
 
-    query = query.filter(and_(BasicCutinfo.belong == 0))
-    cut_infos = query.order_by(desc(BasicCutinfo.id)).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    query = query.filter(and_(BasicHarvestinfo.belong == 0))
+    harvest_infos = query.order_by(desc(BasicHarvestinfo.id)).paginate(page=pageNum, per_page=pageSize, error_out=False)
     total = query.count()
 
     list = []
-    for info in cut_infos:
+    for info in harvest_infos:
         # list.append({
         #     'id': info.id,
         #     'ele_num': info.ele_num,
@@ -1981,7 +1981,7 @@ def get_cut_info():
         data = json.dumps(info, cls=AlchemyEncoder, ensure_ascii=False)
         data = json.loads(data)
         print(data)
-        house_info = ColonyHouseinfo.query.filter_by(id=data['house_id']).first()
+        house_info = FieldHouseinfo.query.filter_by(id=data['house_id']).first()
         if house_info:
             data['house_name'] = house_info.name
         list.append(data)
@@ -2001,18 +2001,18 @@ def get_cut_info():
     #     "method": 'GET'
     # })
 
-@basic.route('/basic/cutinfo/edit', methods=['POST'])
-def edit_cut_info():
+@basic.route('/basic/harvestinfo/edit', methods=['POST'])
+def edit_harvest_info():
     data = request.get_json()
     # print("--data-->", data)
 
     # 前端传过来的数据有修改过的basic_id
     if data['house_name']:
         del data['house_name']
-    BasicCutinfo.query.filter_by(id=data['id']).update(data)
-    # breeder_condition_info = BasicBreederconditioninfo()
-    # breederconditioninfo = BasicBreederconditioninfo.query.filter(
-    #     BasicBreederconditioninfo.id == request.json.get('id')).first()
+    BasicHarvestinfo.query.filter_by(id=data['id']).update(data)
+    # breeder_condition_info = BasicFieldconditioninfo()
+    # fieldconditioninfo = BasicFieldconditioninfo.query.filter(
+    #     BasicFieldconditioninfo.id == request.json.get('id')).first()
     #
     # id = data['id']
     # date_obj = datetime.strptime(data['date'], '%m/%d/%Y')
@@ -2025,8 +2025,8 @@ def edit_cut_info():
     # formatted_date = date_obj.strftime('%Y-%m-%d')
     # data['f_date'] = formatted_date
     #
-    # data['back_fat'] = breederconditioninfo.back_fat
-    # data['eye'] = breederconditioninfo.eye
+    # data['back_fat'] = fieldconditioninfo.back_fat
+    # data['eye'] = fieldconditioninfo.eye
 
     # breeder_condition_info.query.filter_by(id=id).update(data)
 
@@ -2046,11 +2046,11 @@ def edit_cut_info():
     }
     return jsonify(result)
 
-@basic.route('/basic/cutinfo/del', methods=['POST'])
-def del_cut_info():
+@basic.route('/basic/harvestinfo/del', methods=['POST'])
+def del_harvest_info():
     ids = request.get_json()
     for i in ids:
-        BasicCutinfo.query.filter_by(id=i).delete()
+        BasicHarvestinfo.query.filter_by(id=i).delete()
     try:
         db.session.commit()
     except Exception as e:

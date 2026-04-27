@@ -11,7 +11,7 @@ export const getManuList = params => {
 
 // 新增记录
 // export const addManu = params => {
-//   return http.post(PORT1 + `/lambinfo/add`, params);
+//   return http.post(PORT1 + `/seedlinginfo/add`, params);
 // };
 
 // 编辑

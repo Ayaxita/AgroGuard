@@ -38,7 +38,7 @@ import { exportGrassInfo, getManuList, updateGrassAsset } from "../api/manu";
 import {
   assetStandardType,
   BooleanType,
-  colonyDisinfectionMethodType,
+  fieldDisinfectionMethodType,
   manuScaleType,
   manutypeType,
   purposeType,

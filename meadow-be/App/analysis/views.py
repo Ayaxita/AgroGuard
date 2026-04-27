@@ -286,27 +286,27 @@ def _calculate_asset_stats():
     # 子查询 1：找到每个 basic_id 对应的最大日期
     latest_date_subquery = (
         db.session.query(
-            BasicBreederconditioninfo.basic_id,
-            func.max(BasicBreederconditioninfo.date).label('max_date')
+            BasicFieldconditioninfo.basic_id,
+            func.max(BasicFieldconditioninfo.date).label('max_date')
         )
-            .group_by(BasicBreederconditioninfo.basic_id)
+            .group_by(BasicFieldconditioninfo.basic_id)
             .subquery()
     )
 
     # 子查询 2：在每个 basic_id 对应的最大日期下，找到 id 最大的记录
     latest_condition_subquery = (
         db.session.query(
-            BasicBreederconditioninfo.basic_id,
-            func.max(BasicBreederconditioninfo.id).label('max_id')
+            BasicFieldconditioninfo.basic_id,
+            func.max(BasicFieldconditioninfo.id).label('max_id')
         )
             .join(
             latest_date_subquery,
             and_(
-                BasicBreederconditioninfo.basic_id == latest_date_subquery.c.basic_id,
-                BasicBreederconditioninfo.date == latest_date_subquery.c.max_date
+                BasicFieldconditioninfo.basic_id == latest_date_subquery.c.basic_id,
+                BasicFieldconditioninfo.date == latest_date_subquery.c.max_date
             )
         )
-            .group_by(BasicBreederconditioninfo.basic_id)
+            .group_by(BasicFieldconditioninfo.basic_id)
             .subquery()
     )
 
@@ -323,17 +323,17 @@ def _calculate_asset_stats():
             BasicBasicinfo.purpose,
             BasicBasicinfo.mon_age,
             BasicBasicinfo.rank,
-            func.coalesce(BasicBreederconditioninfo.weight, 0).label('weight'),
-            BasicBreederconditioninfo.basic_id.is_(None).label('has_no_weight')
+            func.coalesce(BasicFieldconditioninfo.weight, 0).label('weight'),
+            BasicFieldconditioninfo.basic_id.is_(None).label('has_no_weight')
         )
             .outerjoin(
             latest_condition_subquery,
             BasicBasicinfo.id == latest_condition_subquery.c.basic_id
         )
             .outerjoin(
-            BasicBreederconditioninfo,
+            BasicFieldconditioninfo,
             and_(
-                BasicBreederconditioninfo.id == latest_condition_subquery.c.max_id
+                BasicFieldconditioninfo.id == latest_condition_subquery.c.max_id
             )
         )
             .filter(
@@ -622,11 +622,11 @@ def Commit_calculate_asset_stats(basic_ids):
     # 子查询获取每个basic_id的最新体重记录日期
     latest_condition_subquery = (
         db.session.query(
-            BasicBreederconditioninfo.basic_id,
-            func.max(BasicBreederconditioninfo.date).label('max_date')
+            BasicFieldconditioninfo.basic_id,
+            func.max(BasicFieldconditioninfo.date).label('max_date')
         )
-            .filter(BasicBreederconditioninfo.basic_id.in_(basic_ids))
-            .group_by(BasicBreederconditioninfo.basic_id)
+            .filter(BasicFieldconditioninfo.basic_id.in_(basic_ids))
+            .group_by(BasicFieldconditioninfo.basic_id)
             .subquery()
     )
 
@@ -643,18 +643,18 @@ def Commit_calculate_asset_stats(basic_ids):
             BasicBasicinfo.purpose,
             BasicBasicinfo.mon_age,
             BasicBasicinfo.rank,
-            func.coalesce(BasicBreederconditioninfo.weight, 0).label('weight'),
-            BasicBreederconditioninfo.basic_id.is_(None).label('has_no_weight')
+            func.coalesce(BasicFieldconditioninfo.weight, 0).label('weight'),
+            BasicFieldconditioninfo.basic_id.is_(None).label('has_no_weight')
         )
             .outerjoin(
             latest_condition_subquery,
             BasicBasicinfo.id == latest_condition_subquery.c.basic_id
         )
             .outerjoin(
-            BasicBreederconditioninfo,
+            BasicFieldconditioninfo,
             and_(
-                BasicBreederconditioninfo.basic_id == latest_condition_subquery.c.basic_id,
-                BasicBreederconditioninfo.date == latest_condition_subquery.c.max_date
+                BasicFieldconditioninfo.basic_id == latest_condition_subquery.c.basic_id,
+                BasicFieldconditioninfo.date == latest_condition_subquery.c.max_date
             )
         )
             .filter(

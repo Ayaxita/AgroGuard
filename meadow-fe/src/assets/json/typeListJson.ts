@@ -301,7 +301,7 @@ export const manutypeType = [
   }
 ];
 
-export const breederconditioninfo_MonageType = [
+export const fieldconditioninfo_MonageType = [
   {
     label: "2月生长周期",
     value: 0
@@ -330,7 +330,7 @@ export const DiluentType = [
     value: 2
   }
 ];
-export const breederconditioninfo_TestisShapeType = [
+export const fieldconditioninfo_TestisShapeType = [
   {
     label: "正常",
     value: 0
@@ -341,7 +341,7 @@ export const breederconditioninfo_TestisShapeType = [
   }
 ];
 
-export const cutinfoWoolType = [
+export const harvestinfoWoolType = [
   {
     label: "嫩叶",
     value: 0
@@ -364,7 +364,7 @@ export const cutinfoWoolType = [
   }
 ];
 
-export const colonyFuntionType = [
+export const fieldFuntionType = [
   {
     label: "种植培育区",
     value: 0
@@ -395,7 +395,7 @@ export const colonyFuntionType = [
   }
 ];
 
-export const colonyH_typeType = [
+export const fieldH_typeType = [
   {
     label: "单排",
     value: 0
@@ -410,7 +410,7 @@ export const colonyH_typeType = [
   }
 ];
 
-export const colonyDisinfectionMethodType = [
+export const fieldDisinfectionMethodType = [
   {
     label: "喷雾防治",
     value: 0
@@ -421,7 +421,7 @@ export const colonyDisinfectionMethodType = [
   }
 ];
 
-export const colonyTransferReasonType = [
+export const fieldTransferReasonType = [
   {
     label: "产出",
     value: 0
@@ -610,7 +610,7 @@ export const BooleanType = [
   }
 ];
 
-export const Breeding_wayType = [
+export const Propagation_wayType = [
   {
     label: "自然播种",
     value: 0
@@ -631,7 +631,7 @@ export const Breeding_wayType = [
 
 // ewe_choice和ram_choice先采用variety
 
-export const Breeding_stateType = [
+export const Propagation_stateType = [
   {
     label: "1",
     value: 1
@@ -702,7 +702,7 @@ export const Feeding_wayType = [
   }
 ];
 
-export const WeaningRankType = [
+export const HardeningRankType = [
   {
     label: "特级",
     value: 0
@@ -725,7 +725,7 @@ export const WeaningRankType = [
   }
 ];
 
-export const S_slaughterType = [
+export const S_processingType = [
   {
     label: "淘汰草地",
     value: 3

@@ -41,9 +41,9 @@
       }
     },
     {
-      "path": "/home/basic_capacity_ewes/index",
-      "name": "home_basic_capacity_ewes",
-      "component": "/home/basic_capacity_ewes/useProTable/index",
+      "path": "/home/basic_capacity_females/index",
+      "name": "home_basic_capacity_females",
+      "component": "/home/basic_capacity_females/useProTable/index",
       "meta": {
         "icon": "PieChart",
         "title": "草地生长能力评价指标",
@@ -55,9 +55,9 @@
       }
     },
     {
-      "path": "/home/basic_capacity_ewes_graph/index",
-      "name": "home_basic_capacity_ewes_graph",
-      "component": "/home/basic_capacity_ewes_graph/useProTable/index",
+      "path": "/home/basic_capacity_females_graph/index",
+      "name": "home_basic_capacity_females_graph",
+      "component": "/home/basic_capacity_females_graph/useProTable/index",
       "meta": {
         "icon": "PieChart",
         "title": "草地生长监测统计分析",
@@ -69,9 +69,9 @@
       }
     },
     {
-      "path": "/home/basic_capacity_rams/index",
-      "name": "home_basic_capacity_rams",
-      "component": "/home/basic_capacity_rams/useProTable/index",
+      "path": "/home/basic_capacity_males/index",
+      "name": "home_basic_capacity_males",
+      "component": "/home/basic_capacity_males/useProTable/index",
       "meta": {
         "icon": "PieChart",
         "title": "草地病虫害风险评价指标",
@@ -83,9 +83,9 @@
       }
     },
     {
-      "path": "/home/basic_capacity_rams_graph/index",
-      "name": "home_basic_capacity_rams_graph",
-      "component": "/home/basic_capacity_rams_graph/useProTable/index",
+      "path": "/home/basic_capacity_males_graph/index",
+      "name": "home_basic_capacity_males_graph",
+      "component": "/home/basic_capacity_males_graph/useProTable/index",
       "meta": {
         "icon": "PieChart",
         "title": "草地风险监测统计分析",
@@ -97,9 +97,9 @@
       }
     },
     {
-      "path": "/home/basic_capacityrams/index",
-      "name": "home_basic_capacityrams",
-      "component": "/home/basic_capacityrams/useProTable/index",
+      "path": "/home/basic_capacitymales/index",
+      "name": "home_basic_capacitymales",
+      "component": "/home/basic_capacitymales/useProTable/index",
       "meta": {
         "icon": "PieChart",
         "title": "草地个体性能指标",
@@ -253,9 +253,9 @@
       }
     },
     {
-      "path": "/g_harvest/slaughtersegmentinfo/index",
-      "name": "g_harvest_slaughtersegmentinfo",
-      "component": "/g_harvest/slaughtersegmentinfo/useProTable/index",
+      "path": "/g_harvest/processinginfo/index",
+      "name": "g_harvest_processinginfo",
+      "component": "/g_harvest/processinginfo/useProTable/index",
       "meta": {
         "icon": "Van",
         "title": "屠宰分割",

@@ -133,7 +133,7 @@ import {
   G_harvestTypeType,
   SellingType,
   BooleanType,
-  S_slaughterType
+  S_processingType
 } from "@/assets/json/typeListJson";
 import { placeholderSign } from "element-plus/es/components/table-v2/src/private";
 import { commitUpdateDailyIncome } from "@/views/analysis/daily_income/api/manu";
@@ -748,7 +748,7 @@ const markSale = async grassinfo => {
                         saleProps.value.type = val;
                       }
                     },
-                    S_slaughterType.map(item => {
+                    S_processingType.map(item => {
                       return h(ElOption, {
                         label: item.label,
                         value: item.value

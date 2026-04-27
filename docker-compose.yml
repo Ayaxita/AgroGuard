@@ -1,18 +1,9 @@
-name: agroguard
+name: meadow-guard
 
 services:
-  flask:
-    hostname: flask
-    depends_on:
-      - mysql-db
-    build: ./meadow-be
-    ports:
-      - "5000:5000"
-    command: python app.py
-
   mysql-db:
-    hostname: mysql-db
     image: m.daocloud.io/docker.io/library/mysql:5.7
+    hostname: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: meadow123
       MYSQL_DATABASE: meadow_test
@@ -20,17 +11,45 @@ services:
       - "5010:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./init-scripts/meadow_test-2025_03_21_18_30_21-dump.sql:/docker-entrypoint-initdb.d/01_dump.sql:Z
-      - ./migrations/rename_d_health_to_d_plantcare.sql:/docker-entrypoint-initdb.d/02_rename_d_health_to_d_plantcare.sql:Z
-      - ./migrations/rename_e_breed_to_e_cultivation.sql:/docker-entrypoint-initdb.d/03_rename_e_breed_to_e_cultivation.sql:Z
+      - ./init-scripts/meadow_test.sql:/docker-entrypoint-initdb.d/01_dump.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pmeadow123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --max_allowed_packet=64M
+
+  flask:
+    hostname: flask
+    build:
+      context: ./meadow-be
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URI=mysql+pymysql://root:meadow123@mysql-db:3306/meadow_test
+      - JWT_SECRET_KEY=nihaoshijie
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    restart: unless-stopped
+    command: gunicorn -w 4 -b 0.0.0.0:5000 --timeout 120 --access-logfile - --error-logfile - app:app
+
   vue:
     hostname: vue
-    depends_on:
-      - flask
-    build: ./meadow-fe
+    build:
+      context: ./meadow-fe
+      dockerfile: Dockerfile
     ports:
       - "5020:80"
+    depends_on:
+      - flask
+    restart: unless-stopped
 
 volumes:
   mysql-data:
-

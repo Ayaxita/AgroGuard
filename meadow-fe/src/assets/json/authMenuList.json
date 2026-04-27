@@ -75,9 +75,9 @@
           }
         },
         {
-          "path": "/basic/breederconditioninfo/index",
-          "name": "breederconditioninfo",
-          "component": "/basic/breederconditioninfo/useProTable/index",
+          "path": "/basic/fieldconditioninfo/index",
+          "name": "fieldconditioninfo",
+          "component": "/basic/fieldconditioninfo/useProTable/index",
           "meta": {
             "icon": "MessageBox",
             "title": "草地健康状态",
@@ -89,9 +89,9 @@
           }
         },
         {
-          "path": "/basic/cutinfo/index",
-          "name": "basic_cutinfo",
-          "component": "/basic/cutinfo/useProTable/index",
+          "path": "/basic/harvestinfo/index",
+          "name": "basic_harvestinfo",
+          "component": "/basic/harvestinfo/useProTable/index",
           "meta": {
             "icon": "MessageBox",
             "title": "采收信息",
@@ -103,9 +103,9 @@
           }
         },
         {
-          "path": "/basic/manureinfo/index",
+          "path": "/basic/fertilizerinfo/index",
           "name": "basic_manureinfo",
-          "component": "/basic/manureinfo/useProTable/index",
+          "component": "/basic/fertilizerinfo/useProTable/index",
           "meta": {
             "icon": "MessageBox",
             "title": "草地养分信息",
@@ -131,9 +131,9 @@
           }
         },
         {
-          "path": "/basic/milkperformance/index",
-          "name": "basic_milkperformance",
-          "component": "/basic/milkperformance/useProTable/index",
+          "path": "/basic/yieldperformance/index",
+          "name": "basic_yieldperformance",
+          "component": "/basic/yieldperformance/useProTable/index",
           "meta": {
             "icon": "MessageBox",
             "title": "草地生长性能",
@@ -149,7 +149,7 @@
     {
       "path": "/colony",
       "name": "colony",
-      "redirect": "/colony/colonyinfo/useProTable",
+      "redirect": "/field/colonyinfo/useProTable",
       "meta": {
         "icon": "Guide",
         "title": "监测区域管理",
@@ -161,9 +161,9 @@
       },
       "children": [
         {
-          "path": "/colony/houseinfo/index",
-          "name": "colony_houseinfo",
-          "component": "/colony/houseinfo/useProTable/index",
+          "path": "/field/houseinfo/index",
+          "name": "field_houseinfo",
+          "component": "/field/houseinfo/useProTable/index",
           "meta": {
             "icon": "Guide",
             "title": "监测站点管理",
@@ -175,9 +175,9 @@
           }
         },
         {
-          "path": "/colony/hurdleinfo/index",
-          "name": "colony_hurdleinfo",
-          "component": "/colony/hurdleinfo/useProTable/index",
+          "path": "/field/hurdleinfo/index",
+          "name": "field_hurdleinfo",
+          "component": "/field/hurdleinfo/useProTable/index",
           "meta": {
             "icon": "Guide",
             "title": "监测地块管理",
@@ -189,9 +189,9 @@
           }
         },
         {
-          "path": "/colony/disinfectioninfo/index",
-          "name": "colony_disinfectioninfo",
-          "component": "/colony/disinfectioninfo/useProTable/index",
+          "path": "/field/disinfectioninfo/index",
+          "name": "field_disinfectioninfo",
+          "component": "/field/disinfectioninfo/useProTable/index",
           "meta": {
             "icon": "Guide",
             "title": "区域防疫处理信息",
@@ -205,9 +205,9 @@
       ]
     },
     {
-      "path": "/d_plantcare",
-      "name": "d_plantcare",
-      "redirect": "/d_plantcare/immunizationinfo/useProTable",
+      "path": "/pest_control",
+      "name": "pest_control",
+      "redirect": "/pest_control/immunizationinfo/useProTable",
       "meta": {
         "icon": "FirstAidKit",
         "title": "植物护理",
@@ -219,9 +219,9 @@
       },
       "children": [
         {
-          "path": "/d_plantcare/immunizationinfo/index",
-          "name": "d_plantcare_immunizationinfo",
-          "component": "/d_plantcare/immunizationinfo/useProTable/index",
+          "path": "/pest_control/immunizationinfo/index",
+          "name": "pest_control_immunizationinfo",
+          "component": "/pest_control/immunizationinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "草地防护",
@@ -233,9 +233,9 @@
           }
         },
         {
-          "path": "/d_plantcare/protectioninfo/index",
-          "name": "d_plantcare_protectioninfo",
-          "component": "/d_plantcare/protectioninfo/useProTable/index",
+          "path": "/pest_control/protectioninfo/index",
+          "name": "pest_control_protectioninfo",
+          "component": "/pest_control/protectioninfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "防护处理",
@@ -247,9 +247,9 @@
           }
         },
         {
-          "path": "/d_plantcare/quarantineinfo/index",
-          "name": "d_plantcare_quarantineinfo",
-          "component": "/d_plantcare/quarantineinfo/useProTable/index",
+          "path": "/pest_control/quarantineinfo/index",
+          "name": "pest_control_quarantineinfo",
+          "component": "/pest_control/quarantineinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "检疫检验",
@@ -261,9 +261,9 @@
           }
         },
         {
-          "path": "/d_plantcare/nursinginfo/index",
-          "name": "d_plantcare_nursinginfo",
-          "component": "/d_plantcare/nursinginfo/useProTable/index",
+          "path": "/pest_control/nursinginfo/index",
+          "name": "pest_control_nursinginfo",
+          "component": "/pest_control/nursinginfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "护理信息",
@@ -275,9 +275,9 @@
           }
         },
         {
-          "path": "/d_plantcare/diseaseinfo/index",
-          "name": "d_plantcare_diseaseinfo",
-          "component": "/d_plantcare/diseaseinfo/useProTable/index",
+          "path": "/pest_control/diseaseinfo/index",
+          "name": "pest_control_diseaseinfo",
+          "component": "/pest_control/diseaseinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "疾病信息",
@@ -289,9 +289,9 @@
           }
         },
         {
-          "path": "/d_plantcare/deathinfo/index",
-          "name": "d_plantcare_deathinfo",
-          "component": "/d_plantcare/deathinfo/useProTable/index",
+          "path": "/pest_control/witherinfo/index",
+          "name": "pest_control_witherinfo",
+          "component": "/pest_control/witherinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "死亡信息",
@@ -303,9 +303,9 @@
           }
         },
         {
-          "path": "/d_plantcare/damageinfo/index",
-          "name": "d_plantcare_damageinfo",
-          "component": "/d_plantcare/damageinfo/useProTable/index",
+          "path": "/pest_control/damageinfo/index",
+          "name": "pest_control_damageinfo",
+          "component": "/pest_control/damageinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "异常枯萎信息",
@@ -319,9 +319,9 @@
       ]
     },
     {
-      "path": "/e_cultivation",
-      "name": "e_cultivation",
-      "redirect": "/e_cultivation/rutinfo/useProTable",
+      "path": "/propagation",
+      "name": "propagation",
+      "redirect": "/propagation/growth_statusinfo/useProTable",
       "meta": {
         "icon": "Female",
             "title": "批次管理",
@@ -333,9 +333,9 @@
       },
       "children": [
         {
-          "path": "/e_cultivation/rutinfo/index",
-          "name": "e_cultivation_rutinfo",
-          "component": "/e_cultivation/rutinfo/useProTable/index",
+          "path": "/propagation/growth_statusinfo/index",
+          "name": "propagation_growth_statusinfo",
+          "component": "/propagation/growth_statusinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "草地生长状态",
@@ -347,9 +347,9 @@
           }
         },
         {
-          "path": "/e_cultivation/semencollectinfo/index",
-          "name": "e_cultivation_semencollectinfo",
-          "component": "/e_cultivation/semencollectinfo/useProTable/index",
+          "path": "/propagation/sample_collectinfo/index",
+          "name": "propagation_sample_collectinfo",
+          "component": "/propagation/sample_collectinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "采样信息",
@@ -361,9 +361,9 @@
           }
         },
         {
-          "path": "/e_cultivation/breedinginfo/index",
-          "name": "e_cultivation_breedinginfo",
-          "component": "/e_cultivation/breedinginfo/useProTable/index",
+          "path": "/propagation/propagationinfo/index",
+          "name": "propagation_propagationinfo",
+          "component": "/propagation/propagationinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "草地批次管理",
@@ -375,9 +375,9 @@
           }
         },
         {
-          "path": "/e_cultivation/pregnantinfo/index",
-          "name": "e_cultivation_pregnantinfo",
-          "component": "/e_cultivation/pregnantinfo/useProTable/index",
+          "path": "/propagation/growth_cycleinfo/index",
+          "name": "propagation_growth_cycleinfo",
+          "component": "/propagation/growth_cycleinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "生长周期监测",
@@ -389,9 +389,9 @@
           }
         },
         {
-          "path": "/e_cultivation/postnatalinfo/index",
-          "name": "e_cultivation_postnatalinfo",
-          "component": "/e_cultivation/postnatalinfo/useProTable/index",
+          "path": "/propagation/post_harvestinfo/index",
+          "name": "propagation_post_harvestinfo",
+          "component": "/propagation/post_harvestinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "收割后信息",
@@ -403,9 +403,9 @@
           }
         },
         {
-          "path": "/e_cultivation/artificialfeedinginfo/index",
-          "name": "e_cultivation_artificialfeedinginfo",
-          "component": "/e_cultivation/artificialfeedinginfo/useProTable/index",
+          "path": "/propagation/artificial_careinfo/index",
+          "name": "propagation_artificial_careinfo",
+          "component": "/propagation/artificial_careinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "人工养护",
@@ -417,9 +417,9 @@
           }
         },
         {
-          "path": "/e_cultivation/weaninginfo/index",
-          "name": "e_cultivation_weaninginfo",
-          "component": "/e_cultivation/weaninginfo/useProTable/index",
+          "path": "/propagation/hardeninginfo/index",
+          "name": "propagation_hardeninginfo",
+          "component": "/propagation/hardeninginfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "阶段切换信息",
@@ -431,9 +431,9 @@
           }
         },
         {
-          "path": "/e_cultivation/lambinfo/index",
-          "name": "e_cultivation_lambinfo",
-          "component": "/e_cultivation/lambinfo/useProTable/index",
+          "path": "/propagation/seedlinginfo/index",
+          "name": "propagation_seedlinginfo",
+          "component": "/propagation/seedlinginfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "草地批次信息",

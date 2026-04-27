@@ -34,8 +34,8 @@ import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, View } from "@element-plus/icons-vue";
 import { getManuList, editManu, addManu, delManu } from "../api/manu";
 import {
-  Breeding_stateType,
-  Breeding_wayType,
+  Propagation_stateType,
+  Propagation_wayType,
   G_harvestG_salesTypeType,
   SellingType,
   varietyType

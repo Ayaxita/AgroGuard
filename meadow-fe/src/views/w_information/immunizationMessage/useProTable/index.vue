@@ -47,7 +47,7 @@ import GrassDrawer from "../components/GrassDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, MessageBox, SetUp, View } from "@element-plus/icons-vue";
 import { editThresholdeinfo, getManuList, getThresholdeinfo, updateWarnMessage } from "../api/manu";
-import { colonyTransferReasonType, manuScaleType, manutypeType, sexType } from "@/assets/json/typeListJson";
+import { fieldTransferReasonType, manuScaleType, manutypeType, sexType } from "@/assets/json/typeListJson";
 import { useDownload } from "@/hooks/useDownload";
 import thresholdSet from "../components/thresholdSet.vue";
 import { useTable } from "@/hooks/useTable";

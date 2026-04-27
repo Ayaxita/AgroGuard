@@ -41,8 +41,8 @@ import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, Download, EditPen, View } from "@element-plus/icons-vue";
 import { getManuList, editManu, addManu } from "../api/manu";
 import {
-  colonyFuntionType,
-  colonyH_typeType,
+  fieldFuntionType,
+  fieldH_typeType,
   DeathCauseType,
   DeathHarmless_treatmentType,
   manuScaleType,

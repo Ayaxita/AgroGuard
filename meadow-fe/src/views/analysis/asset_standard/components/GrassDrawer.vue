@@ -132,8 +132,8 @@ import ProTable from "@/components/ProTable/index.vue";
 import { ElMessage, FormInstance, ElMessageBox } from "element-plus";
 import { CirclePlus, Delete, Download, EditPen, View } from "@element-plus/icons-vue";
 import {
-  colonyFuntionType,
-  colonyH_typeType,
+  fieldFuntionType,
+  fieldH_typeType,
   colorType,
   gene_aType,
   Lamb_statType,
@@ -147,11 +147,11 @@ import {
   assetStandardType
 } from "@/assets/json/typeListJson";
 import UploadImg from "@/components/Upload/Img.vue";
-import { getManuList as getHurdle } from "@/views/colony/hurdleinfo/api/manu";
-import { getManuList } from "@/views/colony/houseinfo/api/manu";
+import { getManuList as getHurdle } from "@/views/field/hurdleinfo/api/manu";
+import { getManuList } from "@/views/field/houseinfo/api/manu";
 
 const rules = reactive({
-  // breeding_id: [
+  // propagation_id: [
   //   {
   //     required: true,
   //     message: "请填写培育信息id"
@@ -203,7 +203,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   {
     prop: "function",
     label: "功能",
-    enum: colonyFuntionType,
+    enum: fieldFuntionType,
     fieldNames: { label: "label", value: "value" },
     search: {
       el: "select"
@@ -220,7 +220,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   {
     prop: "h_type",
     label: "监测区类型",
-    enum: colonyH_typeType,
+    enum: fieldH_typeType,
     fieldNames: { label: "label", value: "value" },
     search: {
       el: "select"

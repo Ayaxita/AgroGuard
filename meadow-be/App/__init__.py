@@ -7,13 +7,13 @@ from flask_jwt_extended import JWTManager
 
 from App.login_auth.views import login_auth
 from App.basic.views import basic
-from App.colony.views import colony
+from App.field.views import field
 from App.supply.views import supply
 from App.h_store.views import h_store
 from App.g_harvest.views import g_harvest
-from App.d_plantcare.views import d_plantcare
+from App.pest_control.views import pest_control
 from .analysis.views import analysis
-from .e_cultivation.views import e_cultivation
+from .propagation.views import propagation
 from .exts import init_exts, db
 from .statistic.view import Statistic
 from .w_information.views import w_information
@@ -33,12 +33,12 @@ def create_app():
     # 注册蓝图
     app.register_blueprint(login_auth)      #登录
     app.register_blueprint(basic)       #草只基本信息
-    app.register_blueprint(colony)  #
+    app.register_blueprint(field)  #
     app.register_blueprint(supply)
     app.register_blueprint(h_store)
     app.register_blueprint(g_harvest)
-    app.register_blueprint(d_plantcare)
-    app.register_blueprint(e_cultivation)
+    app.register_blueprint(pest_control)
+    app.register_blueprint(propagation)
     app.register_blueprint(w_information)
     app.register_blueprint(Statistic)
     app.register_blueprint(analysis)
