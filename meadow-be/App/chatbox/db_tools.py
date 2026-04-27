@@ -4,22 +4,22 @@ from flask import current_app
 from App.exts import db
 from App.modelsReverse import (
     BasicBasicinfo,
-    DHealthDiseaseinfo,
-    DHealthImmunizationinfo,
-    DHealthDrugbathinfo,
-    DHealthQuarantineinfo,
-    DHealthDeathinfo,
-    DHealthNursinginfo,
-    DHealthAbortioninfo,
+    DPlantcareDiseaseinfo,
+    DPlantcareImmunizationinfo,
+    DPlantcareProtectioninfo,
+    DPlantcareQuarantineinfo,
+    DPlantcareDeathinfo,
+    DPlantcareNursinginfo,
+    DPlantcareDamageinfo,
+    DPlantcareImmunizationBS,
     SupplyCommodityinfo,
     SupplyVSuppliersinfo,
     WinformationImmunizationMessageinfo,
     ThresholdSetMessageinfo,
     HStoreInventory,
-    HStoreVaccineIn,
-    HStoreVaccineOut,
+    HStoreProtectionIn,
+    HStoreProtectionOut,
     ColonyDisinfectioninfo,
-    DHealthImmunizationBS,
 )
 
 VARIETY_MAP = {0: "小麦", 1: "玉米", 2: "水稻", 3: "大豆", 4: "苜蓿", 5: "黑麦草", 6: "燕麦", 7: "高粱", 8: "谷子", 9: "油菜", 10: "其他"}
@@ -71,20 +71,20 @@ def _paginate(query, page=1, per_page=10):
 
 
 def query_disease(disease_name=None, ele_num=None, start_date=None, end_date=None, page=1, page_size=10):
-    query = DHealthDiseaseinfo.query.filter(DHealthDiseaseinfo.belong == 0)
+    query = DPlantcareDiseaseinfo.query.filter(DPlantcareDiseaseinfo.belong == 0)
     if disease_name:
-        query = query.filter(DHealthDiseaseinfo.disease.like(f"%{disease_name}%"))
+        query = query.filter(DPlantcareDiseaseinfo.disease.like(f"%{disease_name}%"))
     if ele_num:
         basic = BasicBasicinfo.query.filter(BasicBasicinfo.ele_num.like(f"%{ele_num}%")).first()
         if basic:
-            query = query.filter(DHealthDiseaseinfo.basic_id == basic.id)
+            query = query.filter(DPlantcareDiseaseinfo.basic_id == basic.id)
         else:
             return {"total": 0, "records": [], "message": f"未找到编号为 {ele_num} 的作物"}
     if start_date:
-        query = query.filter(DHealthDiseaseinfo.disease_time >= start_date)
+        query = query.filter(DPlantcareDiseaseinfo.disease_time >= start_date)
     if end_date:
-        query = query.filter(DHealthDiseaseinfo.disease_time <= end_date)
-    query = query.order_by(DHealthDiseaseinfo.id.desc())
+        query = query.filter(DPlantcareDiseaseinfo.disease_time <= end_date)
+    query = query.order_by(DPlantcareDiseaseinfo.id.desc())
     total, items = _paginate(query, page, page_size)
     records = []
     for item in items:
@@ -154,52 +154,52 @@ def query_warning(vaccine_id=None, state=None, ele_num=None, page=1, page_size=1
 
 
 def query_immunization(ele_num=None, vaccine_name=None, start_date=None, end_date=None, page=1, page_size=10):
-    query = DHealthImmunizationBS.query
+    query = DPlantcareImmunizationBS.query
     if ele_num:
-        query = query.filter(DHealthImmunizationBS.ele_num.like(f"%{ele_num}%"))
+        query = query.filter(DPlantcareImmunizationBS.ele_num.like(f"%{ele_num}%"))
     if vaccine_name:
-        query = query.filter(DHealthImmunizationBS.cname.like(f"%{vaccine_name}%"))
+        query = query.filter(DPlantcareImmunizationBS.cname.like(f"%{vaccine_name}%"))
     if start_date:
-        query = query.filter(DHealthImmunizationBS.imm_date >= start_date)
+        query = query.filter(DPlantcareImmunizationBS.imm_date >= start_date)
     if end_date:
-        query = query.filter(DHealthImmunizationBS.imm_date <= end_date)
-    query = query.order_by(DHealthImmunizationBS.id.desc())
+        query = query.filter(DPlantcareImmunizationBS.imm_date <= end_date)
+    query = query.order_by(DPlantcareImmunizationBS.id.desc())
     total, items = _paginate(query, page, page_size)
     records = [_serialize(item) for item in items]
     return {"total": total, "records": records}
 
 
 def query_quarantine(ele_num=None, result1=None, result2=None, situation=None, page=1, page_size=10):
-    query = DHealthQuarantineinfo.query.filter(DHealthQuarantineinfo.belong == 0)
+    query = DPlantcareQuarantineinfo.query.filter(DPlantcareQuarantineinfo.belong == 0)
     if ele_num:
         basic = BasicBasicinfo.query.filter(BasicBasicinfo.ele_num.like(f"%{ele_num}%")).first()
         if basic:
-            query = query.filter(DHealthQuarantineinfo.basic_id == basic.id)
+            query = query.filter(DPlantcareQuarantineinfo.basic_id == basic.id)
     if result1 is not None:
         try:
-            query = query.filter(DHealthQuarantineinfo.result1 == int(result1))
+            query = query.filter(DPlantcareQuarantineinfo.result1 == int(result1))
         except (ValueError, TypeError):
             r1_map = {"未发现害虫": 0, "发现害虫": 1}
             v = r1_map.get(result1)
             if v is not None:
-                query = query.filter(DHealthQuarantineinfo.result1 == v)
+                query = query.filter(DPlantcareQuarantineinfo.result1 == v)
     if result2 is not None:
         try:
-            query = query.filter(DHealthQuarantineinfo.result2 == int(result2))
+            query = query.filter(DPlantcareQuarantineinfo.result2 == int(result2))
         except (ValueError, TypeError):
             r2_map = {"检疫阴性": 0, "检疫阳性": 1}
             v = r2_map.get(result2)
             if v is not None:
-                query = query.filter(DHealthQuarantineinfo.result2 == v)
+                query = query.filter(DPlantcareQuarantineinfo.result2 == v)
     if situation is not None:
         try:
-            query = query.filter(DHealthQuarantineinfo.situation == int(situation))
+            query = query.filter(DPlantcareQuarantineinfo.situation == int(situation))
         except (ValueError, TypeError):
             sit_map = {"正常生长": 0, "需要治疗": 1, "观察中": 2, "销毁处理": 3}
             v = sit_map.get(situation)
             if v is not None:
-                query = query.filter(DHealthQuarantineinfo.situation == v)
-    query = query.order_by(DHealthQuarantineinfo.id.desc())
+                query = query.filter(DPlantcareQuarantineinfo.situation == v)
+    query = query.order_by(DPlantcareQuarantineinfo.id.desc())
     total, items = _paginate(query, page, page_size)
     records = []
     for item in items:
@@ -263,15 +263,15 @@ def query_crop(ele_num=None, variety=None, purpose=None, rank=None, page=1, page
 
 
 def query_statistics():
-    disease_count = DHealthDiseaseinfo.query.filter(DHealthDiseaseinfo.belong == 0).count()
+    disease_count = DPlantcareDiseaseinfo.query.filter(DPlantcareDiseaseinfo.belong == 0).count()
     warning_count = WinformationImmunizationMessageinfo.query.filter(WinformationImmunizationMessageinfo.state == 1).count()
     crop_count = BasicBasicinfo.query.count()
-    death_count = DHealthDeathinfo.query.filter(DHealthDeathinfo.belong == 0).count()
-    quarantine_count = DHealthQuarantineinfo.query.filter(DHealthQuarantineinfo.belong == 0).count()
+    death_count = DPlantcareDeathinfo.query.filter(DPlantcareDeathinfo.belong == 0).count()
+    quarantine_count = DPlantcareQuarantineinfo.query.filter(DPlantcareQuarantineinfo.belong == 0).count()
     drug_count = SupplyCommodityinfo.query.count()
     vaccines = SupplyCommodityinfo.query.filter(SupplyCommodityinfo.type == 0).all()
     vaccine_list = [{"id": v.id, "name": v.cname, "description": v.explain or ""} for v in vaccines]
-    disease_records = DHealthDiseaseinfo.query.filter(DHealthDiseaseinfo.belong == 0).all()
+    disease_records = DPlantcareDiseaseinfo.query.filter(DPlantcareDiseaseinfo.belong == 0).all()
     disease_type_counts = {}
     for r in disease_records:
         name = r.disease
@@ -329,16 +329,16 @@ def query_threshold():
 
 
 def query_drug_bath(ele_num=None, drug_name=None, page=1, page_size=10):
-    query = DHealthDrugbathinfo.query.filter(DHealthDrugbathinfo.belong == 0)
+    query = DPlantcareProtectioninfo.query.filter(DPlantcareProtectioninfo.belong == 0)
     if ele_num:
         basic = BasicBasicinfo.query.filter(BasicBasicinfo.ele_num.like(f"%{ele_num}%")).first()
         if basic:
-            query = query.filter(DHealthDrugbathinfo.basic_id == basic.id)
+            query = query.filter(DPlantcareProtectioninfo.basic_id == basic.id)
     if drug_name:
         drug = SupplyCommodityinfo.query.filter(SupplyCommodityinfo.cname.like(f"%{drug_name}%")).first()
         if drug:
-            query = query.filter(DHealthDrugbathinfo.drug_id == drug.id)
-    query = query.order_by(DHealthDrugbathinfo.id.desc())
+            query = query.filter(DPlantcareProtectioninfo.drug_id == drug.id)
+    query = query.order_by(DPlantcareProtectioninfo.id.desc())
     total, items = _paginate(query, page, page_size)
     records = []
     for item in items:
@@ -354,23 +354,23 @@ def query_drug_bath(ele_num=None, drug_name=None, page=1, page_size=10):
 
 
 def query_death(ele_num=None, cause=None, start_date=None, end_date=None, page=1, page_size=10):
-    query = DHealthDeathinfo.query.filter(DHealthDeathinfo.belong == 0)
+    query = DPlantcareDeathinfo.query.filter(DPlantcareDeathinfo.belong == 0)
     if ele_num:
         basic = BasicBasicinfo.query.filter(BasicBasicinfo.ele_num.like(f"%{ele_num}%")).first()
         if basic:
-            query = query.filter(DHealthDeathinfo.basic_id == basic.id)
+            query = query.filter(DPlantcareDeathinfo.basic_id == basic.id)
     if cause is not None:
         try:
-            query = query.filter(DHealthDeathinfo.cause == int(cause))
+            query = query.filter(DPlantcareDeathinfo.cause == int(cause))
         except (ValueError, TypeError):
             c = CAUSE_MAP.get(cause)
             if c is not None:
-                query = query.filter(DHealthDeathinfo.cause == c)
+                query = query.filter(DPlantcareDeathinfo.cause == c)
     if start_date:
-        query = query.filter(DHealthDeathinfo.date >= start_date)
+        query = query.filter(DPlantcareDeathinfo.date >= start_date)
     if end_date:
-        query = query.filter(DHealthDeathinfo.date <= end_date)
-    query = query.order_by(DHealthDeathinfo.id.desc())
+        query = query.filter(DPlantcareDeathinfo.date <= end_date)
+    query = query.order_by(DPlantcareDeathinfo.id.desc())
     total, items = _paginate(query, page, page_size)
     records = []
     for item in items:

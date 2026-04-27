@@ -1,7 +1,7 @@
 # Large SQL dump files (too big for GitHub)
-*.sql
-# Allow schema-only SQL files (small, no data)
-!init-scripts/*-schema-only.sql
+init-scripts/*-dump.sql
+init-scripts/sheep_test-*.sql
+init-scripts/meadow_test-2025_03_21_18_30_21-dump.sql
 
 # Python cache
 __pycache__/

@@ -51,7 +51,7 @@ import {
   varietyType,
   Lamb_statType,
   DoImmType,
-  d_healthResult2Type,
+  d_plantcareResult2Type,
   BrucellaType,
   assetStandardType
 } from "@/assets/json/typeListJson";

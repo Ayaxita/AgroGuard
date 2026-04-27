@@ -201,7 +201,7 @@ def update_thresholdsetMessageinfo():
 
                 FROM
                 basic_basicinfo as b
-                LEFT JOIN (select basic_id ,vaccine_id,MAX(imm_date) as max_immdate from d_health_immunizationinfo where vaccine_id= :id GROUP BY basic_id) as d
+                LEFT JOIN (select basic_id ,vaccine_id,MAX(imm_date) as max_immdate from d_plantcare_immunizationinfo where vaccine_id= :id GROUP BY basic_id) as d
                 ON b.id = d.basic_id
                 LEFT JOIN supply_commodityinfo ON supply_commodityinfo.id = d.vaccine_id
                 where d.vaccine_id = :id and b.state=1 and b.variety in (0,1)
@@ -236,7 +236,7 @@ def update_thresholdsetMessageinfo():
                 WHERE
                 b.state = 1 AND
                 b.variety IN (1,0) and
-                id not in (select basic_id from d_health_immunizationinfo)
+                id not in (select basic_id from d_plantcare_immunizationinfo)
             '''
         # query11删除表中原来的记录
         query11 = '''
@@ -257,7 +257,7 @@ def update_thresholdsetMessageinfo():
         # 后续更新query3指的是跟新下次信息，query4是日常更新
         query3 = '''
                 update w_information_immunizationMessageinfo w 
-                INNER JOIN d_health_immunizationinfo  d
+                INNER JOIN d_plantcare_immunizationinfo  d
                 ON w.basic_id = d.basic_id AND w.vaccine_id = d.vaccine_id
                 inner join threshold_setting t
                 on t.vaccine_id = w.vaccine_id
@@ -290,7 +290,7 @@ def update_thresholdsetMessageinfo():
             delete w
             FROM
             w_information_immunizationMessageinfo AS w
-            INNER JOIN d_health_immunizationinfo AS d ON d.basic_id = w.basic_id and w.vaccine_id = d.vaccine_id
+            INNER JOIN d_plantcare_immunizationinfo AS d ON d.basic_id = w.basic_id and w.vaccine_id = d.vaccine_id
             inner join threshold_setting as t
             on t.vaccine_id = w.vaccine_id
             WHERE

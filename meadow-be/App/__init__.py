@@ -10,10 +10,10 @@ from App.basic.views import basic
 from App.colony.views import colony
 from App.supply.views import supply
 from App.h_store.views import h_store
-from App.g_slaughter.views import g_slaughter
-from App.d_health.views import d_health
+from App.g_harvest.views import g_harvest
+from App.d_plantcare.views import d_plantcare
 from .analysis.views import analysis
-from .e_breed.views import e_breed
+from .e_cultivation.views import e_cultivation
 from .exts import init_exts, db
 from .statistic.view import Statistic
 from .w_information.views import w_information
@@ -36,9 +36,9 @@ def create_app():
     app.register_blueprint(colony)  #
     app.register_blueprint(supply)
     app.register_blueprint(h_store)
-    app.register_blueprint(g_slaughter)
-    app.register_blueprint(d_health)
-    app.register_blueprint(e_breed)
+    app.register_blueprint(g_harvest)
+    app.register_blueprint(d_plantcare)
+    app.register_blueprint(e_cultivation)
     app.register_blueprint(w_information)
     app.register_blueprint(Statistic)
     app.register_blueprint(analysis)

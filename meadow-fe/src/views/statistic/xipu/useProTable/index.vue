@@ -110,7 +110,7 @@ import {
   purposeType,
   DeathCauseType,
   DeathHarmless_treatmentType,
-  G_slaughterTypeType,
+  G_harvestTypeType,
   SellingType,
   BooleanType,
   rankType
@@ -847,7 +847,7 @@ const markSale = async grassinfo => {
                         saleProps.value.type = val;
                       }
                     },
-                    G_slaughterTypeType.map(item => {
+                    G_harvestTypeType.map(item => {
                       return h(ElOption, {
                         label: item.label,
                         value: item.value

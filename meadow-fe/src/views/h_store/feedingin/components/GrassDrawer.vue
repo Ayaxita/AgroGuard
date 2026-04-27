@@ -233,7 +233,7 @@ import ProTable from "@/components/ProTable/index.vue";
 import {
   BooleanType,
   FeedingTypeType,
-  G_slaughterTypeType,
+  G_harvestTypeType,
   ingredientsType,
   InventoryTypeType,
   SellingType

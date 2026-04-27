@@ -375,7 +375,7 @@ def add_Immunization():
     # 重新构建一下数据
     try:
         for i in range(len(data)):  # 循环遍历，需要增加的免疫信息
-            immunizationinfo = DHealthImmunizationinfo()
+            immunizationinfo = DPlantcareImmunizationinfo()
             data[i]['f_date'] = ctime
             data[i]["basic_id"] = data[i]["basic_info"]["id"]
             data[i]["belong"] = data[i]["basic_info"]["belong"]
@@ -399,7 +399,7 @@ def add_Immunization():
             else:
                 return jsonify({"code": 500, "msg": f'没找到合适的疫苗信息和厂家信息'})
             # 在加入list之前要判断是否有数据冗余：同一个basic_id，疫苗类型，接种时间，
-            dup_imminfo = DHealthImmunizationinfo.query.filter_by(basic_id=data[i]['basic_id'],
+            dup_imminfo = DPlantcareImmunizationinfo.query.filter_by(basic_id=data[i]['basic_id'],
                                                                   vaccine_id=data[i]['vaccine_id'],
                                                                   imm_date=data[i]['imm_date']).first()
             if dup_imminfo:
@@ -674,7 +674,7 @@ def edit_basic_info():
     wea_weight = data['wea_weight']
     wea_date = data['wea_date']
 
-    lamb_info = db.session.query(EBreedLambinfo).filter_by(pre_num=data['pre_num']).first()
+    lamb_info = db.session.query(ECultivationSproutinfo).filter_by(pre_num=data['pre_num']).first()
     if lamb_info:
         lamb_id = lamb_info.id
         lamb_info.wea_weight = wea_weight
@@ -683,7 +683,7 @@ def edit_basic_info():
         lamb_info.bir_weight = bir_weighht
         db.session.commit()
 
-        weaning_info = db.session.query(EBreedWeaninginfo).filter_by(lamb_id=lamb_id).first()
+        weaning_info = db.session.query(ECultivationGerminationinfo).filter_by(lamb_id=lamb_id).first()
 
         if weaning_info:
                 weaning_info.wea_weight = wea_weight
@@ -1181,7 +1181,7 @@ def mark_grass_death():
             obsolete_info.obsolete_type = 0
             obsolete_info.dead_date = info['date']
             # db.session.commit()
-        death_info = DHealthDeathinfo()
+        death_info = DPlantcareDeathinfo()
         for key, value in info.items():
             setattr(death_info, key, value)
             death_info.belong = 0
@@ -1231,7 +1231,7 @@ def mark_grass_sale():
             obsolete_info.obsolete_type = 2
             obsolete_info.sales_date = info['sales_date']
             # db.session.commit()
-        sales_info = GSlaughterSSalesinfo()
+        sales_info = GHarvestSSalesinfo()
         for key, value in info.items():
             setattr(sales_info, key, value)
 
@@ -1246,7 +1246,7 @@ def mark_grass_sale():
                 if basic_info.birth:
                     birth_date = basic_info.birth
                     age_in_months = (today.year - birth_date.year) * 12 + (today.month - birth_date.month)
-                    sales_info.age = age_in_months  # 存入 GSlaughterSSalesinfo
+                    sales_info.age = age_in_months  # 存入 GHarvestSSalesinfo
 
             list.append(sales_info)
             # sales_info.belong = 0
@@ -1832,12 +1832,12 @@ def getWith_births():
     # 构造查询条件
     conditions = []
 
-    conditions.append(EBreedPostnatalinfo.ewe_id == ewe_id)
-    conditions.append(EBreedPostnatalinfo.ram_id == ram_id)
-    conditions.append(EBreedPostnatalinfo.delivery_date == birth)
+    conditions.append(ECultivationMaturationinfo.ewe_id == ewe_id)
+    conditions.append(ECultivationMaturationinfo.ram_id == ram_id)
+    conditions.append(ECultivationMaturationinfo.delivery_date == birth)
 
     # 查询数据库，获取符合条件的记录
-    num = EBreedPostnatalinfo.query.filter(and_(*conditions)).first().live_num
+    num = ECultivationMaturationinfo.query.filter(and_(*conditions)).first().live_num
 
     result = {
         "code": 200,

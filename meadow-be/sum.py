@@ -782,12 +782,12 @@ def update_daily_income():  # 按照总价去分，再根据类型去分
             'other_value': 0.0
         }
 
-        # 处理GSlaughterSSalesinfo数据（草地销售）
+        # 处理GHarvestSSalesinfo数据（草地销售）
         ssales_records = db.session.query(
-            GSlaughterSSalesinfo.type,
-            GSlaughterSSalesinfo.total_price
+            GHarvestSSalesinfo.type,
+            GHarvestSSalesinfo.total_price
         ).filter(
-            GSlaughterSSalesinfo.sales_date == today
+            GHarvestSSalesinfo.sales_date == today
         ).all()
 
         # 按total_price分组
@@ -824,13 +824,13 @@ def update_daily_income():  # 按照总价去分，再根据类型去分
                 analysis_data[f'number_{field_suffix}'] += count
                 analysis_data[f'value_{field_suffix}'] += allocated_value
 
-        # 处理GSlaughterGSalesinfo数据（其他产品销售）
+        # 处理GHarvestGSalesinfo数据（其他产品销售）
         gsales_totals = db.session.query(
-            GSlaughterGSalesinfo.type,
-            func.sum(GSlaughterGSalesinfo.total_price).label('total')
+            GHarvestGSalesinfo.type,
+            func.sum(GHarvestGSalesinfo.total_price).label('total')
         ).filter(
-            GSlaughterGSalesinfo.sales_date == today
-        ).group_by(GSlaughterGSalesinfo.type).all()
+            GHarvestGSalesinfo.sales_date == today
+        ).group_by(GHarvestGSalesinfo.type).all()
 
         type_mapping = {
             0: 'dung_value',

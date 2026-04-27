@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item label="类型" prop="type">
         <el-select v-model="drawerProps.row.type" clearable>
-          <el-option v-for="item in G_slaughterG_salesTypeType" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in G_harvestG_salesTypeType" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="计费单位" prop="billing_unit">
@@ -82,7 +82,7 @@
 <script setup lang="ts" name="GrassDrawer">
 import { ref, reactive } from "vue";
 import { ElMessage, FormInstance } from "element-plus";
-import { G_slaughterG_salesTypeType, SellingType } from "@/assets/json/typeListJson";
+import { G_harvestG_salesTypeType, SellingType } from "@/assets/json/typeListJson";
 import UploadImg from "@/components/Upload/Img.vue";
 
 const rules = reactive({

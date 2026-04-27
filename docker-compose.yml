@@ -20,7 +20,9 @@ services:
       - "5010:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./init-scripts/meadow_test-2025_03_21_18_30_21-dump.sql:/docker-entrypoint-initdb.d/dump.sql:Z
+      - ./init-scripts/meadow_test-2025_03_21_18_30_21-dump.sql:/docker-entrypoint-initdb.d/01_dump.sql:Z
+      - ./migrations/rename_d_health_to_d_plantcare.sql:/docker-entrypoint-initdb.d/02_rename_d_health_to_d_plantcare.sql:Z
+      - ./migrations/rename_e_breed_to_e_cultivation.sql:/docker-entrypoint-initdb.d/03_rename_e_breed_to_e_cultivation.sql:Z
   vue:
     hostname: vue
     depends_on:

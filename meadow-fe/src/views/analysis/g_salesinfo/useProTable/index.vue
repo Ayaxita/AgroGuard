@@ -43,7 +43,7 @@ import { getManuList, editManu, addManu } from "../api/manu";
 import {
   Breeding_stateType,
   Breeding_wayType,
-  G_slaughterG_salesTypeType,
+  G_harvestG_salesTypeType,
   SellingType,
   varietyType
 } from "@/assets/json/typeListJson";
@@ -102,7 +102,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   {
     prop: "type",
     label: "类型",
-    enum: G_slaughterG_salesTypeType,
+    enum: G_harvestG_salesTypeType,
     fieldNames: { label: "label", value: "value" },
     search: { el: "select" }
   },

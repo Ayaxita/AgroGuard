@@ -440,7 +440,7 @@ export const colonyTransferReasonType = [
   }
 ];
 
-export const d_healthDetection_modeType = [
+export const d_plantcareDetection_modeType = [
   {
     label: "植株检测",
     value: 0
@@ -451,7 +451,7 @@ export const d_healthDetection_modeType = [
   }
 ];
 
-export const d_healthResult1Type = [
+export const d_plantcareResult1Type = [
   {
     label: "残留检测(合格)",
     value: 0
@@ -462,7 +462,7 @@ export const d_healthResult1Type = [
   }
 ];
 
-export const d_healthResult2Type = [
+export const d_plantcareResult2Type = [
   {
     label: "病害检测(无异常)",
     value: 0
@@ -483,7 +483,7 @@ export const BrucellaType = [
   }
 ];
 
-export const d_healthResult3Type = [
+export const d_plantcareResult3Type = [
   {
     label: "生长检测(无异常)",
     value: 0
@@ -494,7 +494,7 @@ export const d_healthResult3Type = [
   }
 ];
 
-export const d_healthSituationType = [
+export const d_plantcareSituationType = [
   {
     label: "允许销售",
     value: 0
@@ -513,7 +513,7 @@ export const d_healthSituationType = [
   }
 ];
 
-export const d_healthTestis_shapeType = [
+export const d_plantcareTestis_shapeType = [
   {
     label: "正常",
     value: 1
@@ -524,7 +524,7 @@ export const d_healthTestis_shapeType = [
   }
 ];
 
-export const d_healthAb_colorType = [
+export const d_plantcareAb_colorType = [
   {
     label: "黄",
     value: 0
@@ -543,7 +543,7 @@ export const d_healthAb_colorType = [
   }
 ];
 
-export const d_healthAb_smellType = [
+export const d_plantcareAb_smellType = [
   {
     label: "正常",
     value: 0
@@ -558,7 +558,7 @@ export const d_healthAb_smellType = [
   }
 ];
 
-export const d_healthCur_effectType = [
+export const d_plantcareCur_effectType = [
   {
     label: "治愈",
     value: 0
@@ -744,7 +744,7 @@ export const S_slaughterType = [
   }
 ];
 
-export const G_slaughterTypeType = [
+export const G_harvestTypeType = [
   {
     label: "淘汰草地",
     value: 3
@@ -798,7 +798,7 @@ export const SellingType = [
   }
 ];
 
-export const G_slaughterG_salesTypeType = [
+export const G_harvestG_salesTypeType = [
   {
     label: "草地残渣",
     value: 0

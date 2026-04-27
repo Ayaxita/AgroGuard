@@ -226,7 +226,7 @@
           <el-form-item label="根腐病检测" prop="brucella">
             <el-select v-model="drawerProps.row.brucella" clearable>
               <el-option
-                v-for="item in d_healthResult2Type"
+                v-for="item in d_plantcareResult2Type"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -265,7 +265,7 @@ import {
   rankType,
   sexType,
   stateType,
-  d_healthResult2Type,
+  d_plantcareResult2Type,
   DoImmType,
   varietyType
 } from "@/assets/json/typeListJson";

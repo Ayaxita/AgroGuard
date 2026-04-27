@@ -37,7 +37,7 @@ import { EditPen, View } from "@element-plus/icons-vue";
 import { getManuList, editManu, addManu } from "../api/manu";
 
 import { useDownload } from "@/hooks/useDownload";
-import { BooleanType, G_slaughterTypeType, SellingType } from "@/assets/json/typeListJson";
+import { BooleanType, G_harvestTypeType, SellingType } from "@/assets/json/typeListJson";
 
 const router = useRouter();
 
@@ -92,7 +92,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   {
     prop: "type",
     label: "类型",
-    enum: G_slaughterTypeType,
+    enum: G_harvestTypeType,
     fieldNames: { label: "label", value: "value" },
     search: { el: "select" }
   },

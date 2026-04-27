@@ -141,7 +141,7 @@ import {
   rankType,
   sexType,
   stateType,
-  d_healthResult2Type,
+  d_plantcareResult2Type,
   DoImmType,
   varietyType,
   assetStandardType

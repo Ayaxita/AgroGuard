@@ -197,9 +197,9 @@
   ]
 },
 {
-  "path": "/g_slaughter",
-  "name": "g_slaughter",
-  "redirect": "/g_slaughter/salesinfo/useProTable",
+  "path": "/g_harvest",
+  "name": "g_harvest",
+  "redirect": "/g_harvest/salesinfo/useProTable",
   "meta": {
     "icon": "Van",
     "title": "屠宰销售管理",
@@ -211,9 +211,9 @@
   },
   "children": [
     {
-      "path": "/g_slaughter/s_salesinfo/index",
-      "name": "g_slaughter_s_salesinfo",
-      "component": "/g_slaughter/s_salesinfo/useProTable/index",
+      "path": "/g_harvest/s_salesinfo/index",
+      "name": "g_harvest_s_salesinfo",
+      "component": "/g_harvest/s_salesinfo/useProTable/index",
       "meta": {
         "icon": "Van",
         "title": "草地销售",
@@ -225,9 +225,9 @@
       }
     },
     {
-      "path": "/g_slaughter/g_salesinfo/index",
-      "name": "g_slaughter_g_salesinfo",
-      "component": "/g_slaughter/g_salesinfo/useProTable/index",
+      "path": "/g_harvest/g_salesinfo/index",
+      "name": "g_harvest_g_salesinfo",
+      "component": "/g_harvest/g_salesinfo/useProTable/index",
       "meta": {
         "icon": "Van",
         "title": "草地副产品销售",
@@ -239,9 +239,9 @@
       }
     },
     {
-      "path": "/g_slaughter/economicinfo/index",
-      "name": "g_slaughter_economicinfo",
-      "component": "/g_slaughter/economicinfo/useProTable/index",
+      "path": "/g_harvest/economicinfo/index",
+      "name": "g_harvest_economicinfo",
+      "component": "/g_harvest/economicinfo/useProTable/index",
       "meta": {
         "icon": "Van",
         "title": "经济效益",
@@ -253,9 +253,9 @@
       }
     },
     {
-      "path": "/g_slaughter/slaughtersegmentinfo/index",
-      "name": "g_slaughter_slaughtersegmentinfo",
-      "component": "/g_slaughter/slaughtersegmentinfo/useProTable/index",
+      "path": "/g_harvest/slaughtersegmentinfo/index",
+      "name": "g_harvest_slaughtersegmentinfo",
+      "component": "/g_harvest/slaughtersegmentinfo/useProTable/index",
       "meta": {
         "icon": "Van",
         "title": "屠宰分割",
@@ -267,9 +267,9 @@
       }
     },
     {
-      "path": "/g_slaughter/binformationinfo/index",
-      "name": "g_slaughter_binformationinfo",
-      "component": "/g_slaughter/binformationinfo/useProTable/index",
+      "path": "/g_harvest/binformationinfo/index",
+      "name": "g_harvest_binformationinfo",
+      "component": "/g_harvest/binformationinfo/useProTable/index",
       "meta": {
         "icon": "Van",
         "title": "膘情B超",

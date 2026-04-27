@@ -35,7 +35,7 @@ def generate_outbound_no():
         # 查找今天的所有出库单号
         # 如果是饲料那边走这个订单号
         if source == "疫苗":
-            today_records = HStoreVaccineOut.query.filter(HStoreVaccineOut.outbound_no.startswith(today)).all()
+            today_records = HStoreProtectionOut.query.filter(HStoreProtectionOut.outbound_no.startswith(today)).all()
         elif source == "饲料":
             today_records = HStoreFeedingOut.query.filter(HStoreFeedingOut.outbound_no.startswith(today)).all()
         else:
@@ -370,30 +370,30 @@ def del_inventory():
     })
 
 
-@h_store.route('/h_store/vaccine_in', methods=['POST'])
+@h_store.route('/h_store/protection_in', methods=['POST'])
 def get_vaccine_in():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
 
     conditions = []
     search_params = {
-        'maker_name': HStoreVaccineIn.maker_id,
-        'v_name': HStoreVaccineIn.v_name,
-        'type': HStoreVaccineIn.type,
-        'purpose': HStoreVaccineIn.purpose,
-        'produce_date': HStoreVaccineIn.produce_date,
-        'expiration_date': HStoreVaccineIn.expiration_date,
-        'produce_num': HStoreVaccineIn.produce_num,
-        'billing_unit': HStoreVaccineIn.billing_unit,
-        'in_amount': HStoreVaccineIn.in_amount,
-        'unit_price': HStoreVaccineIn.unit_price,
-        'total_price': HStoreVaccineIn.total_price,
-        'fare': HStoreVaccineIn.fare,
-        'avg_price': HStoreVaccineIn.avg_price,
-        'in_time': HStoreVaccineIn.in_time,
-        'keep_amount': HStoreVaccineIn.keep_amount,
-        'f_date': HStoreVaccineIn.f_date,
-        'f_staff': HStoreVaccineIn.f_staff,
+        'maker_name': HStoreProtectionIn.maker_id,
+        'v_name': HStoreProtectionIn.v_name,
+        'type': HStoreProtectionIn.type,
+        'purpose': HStoreProtectionIn.purpose,
+        'produce_date': HStoreProtectionIn.produce_date,
+        'expiration_date': HStoreProtectionIn.expiration_date,
+        'produce_num': HStoreProtectionIn.produce_num,
+        'billing_unit': HStoreProtectionIn.billing_unit,
+        'in_amount': HStoreProtectionIn.in_amount,
+        'unit_price': HStoreProtectionIn.unit_price,
+        'total_price': HStoreProtectionIn.total_price,
+        'fare': HStoreProtectionIn.fare,
+        'avg_price': HStoreProtectionIn.avg_price,
+        'in_time': HStoreProtectionIn.in_time,
+        'keep_amount': HStoreProtectionIn.keep_amount,
+        'f_date': HStoreProtectionIn.f_date,
+        'f_staff': HStoreProtectionIn.f_staff,
     }
     for param, column in search_params.items():
         value = request.json.get(param)
@@ -411,14 +411,14 @@ def get_vaccine_in():
 
     # 使用 and_() 组合条件
     if conditions:
-        query = HStoreVaccineIn.query.filter(and_(*conditions))
+        query = HStoreProtectionIn.query.filter(and_(*conditions))
     else:
-        query = HStoreVaccineIn.query  # 如果没有条件，查询所有
+        query = HStoreProtectionIn.query  # 如果没有条件，查询所有
 
     # 并且根据id降序排列
 
-    query = query.filter(HStoreVaccineIn.belong == 0)
-    infos = query.order_by(desc(HStoreVaccineIn.id)).paginate(page=pageNum, per_page=pageSize,
+    query = query.filter(HStoreProtectionIn.belong == 0)
+    infos = query.order_by(desc(HStoreProtectionIn.id)).paginate(page=pageNum, per_page=pageSize,
                                                               error_out=False)
     total = query.count()
 
@@ -441,7 +441,7 @@ def get_vaccine_in():
     return jsonify(result)
 
 
-@h_store.route('/h_store/vaccine_in/add', methods=['POST'])
+@h_store.route('/h_store/protection_in/add', methods=['POST'])
 def add_vaccine_in():
     data = request.get_json()
     ctime = datetime.now()
@@ -460,7 +460,7 @@ def add_vaccine_in():
     # 去掉maker_name
     # data.pop('maker_name')
     print(data)
-    info = HStoreVaccineIn()
+    info = HStoreProtectionIn()
     for key, value in data.items():
         setattr(info, key, value)
     # 会有重名的厂家
@@ -521,7 +521,7 @@ def add_vaccine_in():
 
 
 # http://127.0.0.1:5000/basic/basicinfo/edit
-@h_store.route('/h_store/vaccine_in/edit', methods=['POST'])
+@h_store.route('/h_store/protection_in/edit', methods=['POST'])
 def edit_vaccine_in():
     data = request.get_json()
     # print("--data-->", data)
@@ -530,7 +530,7 @@ def edit_vaccine_in():
     data.pop('maker_name')
 
     # 数量更新逻辑
-    maker = HStoreVaccineIn.query.filter_by(id=data['id'])
+    maker = HStoreProtectionIn.query.filter_by(id=data['id'])
     old_quantity = maker.first().in_amount
     old_avgPrice = maker.first().avgPrice
     result_quantity = data['in_amount'] - old_quantity
@@ -562,11 +562,11 @@ def edit_vaccine_in():
     return jsonify(result)
 
 
-@h_store.route('/h_store/vaccine_in/del', methods=['POST'])
+@h_store.route('/h_store/protection_in/del', methods=['POST'])
 def del_vaccine_in():
     ids = request.get_json()
     for i in ids:
-        HStoreVaccineIn.query.filter_by(id=i).delete()
+        HStoreProtectionIn.query.filter_by(id=i).delete()
 
     try:
         db.session.commit()
@@ -584,23 +584,23 @@ def del_vaccine_in():
     })
 
 
-@h_store.route('/h_store/vaccine_out', methods=['POST'])
+@h_store.route('/h_store/protection_out', methods=['POST'])
 def get_vaccine_out():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
 
     conditions = []
     search_params = {
-        'maker_name': HStoreVaccineOut.maker_id,
-        'outbound_no': HStoreVaccineOut.outbound_no,
-        'v_name': HStoreVaccineOut.v_name,
-        'type': HStoreVaccineOut.type,
-        'delivery_time': HStoreVaccineOut.delivery_time,
-        'out_purposes': HStoreVaccineOut.out_purposes,
-        'out_staff': HStoreVaccineOut.out_staff,
-        'contact_phone': HStoreVaccineOut.contact_phone,
-        'notes': HStoreVaccineOut.notes,
-        'f_staff': HStoreVaccineOut.f_staff,
+        'maker_name': HStoreProtectionOut.maker_id,
+        'outbound_no': HStoreProtectionOut.outbound_no,
+        'v_name': HStoreProtectionOut.v_name,
+        'type': HStoreProtectionOut.type,
+        'delivery_time': HStoreProtectionOut.delivery_time,
+        'out_purposes': HStoreProtectionOut.out_purposes,
+        'out_staff': HStoreProtectionOut.out_staff,
+        'contact_phone': HStoreProtectionOut.contact_phone,
+        'notes': HStoreProtectionOut.notes,
+        'f_staff': HStoreProtectionOut.f_staff,
     }
     for param, column in search_params.items():
         value = request.json.get(param)
@@ -618,14 +618,14 @@ def get_vaccine_out():
 
     # 使用 and_() 组合条件
     if conditions:
-        query = HStoreVaccineOut.query.filter(and_(*conditions))
+        query = HStoreProtectionOut.query.filter(and_(*conditions))
     else:
-        query = HStoreVaccineOut.query  # 如果没有条件，查询所有
+        query = HStoreProtectionOut.query  # 如果没有条件，查询所有
 
     # 并且根据id降序排列
 
-    query = query.filter(HStoreVaccineOut.belong == 0)
-    infos = query.order_by(desc(HStoreVaccineOut.id)).paginate(page=pageNum, per_page=pageSize,
+    query = query.filter(HStoreProtectionOut.belong == 0)
+    infos = query.order_by(desc(HStoreProtectionOut.id)).paginate(page=pageNum, per_page=pageSize,
                                                                error_out=False)
     total = query.count()
 
@@ -648,7 +648,7 @@ def get_vaccine_out():
     return jsonify(result)
 
 
-@h_store.route('/h_store/vaccine_out/add', methods=['POST'])
+@h_store.route('/h_store/protection_out/add', methods=['POST'])
 def add_vaccine_out():
     # 目前最新的逻辑是，
     # 1. 记录出库的记录并且保留出库价格，按理来讲第一次出库的时候，这条记录在出库表中的出库价格就永远不能变化了
@@ -656,7 +656,7 @@ def add_vaccine_out():
     # 3. 将出库费用分为药品或者疫苗，记录在对应日期的日支出报表中
     # 4. 判断出库单号是否有重复，如果有重复就直接返回就可以了
     data = request.get_json()
-    if HStoreVaccineOut.query.filter_by(outbound_no=data['outbound_no']).first():
+    if HStoreProtectionOut.query.filter_by(outbound_no=data['outbound_no']).first():
         result = {
             "code": 500,
             "msg": f'库存单号重复，不允许添加'
@@ -678,7 +678,7 @@ def add_vaccine_out():
             "msg": '出库日期不可以大于当天日期'
         }
         return jsonify(result)
-    info = HStoreVaccineOut()  # 构建疫苗药品出库记录数据对象
+    info = HStoreProtectionOut()  # 构建疫苗药品出库记录数据对象
     for key, value in data.items():  # 将前端的信息赋值给info
         setattr(info, key, value)
     # 取出库存信息中对应的记录，方便更改
@@ -751,7 +751,7 @@ def add_vaccine_out():
 
 
 # http://127.0.0.1:5000/basic/basicinfo/edit
-@h_store.route('/h_store/vaccine_out/edit', methods=['POST'])
+@h_store.route('/h_store/protection_out/edit', methods=['POST'])
 def edit_vaccine_out():
     data = request.get_json()
     # print("--data-->", data)
@@ -759,7 +759,7 @@ def edit_vaccine_out():
     data.pop('maker_name')
 
     # 数量更新逻辑
-    maker = HStoreVaccineOut.query.filter_by(id=data['id'])  # 这里取的是疫苗和药品出库记录，但是取名字叫做maker
+    maker = HStoreProtectionOut.query.filter_by(id=data['id'])  # 这里取的是疫苗和药品出库记录，但是取名字叫做maker
     old_quantity = maker.first().num  # 拿旧的数量
     result_quantity = int(data['num']) - old_quantity  # 将新的数量和旧的数量做差
     # 更新Inventory表的的数量
@@ -809,11 +809,11 @@ def edit_vaccine_out():
     return jsonify(result)
 
 
-@h_store.route('/h_store/vaccine_out/del', methods=['POST'])
+@h_store.route('/h_store/protection_out/del', methods=['POST'])
 def del_vaccine_out():
     ids = request.get_json()
     for i in ids:
-        HStoreVaccineOut.query.filter_by(id=i).delete()
+        HStoreProtectionOut.query.filter_by(id=i).delete()
     try:
         db.session.commit()
     except Exception as e:

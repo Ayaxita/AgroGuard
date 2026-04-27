@@ -169,8 +169,8 @@ def test():
 
         query = db.session.query(BasicBasicinfo.ele_num, BasicBasicinfo.house_name,BasicBasicinfo.hurdle_name,
                                  BasicBasicinfo.birth,SupplyCommodityinfo.cname) \
-            .outerjoin(DHealthImmunizationinfo, BasicBasicinfo.id == DHealthImmunizationinfo.basic_id) \
-            .outerjoin(SupplyCommodityinfo, DHealthImmunizationinfo.vaccine_id == SupplyCommodityinfo.id) \
+            .outerjoin(DPlantcareImmunizationinfo, BasicBasicinfo.id == DPlantcareImmunizationinfo.basic_id) \
+            .outerjoin(SupplyCommodityinfo, DPlantcareImmunizationinfo.vaccine_id == SupplyCommodityinfo.id) \
             .filter(BasicBasicinfo.mon_age<6 ,SupplyCommodityinfo.cname !=info)\
             .limit(10).all()
         for res in query:

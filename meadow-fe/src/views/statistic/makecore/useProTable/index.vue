@@ -49,7 +49,7 @@ import {
   varietyType,
   Lamb_statType,
   DoImmType,
-  d_healthResult2Type,
+  d_plantcareResult2Type,
   BrucellaType
 } from "@/assets/json/typeListJson";
 import { useDownload } from "@/hooks/useDownload";

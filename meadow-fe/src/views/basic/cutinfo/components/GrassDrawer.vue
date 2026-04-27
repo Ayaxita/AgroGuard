@@ -150,7 +150,7 @@ import {
   purposeType,
   DeathCauseType,
   DeathHarmless_treatmentType,
-  G_slaughterTypeType,
+  G_harvestTypeType,
   SellingType,
   BooleanType
 } from "@/assets/json/typeListJson";

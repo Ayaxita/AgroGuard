@@ -205,12 +205,12 @@
       ]
     },
     {
-      "path": "/d_health",
-      "name": "d_health",
-      "redirect": "/d_health/d_healthinfo/useProTable",
+      "path": "/d_plantcare",
+      "name": "d_plantcare",
+      "redirect": "/d_plantcare/immunizationinfo/useProTable",
       "meta": {
         "icon": "FirstAidKit",
-        "title": "卫生管理",
+        "title": "植物护理",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -219,9 +219,9 @@
       },
       "children": [
         {
-          "path": "/d_health/immunizationinfo/index",
-          "name": "d_health_immunizationinfo",
-          "component": "/d_health/immunizationinfo/useProTable/index",
+          "path": "/d_plantcare/immunizationinfo/index",
+          "name": "d_plantcare_immunizationinfo",
+          "component": "/d_plantcare/immunizationinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "草地防护",
@@ -233,9 +233,9 @@
           }
         },
         {
-          "path": "/d_health/drugbathinfo/index",
-          "name": "d_health_drugbathinfo",
-          "component": "/d_health/drugbathinfo/useProTable/index",
+          "path": "/d_plantcare/protectioninfo/index",
+          "name": "d_plantcare_protectioninfo",
+          "component": "/d_plantcare/protectioninfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "防护处理",
@@ -247,9 +247,9 @@
           }
         },
         {
-          "path": "/d_health/quarantineinfo/index",
-          "name": "d_health_quarantineinfo",
-          "component": "/d_health/quarantineinfo/useProTable/index",
+          "path": "/d_plantcare/quarantineinfo/index",
+          "name": "d_plantcare_quarantineinfo",
+          "component": "/d_plantcare/quarantineinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "检疫检验",
@@ -261,9 +261,9 @@
           }
         },
         {
-          "path": "/d_health/nursinginfo/index",
-          "name": "d_health_nursinginfo",
-          "component": "/d_health/nursinginfo/useProTable/index",
+          "path": "/d_plantcare/nursinginfo/index",
+          "name": "d_plantcare_nursinginfo",
+          "component": "/d_plantcare/nursinginfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "护理信息",
@@ -275,9 +275,9 @@
           }
         },
         {
-          "path": "/d_health/diseaseinfo/index",
-          "name": "d_health_diseaseinfo",
-          "component": "/d_health/diseaseinfo/useProTable/index",
+          "path": "/d_plantcare/diseaseinfo/index",
+          "name": "d_plantcare_diseaseinfo",
+          "component": "/d_plantcare/diseaseinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "疾病信息",
@@ -289,9 +289,9 @@
           }
         },
         {
-          "path": "/d_health/deathinfo/index",
-          "name": "d_health_deathinfo",
-          "component": "/d_health/deathinfo/useProTable/index",
+          "path": "/d_plantcare/deathinfo/index",
+          "name": "d_plantcare_deathinfo",
+          "component": "/d_plantcare/deathinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "死亡信息",
@@ -303,9 +303,9 @@
           }
         },
         {
-          "path": "/d_health/abortioninfo/index",
-          "name": "d_health_abortioninfo",
-          "component": "/d_health/abortioninfo/useProTable/index",
+          "path": "/d_plantcare/damageinfo/index",
+          "name": "d_plantcare_damageinfo",
+          "component": "/d_plantcare/damageinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "异常枯萎信息",
@@ -319,9 +319,9 @@
       ]
     },
     {
-      "path": "/e_breed",
-      "name": "e_breed",
-      "redirect": "/e_breed/rutinfo/useProTable",
+      "path": "/e_cultivation",
+      "name": "e_cultivation",
+      "redirect": "/e_cultivation/rutinfo/useProTable",
       "meta": {
         "icon": "Female",
             "title": "批次管理",
@@ -333,9 +333,9 @@
       },
       "children": [
         {
-          "path": "/e_breed/rutinfo/index",
-          "name": "e_breed_rutinfo",
-          "component": "/e_breed/rutinfo/useProTable/index",
+          "path": "/e_cultivation/rutinfo/index",
+          "name": "e_cultivation_rutinfo",
+          "component": "/e_cultivation/rutinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "草地生长状态",
@@ -347,9 +347,9 @@
           }
         },
         {
-          "path": "/e_breed/semencollectinfo/index",
-          "name": "e_breed_semencollectinfo",
-          "component": "/e_breed/semencollectinfo/useProTable/index",
+          "path": "/e_cultivation/semencollectinfo/index",
+          "name": "e_cultivation_semencollectinfo",
+          "component": "/e_cultivation/semencollectinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "采样信息",
@@ -361,9 +361,9 @@
           }
         },
         {
-          "path": "/e_breed/breedinginfo/index",
-          "name": "e_breed_breedinginfo",
-          "component": "/e_breed/breedinginfo/useProTable/index",
+          "path": "/e_cultivation/breedinginfo/index",
+          "name": "e_cultivation_breedinginfo",
+          "component": "/e_cultivation/breedinginfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "草地批次管理",
@@ -375,9 +375,9 @@
           }
         },
         {
-          "path": "/e_breed/pregnantinfo/index",
-          "name": "e_breed_pregnantinfo",
-          "component": "/e_breed/pregnantinfo/useProTable/index",
+          "path": "/e_cultivation/pregnantinfo/index",
+          "name": "e_cultivation_pregnantinfo",
+          "component": "/e_cultivation/pregnantinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "生长周期监测",
@@ -389,9 +389,9 @@
           }
         },
         {
-          "path": "/e_breed/postnatalinfo/index",
-          "name": "e_breed_postnatalinfo",
-          "component": "/e_breed/postnatalinfo/useProTable/index",
+          "path": "/e_cultivation/postnatalinfo/index",
+          "name": "e_cultivation_postnatalinfo",
+          "component": "/e_cultivation/postnatalinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "收割后信息",
@@ -403,9 +403,9 @@
           }
         },
         {
-          "path": "/e_breed/artificialfeedinginfo/index",
-          "name": "e_breed_artificialfeedinginfo",
-          "component": "/e_breed/artificialfeedinginfo/useProTable/index",
+          "path": "/e_cultivation/artificialfeedinginfo/index",
+          "name": "e_cultivation_artificialfeedinginfo",
+          "component": "/e_cultivation/artificialfeedinginfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "人工养护",
@@ -417,9 +417,9 @@
           }
         },
         {
-          "path": "/e_breed/weaninginfo/index",
-          "name": "e_breed_weaninginfo",
-          "component": "/e_breed/weaninginfo/useProTable/index",
+          "path": "/e_cultivation/weaninginfo/index",
+          "name": "e_cultivation_weaninginfo",
+          "component": "/e_cultivation/weaninginfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "阶段切换信息",
@@ -431,9 +431,9 @@
           }
         },
         {
-          "path": "/e_breed/lambinfo/index",
-          "name": "e_breed_lambinfo",
-          "component": "/e_breed/lambinfo/useProTable/index",
+          "path": "/e_cultivation/lambinfo/index",
+          "name": "e_cultivation_lambinfo",
+          "component": "/e_cultivation/lambinfo/useProTable/index",
           "meta": {
             "icon": "Female",
             "title": "草地批次信息",
@@ -474,9 +474,9 @@
           },
           "children": [
             {
-              "path": "/h_store/vaccine_in/index",
-              "name": "h_store_vaccine_in",
-              "component": "/h_store/vaccine_in/useProTable/index",
+              "path": "/h_store/protection_in/index",
+              "name": "h_store_protection_in",
+              "component": "/h_store/protection_in/useProTable/index",
               "meta": {
                 "icon": "House",
                 "title": "防护物资入库信息",
@@ -517,9 +517,9 @@
           },
           "children": [
             {
-              "path": "/h_store/vaccine_out/index",
-              "name": "h_store_vaccine_out",
-              "component": "/h_store/vaccine_out/useProTable/index",
+              "path": "/h_store/protection_out/index",
+              "name": "h_store_protection_out",
+              "component": "/h_store/protection_out/useProTable/index",
               "meta": {
                 "icon": "House",
                 "title": "防护物资出库信息",
@@ -815,12 +815,12 @@
       ]
     },
     {
-      "path": "/g_slaughter",
-      "name": "g_slaughter",
-      "redirect": "/g_slaughter/salesinfo/useProTable",
+      "path": "/g_harvest",
+      "name": "g_harvest",
+      "redirect": "/g_harvest/salesinfo/useProTable",
       "meta": {
         "icon": "Van",
-        "title": "产品加工销售管理",
+        "title": "产品收割销售管理",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -829,9 +829,9 @@
       },
       "children": [
         {
-          "path": "/g_slaughter/s_salesinfo/index",
-          "name": "g_slaughter_s_salesinfo",
-          "component": "/g_slaughter/s_salesinfo/useProTable/index",
+          "path": "/g_harvest/s_salesinfo/index",
+          "name": "g_harvest_s_salesinfo",
+          "component": "/g_harvest/s_salesinfo/useProTable/index",
           "meta": {
             "icon": "Van",
             "title": "草地销售",
@@ -843,9 +843,9 @@
           }
         },
         {
-          "path": "/g_slaughter/g_salesinfo/index",
-          "name": "g_slaughter_g_salesinfo",
-          "component": "/g_slaughter/g_salesinfo/useProTable/index",
+          "path": "/g_harvest/g_salesinfo/index",
+          "name": "g_harvest_g_salesinfo",
+          "component": "/g_harvest/g_salesinfo/useProTable/index",
           "meta": {
             "icon": "Van",
             "title": "草地副产品销售",
