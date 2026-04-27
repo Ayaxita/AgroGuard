@@ -11,15 +11,15 @@ export const getManuList = params => {
 
 // 新增
 export const addManu = params => {
-  return http.post(PORT1 + `/inventory/add`, params);
+  return http.post(PORT1 + `/inventoryForage/add`, params);
 };
 
 // 编辑
 export const editManu = params => {
-  return http.post(PORT1 + `/inventory/edit`, params);
+  return http.post(PORT1 + `/inventoryForage/edit`, params);
 };
 
 // 删除
 export const delManu = params => {
-  return http.post(PORT1 + `/inventory/del`, params);
+  return http.post(PORT1 + `/inventoryForage/del`, params);
 };

@@ -19,7 +19,7 @@ export const getManuList = params => {
 // };
 
 export const searchDate = params => {
-  const result = http.post(PORT6 + `/daily_report/searchDate`, params);
+  const result = http.post(PORT6 + `/daily_stocksheet/searchDate`, params);
   result.then(resp => console.log("返回的列表数据", resp));
   return result;
 };

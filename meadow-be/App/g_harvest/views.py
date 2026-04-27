@@ -496,3 +496,132 @@ def del_g_harvest_economicinfo():
         db.session.flush()
         return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
     return jsonify({"code": 200, "msg": '删除成功'})
+
+
+@g_harvest.route('/g_harvest/segmentinfo', methods=['POST'])
+def get_g_harvest_segmentinfo_list():
+    pageNum = int(request.json.get('pageNum', 1))
+    pageSize = int(request.json.get('pageSize', 10))
+    conditions = []
+    search_params = {
+        'belong': GHarvestSegmentinfo.belong,
+        'basic_id': GHarvestSegmentinfo.basic_id,
+        'age': GHarvestSegmentinfo.age,
+        'source': GHarvestSegmentinfo.source,
+        'in_weight': GHarvestSegmentinfo.in_weight,
+        'CWT': GHarvestSegmentinfo.CWT,
+        'net_meat_weight': GHarvestSegmentinfo.net_meat_weight,
+        'spine': GHarvestSegmentinfo.spine,
+        'chops_weight': GHarvestSegmentinfo.chops_weight,
+        'stick_bone_weight': GHarvestSegmentinfo.stick_bone_weight,
+        'others_weight': GHarvestSegmentinfo.others_weight,
+        'head_weight': GHarvestSegmentinfo.head_weight,
+        'blood_weight': GHarvestSegmentinfo.blood_weight,
+        'skin_weight': GHarvestSegmentinfo.skin_weight,
+        'heart_weight': GHarvestSegmentinfo.heart_weight,
+        'liver_weight': GHarvestSegmentinfo.liver_weight,
+        'lungs_weight': GHarvestSegmentinfo.lungs_weight,
+        'tripe_weight': GHarvestSegmentinfo.tripe_weight,
+        'hoof_weight': GHarvestSegmentinfo.hoof_weight,
+        'L_intestine_weight': GHarvestSegmentinfo.L_intestine_weight,
+        'S_intestine_weight': GHarvestSegmentinfo.S_intestine_weight,
+        'kidney_weight': GHarvestSegmentinfo.kidney_weight,
+        'white_weight': GHarvestSegmentinfo.white_weight,
+        'date': GHarvestSegmentinfo.date,
+        'f_staff': GHarvestSegmentinfo.f_staff,
+    }
+    for param, column in search_params.items():
+        value = request.json.get(param)
+        if value is not None:
+            conditions.append(column == value)
+    if conditions:
+        query = GHarvestSegmentinfo.query.filter(and_(*conditions))
+    else:
+        query = GHarvestSegmentinfo.query
+    infos = query.filter(GHarvestSegmentinfo.belong == 0).paginate(page=pageNum, per_page=pageSize, error_out=False)
+    total = query.count()
+    list = []
+    for info in infos:
+        list.append({
+            'id': info.id,
+            'belong': info.belong,
+            'basic_id': info.basic_id,
+            'age': info.age,
+            'source': info.source,
+            'in_weight': info.in_weight,
+            'CWT': info.CWT,
+            'net_meat_weight': info.net_meat_weight,
+            'spine': info.spine,
+            'chops_weight': info.chops_weight,
+            'stick_bone_weight': info.stick_bone_weight,
+            'others_weight': info.others_weight,
+            'head_weight': info.head_weight,
+            'blood_weight': info.blood_weight,
+            'skin_weight': info.skin_weight,
+            'heart_weight': info.heart_weight,
+            'liver_weight': info.liver_weight,
+            'lungs_weight': info.lungs_weight,
+            'tripe_weight': info.tripe_weight,
+            'hoof_weight': info.hoof_weight,
+            'L_intestine_weight': info.L_intestine_weight,
+            'S_intestine_weight': info.S_intestine_weight,
+            'kidney_weight': info.kidney_weight,
+            'white_weight': info.white_weight,
+            'date': info.date,
+            'f_staff': info.f_staff,
+        })
+    result = {"code": 200, "data": {"list": list, "pageNum": pageNum, "pageSize": pageSize, "total": total}, "msg": '成功'}
+    return jsonify(result)
+
+
+@g_harvest.route('/g_harvest/segmentinfo/add', methods=['POST'])
+def add_g_harvest_segmentinfo():
+    data = request.get_json()
+    data['belong'] = 0
+    obj = GHarvestSegmentinfo()
+    for key, value in data.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
+    try:
+        db.session.add(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '添加成功'})
+
+
+@g_harvest.route('/g_harvest/segmentinfo/edit', methods=['POST'])
+def edit_g_harvest_segmentinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    GHarvestSegmentinfo.query.filter_by(id=id).update(data)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'修改失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '修改成功'})
+
+
+@g_harvest.route('/g_harvest/segmentinfo/del', methods=['POST'])
+def del_g_harvest_segmentinfo():
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"code": 400, "msg": '缺少id'})
+    obj = GHarvestSegmentinfo.query.get(id)
+    if not obj:
+        return jsonify({"code": 404, "msg": '记录不存在'})
+    try:
+        db.session.delete(obj)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'删除失败 {str(e)}'})
+    return jsonify({"code": 200, "msg": '删除成功'})

@@ -1156,19 +1156,6 @@ def fun(param):
 
 
 
-    except Exception as e:
-        # 出现异常时回滚
-        db.session.rollback()
-        print(f"更新失败: {str(e)}")
-        result = {
-            "code": 500,
-            "msg": f'更新失败 {str(e)}'
-        }
-        return jsonify(result)
-
-
-
-
 
 
 
@@ -2905,3 +2892,74 @@ def get_obsoletegrassinfo():
         "msg": '成功'
     }
     return jsonify(result)
+
+
+@Statistic.route('/statistic/obsoletegrassinfo/add', methods=['POST'])
+def add_obsoletegrassinfo():
+    data = request.get_json()
+    ctime = datetime.now()
+    # belong为0
+    data['belong'] = 0
+    data['f_date'] = ctime
+    info = BasicObsoleteGrassinfo()
+    for key, value in data.items():
+        setattr(info, key, value)
+    try:
+        db.session.add(info)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'添加失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '添加成功'
+    }
+    return jsonify(result)
+
+
+@Statistic.route('/statistic/obsoletegrassinfo/edit', methods=['POST'])
+def edit_obsoletegrassinfo():
+    data = request.get_json()
+    id = data['id']
+    try:
+        BasicObsoleteGrassinfo.query.filter_by(id=id).update(data)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'修改失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '修改成功'
+    }
+    return jsonify(result)
+
+
+@Statistic.route('/statistic/obsoletegrassinfo/del', methods=['POST'])
+def del_obsoletegrassinfo():
+    ids = request.get_json()
+    for i in ids:
+        BasicObsoleteGrassinfo.query.filter_by(id=i).delete()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'删除失败 {str(e)}'
+        }
+        return jsonify(result)
+    return jsonify({
+        "code": 200,
+        "msg": '删除成功'
+    })

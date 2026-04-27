@@ -1301,3 +1301,81 @@ def del_feeding_out():
         "code": 200,
         "msg": '删除成功'
     })
+
+
+@h_store.route('/h_store/inventoryForage/add', methods=['POST'])
+def add_inventoryForage():
+    data = request.get_json()
+    ctime = datetime.now()
+    # belong为0
+    data['belong'] = 0
+    data['f_date'] = ctime
+    print(data)
+    info = HStoreInventory()
+    for key, value in data.items():
+        setattr(info, key, value)
+
+    try:
+        db.session.add(info)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'添加失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '添加成功'
+    }
+    return jsonify(result)
+
+
+@h_store.route('/h_store/inventoryForage/edit', methods=['POST'])
+def edit_inventoryForage():
+    data = request.get_json()
+    ctime = datetime.now()
+    data.pop('maker_name', None)
+    HStoreInventory.query.filter_by(id=data['id']).update(data)
+
+    # 更新inventory表的相应的"更新时间"
+    HStoreInventory.query.filter_by(id=data['id']).update({'out_time': ctime})
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'修改失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '修改成功'
+    }
+    return jsonify(result)
+
+
+@h_store.route('/h_store/inventoryForage/del', methods=['POST'])
+def del_inventoryForage():
+    ids = request.get_json()
+    for i in ids:
+        HStoreInventory.query.filter_by(id=i).delete()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'删除失败 {str(e)}'
+        }
+        return jsonify(result)
+    return jsonify({
+        "code": 200,
+        "msg": '删除成功'
+    })

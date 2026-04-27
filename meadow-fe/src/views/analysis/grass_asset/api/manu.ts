@@ -23,7 +23,7 @@ export const exportGrassInfo = params => {
 };
 //获取监测目标信息
 export const getFemaleGrass = params => {
-  const result = http.post(PORT1 + `/growth_statusinfo/get_femalegrass`, params);
+  const result = http.post(`/propagation/growth_statusinfo/get_femalegrass`, params);
   result.then(resp => console.log("返回的列表数据", resp));
   return result;
 };

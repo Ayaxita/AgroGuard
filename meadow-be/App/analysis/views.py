@@ -3133,3 +3133,107 @@ def get_annual_financial_data():
         return jsonify({"code": 200, "data": result})
     except Exception as e:
         return jsonify({"code": 500, "message": str(e)})
+
+
+@analysis.route('/analysis/daily_income/edit', methods=['POST'])
+def edit_daily_income():
+    data = request.get_json()
+    id = data['id']
+    try:
+        AnalysisDailyIncome.query.filter_by(id=id).update(data)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'修改失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '修改成功'
+    }
+    return jsonify(result)
+
+
+@analysis.route('/analysis/daily_income/del', methods=['POST'])
+def del_daily_income():
+    ids = request.get_json()
+    for i in ids:
+        AnalysisDailyIncome.query.filter_by(id=i).delete()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'删除失败 {str(e)}'
+        }
+        return jsonify(result)
+    return jsonify({
+        "code": 200,
+        "msg": '删除成功'
+    })
+
+
+@analysis.route('/analysis/daily_grass_asset/edit', methods=['POST'])
+def edit_daily_grass_asset():
+    data = request.get_json()
+    id = data['id']
+    try:
+        AnalysisGrassAsset.query.filter_by(id=id).update(data)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'修改失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '修改成功'
+    }
+    return jsonify(result)
+
+
+@analysis.route('/analysis/daily_grass_asset/del', methods=['POST'])
+def del_daily_grass_asset():
+    ids = request.get_json()
+    for i in ids:
+        AnalysisGrassAsset.query.filter_by(id=i).delete()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'删除失败 {str(e)}'
+        }
+        return jsonify(result)
+    return jsonify({
+        "code": 200,
+        "msg": '删除成功'
+    })
+
+
+@analysis.route('/analysis/daily_stocksheet/searchDate', methods=['POST'])
+def search_date_stocksheet():
+    data = request.get_json()
+    sheet = Analysisdailystocksheet.query.filter_by(date=data['date']).all()
+    if sheet:
+        result = {
+            "code": 200,
+            "msg": '经查询得知相同日期已经存在一次记录，继续增加则在之前基础上累加！'
+        }
+        return jsonify(result)
+    else:
+        result = {
+            "code": 200,
+            "msg": '未查询到相同日期的记录，请继续添加！'
+        }
+        return jsonify(result)

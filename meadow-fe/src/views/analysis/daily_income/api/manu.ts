@@ -29,10 +29,10 @@ export const exportGrassInfo = params => {
 };
 // 编辑
 export const editManu = params => {
-  return http.post(PORT1 + `/inventory/edit`, params);
+  return http.post(PORT1 + `/daily_income/edit`, params);
 };
 
 // 删除
 export const delManu = params => {
-  return http.post(PORT1 + `/inventory/del`, params);
+  return http.post(PORT1 + `/daily_income/del`, params);
 };
