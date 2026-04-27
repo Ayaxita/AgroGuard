@@ -1033,7 +1033,7 @@ class BasicYieldperformance(db.Model):
 
     milk_volume = db.Column(db.String(40), nullable=False)
 
-    sprout_num = db.Column(db.Integer)
+    lamb_num = db.Column(db.Integer)
 
     date = db.Column(db.Date, nullable=False)
 

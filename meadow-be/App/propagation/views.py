@@ -2557,9 +2557,6 @@ def get_artificial_careinfo():
         data = json.dumps(info, cls=AlchemyEncoder, ensure_ascii=False)
         data = json.loads(data)
         seedling_info = ECultivationSproutinfo.query.filter_by(id=data['sprout_id']).first()
-        print(seedling_info)
-        print(seedling_info.ele_num)
-        print(seedling_info.pre_num)
         if seedling_info:
             data['ele_num'] = seedling_info.ele_num
             data['pre_num'] = seedling_info.pre_num
