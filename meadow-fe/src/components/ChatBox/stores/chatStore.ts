@@ -137,7 +137,7 @@ export const useChatStateStore = defineStore("chatState", () => {
 
 // 模型存储
 export const useModelStore = defineStore("model", () => {
-  const modelType = ref("GLM-4.6V");
+  const modelType = ref("GLM-4.7-Flash");
 
   const getModelType = computed(() => modelType.value);
 
