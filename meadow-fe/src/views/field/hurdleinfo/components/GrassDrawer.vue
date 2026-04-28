@@ -10,12 +10,11 @@
       :hide-required-asterisk="drawerProps.isView"
     >
       <!-- 棚自动填0 -->
-      <!-- <el-form-item label="上级id" prop="pid">
-        <el-input v-model="drawerProps.row.pid" clearable></el-input>
-      </el-form-item> -->
-      <!-- <el-form-item label="监测站点名称" prop="pid">
-        <el-input v-model="drawerProps.row.pid" clearable></el-input>
-      </el-form-item> -->
+      <el-form-item label="所属监测站点" prop="house_id" v-if="drawerProps.title === '新增'">
+        <el-select v-model="drawerProps.row.house_id" clearable placeholder="请选择所属监测站点">
+          <el-option v-for="item in houses" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="监测地块名称" prop="name">
         <el-input v-model="drawerProps.row.name" clearable></el-input>
       </el-form-item>
@@ -96,7 +95,7 @@ import { fieldFuntionType, fieldH_typeType, varietyType } from "@/assets/json/ty
 import { initHouse } from "../api/manu";
 
 const rules = reactive({
-  // pid: [{ required: true, message: "请输入上级id" }],
+  house_id: [{ required: true, message: "请选择所属监测站点" }],
   name: [{ required: true, message: "请输入名称" }],
   build_time: [{ required: true, message: "请输入建设时间" }],
   function: [{ required: true, message: "请选择功能" }],
@@ -117,19 +116,18 @@ interface DrawerProps {
   getTableList?: () => void;
 }
 
-// const houses = ref<any>([]);
+const houses = ref<any>([]);
 
-// // 初始化house
-
-// onBeforeMount(() => {
-//   initHouse().then((res: any) => {
-//     if (res.code === 200) {
-//       houses.value = res.data.list;
-//     } else {
-//       ElMessage.error("获取监测站点列表失败！");
-//     }
-//   });
-// });
+// 初始化house
+onBeforeMount(() => {
+  initHouse().then((res: any) => {
+    if (res.code === 200) {
+      houses.value = res.data.list;
+    } else {
+      ElMessage.error("获取监测站点列表失败！");
+    }
+  });
+});
 const drawerVisible = ref(false);
 const drawerProps = ref<DrawerProps>({
   isView: false,

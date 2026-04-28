@@ -1,5 +1,5 @@
 # __init__.py：初始化文件，创建Flask应用
-import datetime
+from datetime import timedelta
 
 
 from flask import Flask
@@ -28,7 +28,7 @@ def create_app():
 
     '''
     app.config['SECRET_KEY'] = 'nihaoshijie'
-    app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=30)
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 
     # 注册蓝图
     app.register_blueprint(login_auth)      #登录
@@ -55,13 +55,20 @@ def create_app():
     # 配置jwt
     app.config['JWT_SECRET_KEY'] = 'nihaoshijie'
     # 设置普通JWT过期时间
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(minutes=15)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=15)
     # 设置刷新JWT过期时间
-    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = datetime.timedelta(days=30)
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
     jwt = JWTManager(app)
 
     # 初始化插件
     #建立数据库连接
     init_exts(app=app)
+
+    # 启动定时任务（病虫害防护预警每日自动更新）
+    try:
+        from .task import init_scheduler
+        init_scheduler(app)
+    except Exception as e:
+        print(f"[警告] 定时任务初始化失败（不影响系统运行）: {e}")
 
     return app

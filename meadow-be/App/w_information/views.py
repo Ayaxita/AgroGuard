@@ -14,7 +14,7 @@ from ..utils.AlchemyEncoder import AlchemyEncoder
 w_information = Blueprint('w_information', __name__)
 
 
-@w_information.route('/w_information/immunizationMessageinfo', methods=['POST', "GET"])  # 疫苗预警 后端接口
+@w_information.route('/w_information/immunizationMessageinfo', methods=['POST', "GET"])  # 病虫害防护预警 后端接口
 def get_immunizationMessageinfo():
     pageNum = int(request.json.get('pageNum'))
     pageSize = int(request.json.get('pageSize'))
@@ -47,17 +47,26 @@ def get_immunizationMessageinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'cname':
-                vaccine_id = SupplyCommodityinfo.query.filter(
-                    SupplyCommodityinfo.cname.like(f'%{value}%')).first().id
-                conditions.append(column == vaccine_id)
+                commodity = SupplyCommodityinfo.query.filter(
+                    SupplyCommodityinfo.cname.like(f'%{value}%')).first()
+                if commodity:
+                    conditions.append(column == commodity.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'note':
                 conditions.append(column.like(f'%{value}%'))
             else:
@@ -198,13 +207,13 @@ def update_thresholdsetMessageinfo():
                 1 as state,
                 'System' as f_staff,
                 NOW() as f_date,
-                '' as note
+                COALESCE(s.explain, '') as note
 
                 FROM
                 basic_basicinfo as b
                 LEFT JOIN (select basic_id ,vaccine_id,MAX(imm_date) as max_immdate from d_plantcare_immunizationinfo where vaccine_id= :id GROUP BY basic_id) as d
                 ON b.id = d.basic_id
-                LEFT JOIN supply_commodityinfo ON supply_commodityinfo.id = d.vaccine_id
+                LEFT JOIN supply_commodityinfo s ON s.id = d.vaccine_id
                 where d.vaccine_id = :id and b.state=1 and b.variety in (0,1)
                 ORDER BY
                 b.id ASC
@@ -231,13 +240,14 @@ def update_thresholdsetMessageinfo():
                 1 as state,
                 'System' as f_staff,
                 NOW() as f_date,
-                '' as note
+                COALESCE(s.explain, '') as note
                 FROM
                 basic_basicinfo AS b
+                LEFT JOIN supply_commodityinfo s ON s.id = :id
                 WHERE
                 b.state = 1 AND
                 b.variety IN (1,0) and
-                id not in (select basic_id from d_plantcare_immunizationinfo)
+                b.id not in (select basic_id from d_plantcare_immunizationinfo)
             '''
         # query11删除表中原来的记录
         query11 = '''

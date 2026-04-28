@@ -112,7 +112,7 @@ def reset_password():
 @login_auth.route('/login/test', methods=['POST'])
 def test():
     '''
-    返回需要处理的预警信息长度,按照数据库的顺序排列
+    返回需要处理的病虫害防护预警信息长度,按照数据库的顺序排列
     :return: MessageLength
     '''
     list = []

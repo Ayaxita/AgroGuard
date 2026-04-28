@@ -215,8 +215,9 @@ def get_hurdleinfo():
     # 筛选出监测地块(pid!=0)
     # 并且根据id降序排列
 
-    query = query.filter(FieldHouseinfo.belong == 0, FieldHouseinfo.pid != 0,
-                         FieldHouseinfo.pid == house_id)
+    query = query.filter(FieldHouseinfo.belong == 0, FieldHouseinfo.pid != 0)
+    if house_id is not None and str(house_id).strip() != '':
+        query = query.filter(FieldHouseinfo.pid == int(house_id))
     data_infos = query.order_by(desc(FieldHouseinfo.id)).paginate(page=pageNum, per_page=pageSize, error_out=False)
     total = query.count()
 
@@ -248,7 +249,9 @@ def add_hurdleinfo():
     # 作物密度比例不能为空
     data['area_pro'] = 0
     house_id = request.json.get('house_id')
-    data['pid'] = int(house_id) if house_id and str(house_id).strip() != '' else 0
+    if not house_id or str(house_id).strip() == '':
+        return jsonify({"code": 400, "msg": '请先选择所属监测站点'})
+    data['pid'] = int(house_id)
     data['grass_quantity'] = 0
     # print(data)
     data_info = FieldHouseinfo()

@@ -41,13 +41,19 @@ def get_witherinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -122,21 +128,33 @@ def get_immunizationinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'cname':
-                vaccine_id = SupplyCommodityinfo.query.filter(
-                    SupplyCommodityinfo.cname.like(f'%{value}%')).first().id
-                conditions.append(column == vaccine_id)
+                commodity = SupplyCommodityinfo.query.filter(
+                    SupplyCommodityinfo.cname.like(f'%{value}%')).first()
+                if commodity:
+                    conditions.append(column == commodity.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'supplier_name':
-                maker_id = SupplyVSuppliersinfo.query.filter(
-                    SupplyVSuppliersinfo.supplier_name.like(f'%{value}%')).first().id
-                conditions.append(column == maker_id)
+                supplier = SupplyVSuppliersinfo.query.filter(
+                    SupplyVSuppliersinfo.supplier_name.like(f'%{value}%')).first()
+                if supplier:
+                    conditions.append(column == supplier.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
     # 使用 and_() 组合条件
@@ -220,21 +238,33 @@ def get_protectioninfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'cname':
-                drug_id = SupplyCommodityinfo.query.filter(
-                    SupplyCommodityinfo.cname.like(f'%{value}%')).first().id
-                conditions.append(column == drug_id)
+                commodity = SupplyCommodityinfo.query.filter(
+                    SupplyCommodityinfo.cname.like(f'%{value}%')).first()
+                if commodity:
+                    conditions.append(column == commodity.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'supplier_name':
-                vac_maker = SupplyVSuppliersinfo.query.filter(
-                    SupplyVSuppliersinfo.supplier_name.like(f'%{value}%')).first().id
-                conditions.append(column == vac_maker)
+                supplier = SupplyVSuppliersinfo.query.filter(
+                    SupplyVSuppliersinfo.supplier_name.like(f'%{value}%')).first()
+                if supplier:
+                    conditions.append(column == supplier.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
     # 使用 and_() 组合条件
@@ -315,13 +345,19 @@ def get_quarantineinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -424,13 +460,19 @@ def get_nursinginfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -538,17 +580,26 @@ def get_diseaseinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'cname':
-                vaccine_id = SupplyCommodityinfo.query.filter(
-                    SupplyCommodityinfo.cname.like(f'%{value}%')).first().id
-                conditions.append(column == vaccine_id)
+                commodity = SupplyCommodityinfo.query.filter(
+                    SupplyCommodityinfo.cname.like(f'%{value}%')).first()
+                if commodity:
+                    conditions.append(column == commodity.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -615,13 +666,19 @@ def get_damageinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                basic = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if basic:
+                    conditions.append(column == basic.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -1006,6 +1063,74 @@ def edit_witherinfo():
     result = {
         "code": 200,
         "msg": '修改成功'
+    }
+    return jsonify(result)
+
+
+@pest_control.route('/pest_control/witherinfo/add', methods=['POST'])  # 绝收信息 新增 后端接口
+def add_witherinfo():
+    data = request.get_json()
+    ctime = datetime.now()
+    data['belong'] = 0
+    data['f_date'] = ctime
+    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
+    ele_num = data['ele_num']
+    query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
+    if query:
+        del data['ele_num']
+        if 'pre_num' in data:
+            del data['pre_num']
+        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
+        basic_info = json.loads(basic_info)
+        data['basic_id'] = basic_info['id']
+    else:
+        result = {
+            "code": 500,
+            "msg": f'添加失败 '
+        }
+        return jsonify(result)
+    witherinfo = DPlantcareDeathinfo()
+    for key, value in data.items():
+        setattr(witherinfo, key, value)
+    try:
+        db.session.add(witherinfo)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'添加失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '添加成功'
+    }
+    return jsonify(result)
+
+
+@pest_control.route('/pest_control/witherinfo/del', methods=['POST'])  # 绝收信息 删除 后端接口
+def del_witherinfo():
+    data = request.get_json()
+    print("--data-->", data)
+    # 这个表更新的话需要1个搜索条件
+    id = data['id']
+    print('--------------------------test--------------------------------')
+    try:
+        DPlantcareDeathinfo.query.filter_by(id=id).delete()
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        result = {
+            "code": 500,
+            "msg": f'删除失败 {str(e)}'
+        }
+        return jsonify(result)
+    result = {
+        "code": 200,
+        "msg": '删除成功'
     }
     return jsonify(result)
 

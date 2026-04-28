@@ -210,7 +210,7 @@
       "redirect": "/pest_control/immunizationinfo/useProTable",
       "meta": {
         "icon": "FirstAidKit",
-        "title": "植物护理",
+        "title": "草地护理",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -291,7 +291,7 @@
         {
           "path": "/pest_control/witherinfo/index",
           "name": "pest_control_witherinfo",
-          "component": "/pest_control/witherinfo/useProTable/index",
+          "component": "/pest_control/deathinfo/useProTable/index",
           "meta": {
             "icon": "FirstAidKit",
             "title": "死亡信息",
