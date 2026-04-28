@@ -76,6 +76,9 @@ def get_houseinfo():
 @field.route('/field/houseinfo/add', methods=['POST'])
 def add_houseinfo():
     data = request.get_json()
+    # 校验必填字段
+    if not data.get('name') or str(data.get('name')).strip() == '':
+        return jsonify({"code": 400, "msg": '监测站点名称不能为空'})
     # belong为0
     data['belong'] = 0
     # 作物密度比例不能为空
@@ -237,11 +240,15 @@ def get_hurdleinfo():
 @field.route('/field/hurdleinfo/add', methods=['POST'])
 def add_hurdleinfo():
     data = request.get_json()
+    # 校验必填字段
+    if not data.get('name') or str(data.get('name')).strip() == '':
+        return jsonify({"code": 400, "msg": '监测地块名称不能为空'})
     # belong为0
     data['belong'] = 0
     # 作物密度比例不能为空
     data['area_pro'] = 0
-    data['pid'] = request.json.get('house_id')
+    house_id = request.json.get('house_id')
+    data['pid'] = int(house_id) if house_id and str(house_id).strip() != '' else 0
     data['grass_quantity'] = 0
     # print(data)
     data_info = FieldHouseinfo()
@@ -270,6 +277,13 @@ def edit_hurdleinfo():
     data = request.get_json()
     # print("--data-->", data)
     id = data['id']
+
+    # 空值保护：pid 和 house_id 不能为空字符串
+    if 'pid' in data and (data['pid'] == '' or data['pid'] is None):
+        data['pid'] = 0
+    house_id = data.get('house_id')
+    if house_id is not None and str(house_id).strip() == '':
+        data['pid'] = 0
 
     FieldHouseinfo.query.filter_by(id=id).update(data)
     try:

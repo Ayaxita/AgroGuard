@@ -2829,8 +2829,8 @@ class WinformationImmunizationMessageinfo(db.Model):
 
     basic_id = db.Column(db.Integer, nullable=False)
 
-    ele_num = db.Column(db.String(16), nullable=False, unique=True)
-    pre_num = db.Column(db.String(16))
+    ele_num = db.Column(db.String(30), nullable=False)
+    pre_num = db.Column(db.String(30))
     sex = db.Column(db.Integer)
     variety = db.Column(db.Integer)
     mon_age = db.Column(db.Double(asdecimal=True))
@@ -2839,12 +2839,12 @@ class WinformationImmunizationMessageinfo(db.Model):
     vaccine_id = db.Column(db.Integer)
     birth = db.Column(db.Date)
     imm_date = db.Column(db.Date)
-    distance_date = db.Column(db.Date)
+    distance_date = db.Column(db.Integer)
     dead_date = db.Column(db.Date)
     state = db.Column(db.Integer)
     f_staff = db.Column(db.String(20))
-    f_date = db.Column(db.Date)
-    note = db.Column(db.String(255))
+    f_date = db.Column(db.DateTime)
+    note = db.Column(db.Text)
     belong = db.Column(db.Integer)
 
 

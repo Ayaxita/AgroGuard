@@ -35,7 +35,6 @@ def get_immunizationMessageinfo():
 
         'birth': WinformationImmunizationMessageinfo.birth,
         "imm_date": WinformationImmunizationMessageinfo.imm_date,
-        "distance_date": WinformationImmunizationMessageinfo.distance_date,
         'dead_date': WinformationImmunizationMessageinfo.dead_date,
         'f_staff': WinformationImmunizationMessageinfo.f_staff,
         'f_date': WinformationImmunizationMessageinfo.f_date,
@@ -44,7 +43,7 @@ def get_immunizationMessageinfo():
     for param, column in search_params.items():
         value = request.json.get(param)
         if value is not None:  # 检查值不为 None
-            if param == 'birth' or param == 'dead_date' or param == 'imm_date' or param == 'distance_date' or param == 'f_date':  # 日期需要转换
+            if param == 'birth' or param == 'dead_date' or param == 'imm_date' or param == 'f_date':  # 日期需要转换
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
@@ -59,6 +58,8 @@ def get_immunizationMessageinfo():
                 vaccine_id = SupplyCommodityinfo.query.filter(
                     SupplyCommodityinfo.cname.like(f'%{value}%')).first().id
                 conditions.append(column == vaccine_id)
+            elif param == 'note':
+                conditions.append(column.like(f'%{value}%'))
             else:
                 conditions.append(column == value)
 

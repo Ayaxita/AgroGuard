@@ -48,7 +48,7 @@ def create_app():
     # db_uri = 'sqlite:///sqlite3.db'
     # db_uri = 'mysql+pymysql://root:dpfxzby$ztcxlbj$9264$@39.99.175.254:8055/grass_555'  # mysql链接
     # db_uri = 'mysql+pymysql://root:hscjtCemt2024$@182.92.207.3:3306/meadow_test' #mysql链接
-    db_uri = 'mysql+pymysql://root:meadow123@mysql-db:3306/meadow_test' #mysql链接
+    db_uri = 'mysql+pymysql://root:meadow123@mysql-db:3306/meadow_test?charset=utf8mb4' #mysql链接
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     

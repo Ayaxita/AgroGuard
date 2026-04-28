@@ -129,12 +129,16 @@ def test():
 
     for vaccine_id, count in results:
         commodity = SupplyCommodityinfo.query.filter_by(id=vaccine_id).first()
+        note_record = WinformationImmunizationMessageinfo.query.filter_by(vaccine_id=vaccine_id).filter(
+            WinformationImmunizationMessageinfo.dead_date <= nowtime
+        ).order_by(WinformationImmunizationMessageinfo.id.desc()).first()
         if commodity:
             cname = commodity.cname
             list.append({
                 "vaccine_id": vaccine_id,
                 "cname": cname,
-                "Messagelength": count
+                "Messagelength": count,
+                "note": note_record.note if note_record else ""
             })
     '''
     这里的注释是之前写的内容，功能是查询到所有的预警信息，将详细信息在消息界面显示，现在要更新这种做法

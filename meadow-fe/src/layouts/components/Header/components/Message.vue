@@ -2,7 +2,7 @@
   <div class="message">
     <el-popover placement="bottom" :width="310" trigger="click">
       <template #reference>
-        <el-badge :value="warnMessageslist.length" class="item">
+        <el-badge :value="warnMessageslist.length" :hidden="warnMessageslist.length === 0" class="item">
           <i :class="'iconfont icon-xiaoxi'" class="toolBar-icon"></i>
         </el-badge>
       </template>
@@ -33,6 +33,7 @@
               <img src="@/assets/images/msg01.png" alt="" class="message-icon" />
               <div class="message-content">
                 <span class="message-title">关于 {{ message.cname }} 的预警信息 💜</span>
+                <span class="message-date" v-if="message.note">防治病虫害描述：{{ message.note }}</span>
                 <span class="message-date">共由 {{ message.Messagelength }} 条预警信息需要处理</span>
                 <el-button class="message-commmit" type="text" @click="viewWarnMessage(message.vaccine_id)"> 查看详情 </el-button>
               </div>

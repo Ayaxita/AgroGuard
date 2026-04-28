@@ -479,26 +479,45 @@ def add_basic_info():
         os.rename(old_name, new_name)
         data['img_right'] = data['ele_num'] + '-' + 'img_right.' + data['img_right'].split('.')[-1]
 
+    # 自动填充 house_name 和 hurdle_name
+    house_id = request.json.get('house_id')
+    hurdle_id = request.json.get('hurdle_id')
+    if house_id is not None:
+        house_info = FieldHouseinfo.query.filter_by(id=house_id).first()
+        if house_info:
+            data['house_name'] = house_info.name
+    if hurdle_id is not None:
+        hurdle_info = FieldHouseinfo.query.filter_by(id=hurdle_id).first()
+        if hurdle_info:
+            data['hurdle_name'] = hurdle_info.name
+
     # 在圈舍表中添加草地数量
-    if request.json.get('house_id') is not None:
-        house_info = FieldHouseinfo.query.filter_by(id=request.json.get('house_id')).first()
-        hurdle_info = FieldHouseinfo.query.filter_by(id=request.json.get('hurdle_id')).first()
-        if house_info.grass_quantity is None:
-            house_info.grass_quantity = 1
-            hurdle_info.grass_quantity = 1
-        else:
-            house_info.grass_quantity += 1
-            hurdle_info.grass_quantity += 1
+    if house_id is not None and hurdle_id is not None:
+        house_info = FieldHouseinfo.query.filter_by(id=house_id).first()
+        hurdle_info = FieldHouseinfo.query.filter_by(id=hurdle_id).first()
+        if house_info and hurdle_info:
+            if house_info.grass_quantity is None:
+                house_info.grass_quantity = 1
+                hurdle_info.grass_quantity = 1
+            else:
+                house_info.grass_quantity += 1
+                hurdle_info.grass_quantity += 1
     basic_info = BasicBasicinfo()
-    if data['f_ele_num'] == '000000000000000':
+    f_ele_num = data.get('f_ele_num', '')
+    m_ele_num = data.get('m_ele_num', '')
+    if f_ele_num == '000000000000000':
         basic_info.father_id = 0
-        basic_info.mother_id = BasicBasicinfo.query.filter_by(ele_num=data['m_ele_num']).first().id
-    elif data['m_ele_num'] == '000000000000000':
+        mother = BasicBasicinfo.query.filter_by(ele_num=m_ele_num).first()
+        basic_info.mother_id = mother.id if mother else 0
+    elif m_ele_num == '000000000000000':
         basic_info.mother_id = 0
-        basic_info.father_id = BasicBasicinfo.query.filter_by(ele_num=data['f_ele_num']).first().id
+        father = BasicBasicinfo.query.filter_by(ele_num=f_ele_num).first()
+        basic_info.father_id = father.id if father else 0
     else:
-        basic_info.father_id = BasicBasicinfo.query.filter_by(ele_num=data['f_ele_num']).first().id
-        basic_info.mother_id = BasicBasicinfo.query.filter_by(ele_num=data['m_ele_num']).first().id
+        father = BasicBasicinfo.query.filter_by(ele_num=f_ele_num).first()
+        mother = BasicBasicinfo.query.filter_by(ele_num=m_ele_num).first()
+        basic_info.father_id = father.id if father else 0
+        basic_info.mother_id = mother.id if mother else 0
     for key, value in data.items():
         setattr(basic_info, key, value)
     try:

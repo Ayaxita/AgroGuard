@@ -179,6 +179,13 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
         "value-format": "YYYY-MM-DD"
       }
     }
+  },
+  {
+    prop: "note",
+    label: "病虫害描述",
+    search: {
+      el: "input"
+    }
   }
   // ,
   // { prop: "operation", label: "操作", fixed: "right", width: 150 }

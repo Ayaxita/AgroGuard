@@ -420,7 +420,7 @@ def get_commodity_info():
             if param == 'f_date':  # 日期需要转换
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
-            elif param == 'explain':
+            elif param == 'explain' or param == 'cname':
                 conditions.append(column.like(f'%{value}%'))
             else:
                 conditions.append(column == value)

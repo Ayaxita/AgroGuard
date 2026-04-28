@@ -22,6 +22,7 @@ services:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
       --max_allowed_packet=64M
+      --init-connect="SET NAMES utf8mb4"
 
   flask:
     hostname: flask
