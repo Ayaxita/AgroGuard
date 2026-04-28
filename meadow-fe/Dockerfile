@@ -7,7 +7,7 @@ RUN npm install --registry=https://registry.npmmirror.com -g pnpm
 RUN pnpm install --registry=https://registry.npmmirror.com --frozen-lockfile
 
 COPY . .
-RUN pnpm build:dev
+RUN pnpm build:prod
 
 FROM m.daocloud.io/docker.io/library/nginx:1.27.3-alpine
 
