@@ -35,6 +35,7 @@ services:
       - FLASK_ENV=production
       - DATABASE_URI=mysql+pymysql://root:meadow123@mysql-db:3306/meadow_test
       - JWT_SECRET_KEY=nihaoshijie
+      - ZHIPU_API_KEY=c22e75ec763e4b7183a3eb24e3232c76.MOHB0b4CS5wZS6Zs
     depends_on:
       mysql-db:
         condition: service_healthy

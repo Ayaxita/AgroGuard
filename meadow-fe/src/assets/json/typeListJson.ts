@@ -123,15 +123,15 @@ export const gene_cType = [
 
 export const purposeType = [
   {
-    label: "草地(待分类)",
+    label: "待分类地块",
     value: 0
   },
   {
-    label: "生长期草地",
+    label: "生长期地块",
     value: 1
   },
   {
-    label: "草地幼苗期",
+    label: "幼苗期地块",
     value: 2
   },
   {
@@ -143,30 +143,30 @@ export const purposeType = [
     value: 6
   },
   {
-    label: "成熟草地",
+    label: "成熟地块",
     value: 8
   }
 ];
 
 export const assetStandardType = [
   {
-    label: "草地",
+    label: "地块",
     value: 0
   },
   {
-    label: "生长期草地",
+    label: "生长期地块",
     value: 1
   },
   {
-    label: "幼苗期草地(1月)",
+    label: "幼苗期地块(1月)",
     value: 2
   },
   {
-    label: "幼苗期草地(2月)",
+    label: "幼苗期地块(2月)",
     value: 3
   },
   {
-    label: "其他草地",
+    label: "其他地块",
     value: 4
   }
 ];
@@ -226,43 +226,43 @@ export const stateType = [
 
 export const varietyType = [
   {
-    label: "禾本科草",
+    label: "经济型草地",
     value: 0
   },
   {
-    label: "豆科草",
+    label: "经济型草地",
     value: 1
   },
   {
-    label: "混播草",
+    label: "混合型草地",
     value: 2
   },
   {
-    label: "单作草",
+    label: "单作型地块",
     value: 3
   },
   {
-    label: "多年生草地",
+    label: "多年生地块",
     value: 4
   },
   {
-    label: "一年生草地",
+    label: "一年生地块",
     value: 5
   },
   {
-    label: "耐旱草地",
+    label: "耐旱型地块",
     value: 6
   },
   {
-    label: "耐寒草地",
+    label: "耐寒型地块",
     value: 7
   },
   {
-    label: "高产草地",
+    label: "高产型地块",
     value: 8
   },
   {
-    label: "抗病草地",
+    label: "抗病型地块",
     value: 9
   },
   {
@@ -727,38 +727,38 @@ export const HardeningRankType = [
 
 export const S_processingType = [
   {
-    label: "淘汰草地",
+    label: "淘汰地块",
     value: 3
   },
   {
-    label: "幼苗期草地",
+    label: "幼苗期地块",
     value: 2
   },
   {
-    label: "生长期草地",
+    label: "生长期地块",
     value: 1
   },
   {
-    label: "成熟草地",
+    label: "成熟地块",
     value: 0
   }
 ];
 
 export const G_harvestTypeType = [
   {
-    label: "淘汰草地",
+    label: "淘汰地块",
     value: 3
   },
   {
-    label: "幼苗期草地",
+    label: "幼苗期地块",
     value: 2
   },
   {
-    label: "生长期草地",
+    label: "生长期地块",
     value: 1
   },
   {
-    label: "成熟草地",
+    label: "成熟地块",
     value: 0
   }
 ];
@@ -800,15 +800,15 @@ export const SellingType = [
 
 export const G_harvestG_salesTypeType = [
   {
-    label: "草地残渣",
+    label: "地块残渣",
     value: 0
   },
   {
-    label: "干草",
+    label: "干物料",
     value: 1
   },
   {
-    label: "草地副产物",
+    label: "地块副产物",
     value: 2
   },
   {
@@ -816,7 +816,7 @@ export const G_harvestG_salesTypeType = [
     value: 3
   },
   {
-    label: "饲用草地物料",
+    label: "饲用物料",
     value: 4
   },
   {
@@ -840,7 +840,7 @@ export const InventoryTypeType = [
     value: 1
   },
   {
-    label: "草地投入物料",
+    label: "投入物料",
     value: 2
   },
   {
@@ -862,7 +862,7 @@ export const VaccineTypeType = [
 
 export const FeedingTypeType = [
   {
-    label: "草地投入物料",
+    label: "投入物料",
     value: 2
   },
   {

@@ -78,7 +78,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   // { type: "expand", label: "Expand", width: 85 },
   {
     prop: "huyang",
-    label: "禾本科草",
+    label: "经济型草地",
     _children: [
       {
         prop: "zhongyang",
@@ -188,7 +188,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   },
   {
     prop: "xiaowei",
-    label: "豆科草",
+    label: "经济型草地",
     _children: [
       {
         prop: "zhongyang",
