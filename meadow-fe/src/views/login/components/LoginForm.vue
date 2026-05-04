@@ -21,19 +21,7 @@
   </el-form>
 
   <div class="login-btn">
-    <!-- <el-button :icon="CircleClose" round size="large" @click="resetForm(loginFormRef)"> 重置 </el-button> -->
-    <el-button :icon="UserFilled" round size="large" type="primary" :loading="loading" @click="login(loginFormRef)">
-      登录
-    </el-button>
-  </div>
-  <div class="operation">
-    <div class="forgot-pwd">
-      <!-- <el-button :icon="CircleClose" round size="large" @click="resetForm(loginFormRef)"> 重置 </el-button> -->
-      <el-button plain round size="small" type="text" :loading="loading" @click="login(forgotPwd)">忘记密码</el-button>
-    </div>
-    <div class="register">
-      <el-button plain round size="small" type="text" :loading="loading" @click="login(forgotPwd)">注册用户</el-button>
-    </div>
+    <el-button :icon="UserFilled" size="large" type="primary" :loading="loading" @click="login(loginFormRef)">登录</el-button>
   </div>
 </template>
 
@@ -41,17 +29,14 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { HOME_URL } from "@/config";
-// import { getTimeState } from "@/utils";
 import { Login } from "@/api/interface";
-import { ElMessage, ElNotification } from "element-plus";
 import { loginApi } from "@/api/modules/login";
 import { useUserStore } from "@/stores/modules/user";
 import { useTabsStore } from "@/stores/modules/tabs";
 import { useKeepAliveStore } from "@/stores/modules/keepAlive";
 import { initDynamicRouter } from "@/routers/modules/dynamicRouter";
-import { CircleClose, UserFilled } from "@element-plus/icons-vue";
+import { UserFilled } from "@element-plus/icons-vue";
 import type { ElForm } from "element-plus";
-import md5 from "md5";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -60,7 +45,6 @@ const keepAliveStore = useKeepAliveStore();
 
 type FormInstance = InstanceType<typeof ElForm>;
 const loginFormRef = ref<FormInstance>();
-const forgotPwd = ref<FormInstance>();
 const loginRules = reactive({
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }]
@@ -71,57 +55,13 @@ const loginForm = reactive<Login.ReqLoginForm>({
   username: "",
   password: ""
 });
-//resetpwd
-const resetpwd = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.validate(async valid => {
-    if (!valid) return;
-    loading.value = true;
-    try {
-      // 1.执行登录接口
-      const { data } = await loginApi({ ...loginForm });
-      userStore.setToken(data.access_token);
-      userStore.setRefreshToken(data.refresh_token);
-      let token = data.access_token;
-      let [headerBase64, payloadBase64, sign] = token.split(".");
-      let payload = JSON.parse(atob(payloadBase64));
-      userStore.setUserInfo({ name: payload.sub, expire_date: payload.exp });
-      // 2.添加动态路由
-      await initDynamicRouter();
 
-      // 3.清空 tabs、keepAlive 数据
-      tabsStore.setTabs([]);
-      keepAliveStore.setKeepAliveName([]);
-
-      // 4.跳转到首页
-      router.push(HOME_URL);
-      // ElNotification({
-      //   title: getTimeState(),
-      //   message: "欢迎登录 Geeker-Admin",
-      //   type: "success",
-      //   duration: 3000
-      // });
-      // ElNotification({
-      //   title: "React 付费版本 🔥🔥🔥",
-      //   dangerouslyUseHTMLString: true,
-      //   message: "预览地址：<a href='https://pro.spicyboy.cn'>https://pro.spicyboy.cn</a>",
-      //   type: "success",
-      //   duration: 8000
-      // });
-    } finally {
-      loading.value = false;
-    }
-  });
-};
-// login
 const login = (formEl: FormInstance | undefined) => {
-  // if (!isVarified.value) return ElMessage.error("请进行滑块验证");
   if (!formEl) return;
   formEl.validate(async valid => {
     if (!valid) return;
     loading.value = true;
     try {
-      // 1.执行登录接口
       const { data } = await loginApi({ ...loginForm });
       userStore.setToken(data.access_token);
       userStore.setRefreshToken(data.refresh_token);
@@ -129,42 +69,20 @@ const login = (formEl: FormInstance | undefined) => {
       let [headerBase64, payloadBase64, sign] = token.split(".");
       let payload = JSON.parse(atob(payloadBase64));
       userStore.setUserInfo({ name: payload.sub, expire_date: payload.exp });
-      // 2.添加动态路由
+
       await initDynamicRouter();
 
-      // 3.清空 tabs、keepAlive 数据
       tabsStore.setTabs([]);
       keepAliveStore.setKeepAliveName([]);
 
-      // 4.跳转到首页
       router.push(HOME_URL);
-      // ElNotification({
-      //   title: getTimeState(),
-      //   message: "欢迎登录 Geeker-Admin",
-      //   type: "success",
-      //   duration: 3000
-      // });
-      // ElNotification({
-      //   title: "React 付费版本 🔥🔥🔥",
-      //   dangerouslyUseHTMLString: true,
-      //   message: "预览地址：<a href='https://pro.spicyboy.cn'>https://pro.spicyboy.cn</a>",
-      //   type: "success",
-      //   duration: 8000
-      // });
-    } finally {
+    } catch (error) {
       loading.value = false;
     }
   });
-};
-
-// resetForm
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
 };
 
 onMounted(() => {
-  // 监听 enter 事件（调用登录）
   document.onkeydown = (e: KeyboardEvent) => {
     if (e.code === "Enter" || e.code === "enter" || e.code === "NumpadEnter") {
       if (loading.value) return;

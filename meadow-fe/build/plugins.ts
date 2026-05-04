@@ -85,6 +85,10 @@ const createVitePwa = (viteEnv: ViteEnv): PluginOption | PluginOption[] => {
   const { VITE_GLOB_APP_TITLE } = viteEnv;
   return VitePWA({
     registerType: "autoUpdate",
+    workbox: {
+      clientsClaim: true,
+      skipWaiting: true
+    },
     manifest: {
       name: VITE_GLOB_APP_TITLE,
       short_name: VITE_GLOB_APP_TITLE,
