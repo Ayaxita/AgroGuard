@@ -44,7 +44,6 @@
       </el-form-item> -->
           <el-form-item label="草地编号" prop="ele_num">
             <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-2" :disabled="isEditMode">
-              <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
               添加草地信息
             </el-button>
             <el-input v-model="drawerProps.row.ele_num" clearable :disabled="isEditMode"></el-input>
@@ -52,16 +51,9 @@
           <el-form-item label="地块编号" prop="pre_num">
             <el-input v-model="drawerProps.row.pre_num" clearable :disabled="isEditMode"></el-input>
           </el-form-item>
-          <!-- 生长年数 -->
-          <el-form-item label="生长年数" prop="age">
+          <!-- 生长周期 -->
+          <el-form-item label="生长周期" prop="age">
             <el-input type="number" v-model="drawerProps.row.age" clearable></el-input>
-          </el-form-item>
-
-          <!-- 是否关联 -->
-          <el-form-item v-if="false" label="是否关联" prop="breeding">
-            <el-select v-model="drawerProps.row.breeding" clearable>
-              <el-option v-for="item in BooleanType" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
           </el-form-item>
 
           <!-- 创建人员 -->

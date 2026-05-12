@@ -925,33 +925,24 @@ def export_basic_info():
             '草地类型': variety_value,
             '草地颜色': color_value,
             '作物类型': sex_value,
-            '种植日期': info.birth.isoformat() if info.birth else None,
+            '播种日期': info.birth.isoformat() if info.birth else None,
+            '阶段结束日期': info.wea_date.isoformat() if info.wea_date else None,
             '生长月数': info.mon_age,
             '原产地': info.manu_info_name,
             '状态': state_value,
-            '所属监测区域': info.house_name,
+            '监测区域': info.house_name,
             '监测地块': info.hurdle_name,
-            '出生体重(kg)': info.bir_weight,
-            '成坪重(kg)': info.wea_weight,
-            '受灾等级': rank_value,
-            '父草地编号': info.f_ele_num,
-            '父地块编号': info.f_pre_num,
-            '母草地编号': info.m_ele_num,
-            '母地块编号': info.m_pre_num,
-            '录入人员': info.f_staff,
-            '创建日期': info.f_date.isoformat() if info.f_date else None,
-            '正面照片': info.img_positive,
-            '左侧照片': info.img_left,
-            '右侧照片': info.img_right,
+            '初始生物量(kg)': info.bir_weight,
+            '阶段生物量(kg)': info.wea_weight,
+            '外貌等级': rank_value,
+            '上级地块编号': info.f_ele_num,
+            '上级地块编号': info.f_pre_num,
+            '当前地块编号': info.m_ele_num,
+            '当前地块编号': info.m_pre_num,
+            '多批基因': gen_a_value,
+            '添加人': info.f_staff,
+            '添加时间': info.f_date.isoformat() if info.f_date else None,
             '备注': info.note,
-            '抗虫基因': gen_a_value,
-            '抗病基因': gen_b_value,
-            '耐旱基因': gen_c_value,
-            '综合评分': info.score,
-            '2月生长评分': info.score_2,
-            '6月生长评分': info.score_6,
-            '12月生长评分': info.score_12,
-            '24月生长评分': info.score_24
         })
     dataframes = pd.DataFrame(list)
     # filename = r'.\App\basic\export_excel\basic_info.xlsx'
@@ -1036,7 +1027,8 @@ def import_basic_info():
                 if i['label'] == df.iloc[r, 3]:
                     basic_info.sex = i['value']
             # 来源填什么?
-            basic_info.manu_info_id = BasicManuinfo.query.filter_by(manu_name=df.iloc[r, 5]).first().id
+            _manu = BasicManuinfo.query.filter_by(manu_name=df.iloc[r, 5]).first()
+            basic_info.manu_info_id = _manu.id if _manu else None
             basic_info.manu_info_name = df.iloc[r, 5]
             for i in state_type:
                 if i['label'] == df.iloc[r, 6]:
@@ -1050,9 +1042,11 @@ def import_basic_info():
                 basic_info.birth = df.iloc[r, 9]
             basic_info.bir_weight = df.iloc[r, 10]
             basic_info.wea_weight = df.iloc[r, 11]
-            basic_info.house_id = FieldHouseinfo.query.filter_by(name=df.iloc[r, 7]).first().id
+            _house = FieldHouseinfo.query.filter_by(name=df.iloc[r, 7]).first()
+            basic_info.house_id = _house.id if _house else None
             basic_info.house_name = df.iloc[r, 7]
-            basic_info.hurdle_id = FieldHouseinfo.query.filter_by(name=df.iloc[r, 8]).first().id
+            _hurdle = FieldHouseinfo.query.filter_by(name=df.iloc[r, 8]).first()
+            basic_info.hurdle_id = _hurdle.id if _hurdle else None
             basic_info.hurdle_name = df.iloc[r, 8]
             basic_info.mon_age = df.iloc[r, 12]
             # 如果父母id在数据库里没有怎么办,
@@ -1556,8 +1550,10 @@ def add_fieldcondition_info():
         # 将 datetime 对象转换为指定格式的字符串
         formatted_date = date_obj.strftime('%Y-%m-%d')
         data['date'] = formatted_date
-    if data['ele_num']:
-        data['basic_id'] = BasicBasicinfo.query.filter_by(ele_num = data['ele_num']).first().id
+    if data.get('ele_num'):
+        _record = BasicBasicinfo.query.filter_by(ele_num=data.get('ele_num')).first()
+        if _record:
+            data['basic_id'] = _record.id
         del data['ele_num']
 
     # print(f'data----->{data}')
@@ -1934,9 +1930,12 @@ def get_harvest_info():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'house_name':
-                house_id = FieldHouseinfo.query.filter(
-                    FieldHouseinfo.name.like(f'%{value}%')).first().id
-                conditions.append(column == house_id)
+                _record = FieldHouseinfo.query.filter(
+                    FieldHouseinfo.name.like(f'%{value}%')).first()
+                if _record:
+                    conditions.append(column == _record.id)
+                else:
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 

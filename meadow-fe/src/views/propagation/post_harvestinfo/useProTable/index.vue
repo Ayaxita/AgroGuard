@@ -92,7 +92,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   // },
   {
     prop: "propagation_date",
-    label: "批次建立日期",
+    label: "建立日期",
     width: 115,
     search: {
       el: "date-picker",
@@ -123,22 +123,22 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   //     el: "input"
   //   }
   // },
-  {
-    prop: "ram_ele_num",
-    label: "批次编号",
-    width: 150,
-    search: {
-      el: "input"
-    }
-  },
-  {
-    prop: "ram_pre_num",
-    label: "关联编号",
-    width: 130,
-    search: {
-      el: "input"
-    }
-  },
+  // {
+  //   prop: "ram_ele_num",
+  //   label: "批次编号",
+  //   width: 150,
+  //   search: {
+  //     el: "input"
+  //   }
+  // },
+  // {
+  //   prop: "ram_pre_num",
+  //   label: "关联编号",
+  //   width: 130,
+  //   search: {
+  //     el: "input"
+  //   }
+  // },
   // {
   //   prop: "ewe_id",
   //   label: "关联记录编号",
@@ -219,16 +219,16 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   //     }
   //   }
   // },
-  {
-    prop: "live_num",
-    label: "批次数",
-    search: {
-      el: "input",
-      props: {
-        type: "number"
-      }
-    }
-  },
+  // {
+  //   prop: "live_num",
+  //   label: "批次数",
+  //   search: {
+  //     el: "input",
+  //     props: {
+  //       type: "number"
+  //     }
+  //   }
+  // },
   {
     prop: "planting_attendants",
     label: "采收人员",

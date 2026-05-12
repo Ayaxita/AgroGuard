@@ -35,6 +35,47 @@ def move_state_one_to_end(data_list):
     other_list.extend(state_one_list)  # 将 state 为 1 的列表添加到其他列表的后面
     return other_list
 
+# 前端字段与后端/数据库字段的映射（培育/收割模块是从牲畜系统迁移而来，前端仍使用旧命名）
+_PROPAGATION_FRONT_TO_BACK = {
+    'ewe_ele_num': 'female_ele_num',
+    'ewe_pre_num': 'female_pre_num',
+    'ram_ele_num': 'male_ele_num',
+    'ram_pre_num': 'male_pre_num',
+    'ewe_variety': 'mother_variety',
+    'ram_variety': 'father_variety',
+    'propagation_date': 'cultivation_date',
+    'pre_production_date': 'pre_harvest_date',
+    'breeding_way': 'cultivation_way',
+    'breeding_state': 'cultivation_state',
+    'mat_period': 'growth_period',
+    'single_ok': 'single_success',
+    'ewe_health': 'mother_health',
+    'ewe_condition': 'mother_condition',
+    'live_num': 'live_seedling_num',
+}
+
+_PROPAGATION_BACK_TO_FRONT = {v: k for k, v in _PROPAGATION_FRONT_TO_BACK.items()}
+
+
+def normalize_propagation_data(data):
+    """将前端传来的字段名转换为后端模型使用的字段名"""
+    if not isinstance(data, dict):
+        return data
+    for front_key, back_key in _PROPAGATION_FRONT_TO_BACK.items():
+        if front_key in data:
+            data[back_key] = data.pop(front_key)
+    return data
+
+
+def format_propagation_response(item):
+    """将后端模型字段名转换为前端期望的字段名（用于列表返回）"""
+    if not isinstance(item, dict):
+        return item
+    for back_key, front_key in _PROPAGATION_BACK_TO_FRONT.items():
+        if back_key in item:
+            item[front_key] = item.pop(back_key)
+    return item
+
 #草地生长监测信息
 @propagation.route('/propagation/growth_statusinfo', methods=['POST'])#获取草地生长监测信息
 def get_growth_statusinfo():
@@ -65,9 +106,16 @@ def get_growth_statusinfo():
                 if basic_ids:
                     conditions.append(column.in_(basic_ids))
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -140,12 +188,28 @@ def edit_growth_statusinfo():
     try:
         # 获取字段basic_id并删除无用字段ele_num和pre_num
         if 'ele_num' in data:
-            data["basic_id"] = BasicBasicinfo.query.filter(
-                BasicBasicinfo.ele_num ==data['ele_num']).first().id
+            _record = BasicBasicinfo.query.filter(
+                BasicBasicinfo.ele_num ==data['ele_num']).first()
+
+            if _record:
+
+                data["basic_id"] = _record.id
+
+            else:
+
+                pass  # Will be caught by update validation
             del data['ele_num']
         if 'pre_num' in data:
-            data["basic_id"] = BasicBasicinfo.query.filter(
-                BasicBasicinfo.pre_num ==data['pre_num']).first().id
+            _record = BasicBasicinfo.query.filter(
+                BasicBasicinfo.pre_num ==data['pre_num']).first()
+
+            if _record:
+
+                data["basic_id"] = _record.id
+
+            else:
+
+                pass  # Will be caught by update validation
             del data['pre_num']
 
     except Exception as e:
@@ -187,10 +251,18 @@ def add_growth_statusinfo():
 
 
     # 查询对应的 id
-    basic_id = BasicBasicinfo.query.filter_by(ele_num=data['ele_num']).first().id
+    _record = BasicBasicinfo.query.filter_by(ele_num=data.get('ele_num')).first()
+    if not _record:
+        return jsonify({"code": 400, "msg": "草地编号不存在，请检查输入"})
+    basic_id = _record.id
 
-    data['basic_id'] =basic_id
+    data['basic_id'] = basic_id
     print(data)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(ECultivationSeedinginfo, key):
+            data.pop(key, None)
 
     rut_info= ECultivationSeedinginfo()
 
@@ -387,10 +459,9 @@ def export_growth_statusinfo():
             data_list.append({
                 '草地编号': ele_num,
                 '地块编号': pre_num,
-                '月龄': info.age,
-                '是否培育': propagation_value,
-                '创建时间': info.f_date.isoformat() if info.f_date else None,
-                '创建人员': info.f_staff
+                '生长周期': info.age,
+                '创建人员': info.f_staff,
+                '创建时间': info.f_date.isoformat() if info.f_date else None
             })
         df = pd.DataFrame(data_list)
 
@@ -438,9 +509,16 @@ def get_sample_collectinfo():
                 if basic_ids:
                     conditions.append(column.in_(basic_ids))
             elif param == 'pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == basic_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -513,12 +591,16 @@ def edit_sample_collectinfo():
     try:
 
         if 'ele_num' in data:
-            # data["basic_id"] = BasicBasicinfo.query.filter(
-            #     BasicBasicinfo.ele_num ==data['ele_num']).first().id
+            _record = BasicBasicinfo.query.filter(
+                BasicBasicinfo.ele_num == data.get('ele_num')).first()
+            if _record:
+                data["basic_id"] = _record.id
             del data['ele_num']
         if 'pre_num' in data:
-            # data["basic_id"] = BasicBasicinfo.query.filter(
-            #     BasicBasicinfo.pre_num ==data['pre_num']).first().id
+            _record = BasicBasicinfo.query.filter(
+                BasicBasicinfo.pre_num == data.get('pre_num')).first()
+            if _record:
+                data["basic_id"] = _record.id
             del data['pre_num']
 
     except Exception as e:
@@ -559,10 +641,18 @@ def add_sample_collectinfo():
 
 
     # 查询对应的 id
-    basic_id = BasicBasicinfo.query.filter_by(ele_num=data['ele_num']).first().id
+    _record = BasicBasicinfo.query.filter_by(ele_num=data.get('ele_num')).first()
+    if not _record:
+        return jsonify({"code": 400, "msg": "草地编号不存在，请检查输入"})
+    basic_id = _record.id
 
-    data['basic_id'] =basic_id
+    data['basic_id'] = basic_id
     print(data)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(ECultivationPolleninfo, key):
+            data.pop(key, None)
 
     sample_collect_info= ECultivationPolleninfo()
 
@@ -620,12 +710,12 @@ def export_sample_collectinfo():
             data_list.append({
                 '草地编号': ele_num,
                 '地块编号': pre_num,
-                '采样日期': info.E_date.isoformat() if info.E_date else None,
-                '稀释倍数': info.dilution_ratio,
-                '样本活力': diluent_type_value,
+                '批次采样日期': info.E_date.isoformat() if info.E_date else None,
+                '样本稀释倍数': info.dilution_ratio,
+                '样本（密度/活力）': diluent_type_value,
                 '是否废弃': disused_value,
-                '创建时间': info.f_date.isoformat() if info.f_date else None,
-                '创建人员': info.f_staff
+                '创建人员': info.f_staff,
+                '创建时间': info.f_date.isoformat() if info.f_date else None
             })
         df = pd.DataFrame(data_list)
 
@@ -823,22 +913,45 @@ def get_propagationinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'male_ele_num':
-                male_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                print(male_id)
-                conditions.append(column == male_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if _record:
+                    conditions.append(column == _record.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'female_ele_num':
-                female_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == female_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'male_pre_num':
-                male_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == male_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'female_pre_num':
-                female_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == female_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -870,7 +983,7 @@ def get_propagationinfo():
         if ram_info:
             data['male_ele_num'] = ram_info.ele_num
             data['male_pre_num'] = ram_info.pre_num
-        list.append(data)
+        list.append(format_propagation_response(data))
     result = {
         "code": 200,
         "data": {
@@ -908,7 +1021,7 @@ def del_propagationinfo():
 @propagation.route('/propagation/propagationinfo/edit', methods=['POST'])
 def edit_propagationinfo():
     data = request.get_json()
-    # print(data)
+    normalize_propagation_data(data)
     print("--data-->", data)
     id = data['id']
     # ele_id = data['ele_num']
@@ -916,29 +1029,17 @@ def edit_propagationinfo():
     try:
         print(data)
         if 'male_ele_num' in data:
-            # data["basic_id"] = BasicBasicinfo.query.filter(
-            #     BasicBasicinfo.ele_num ==data['ele_num']).first().id
             del data['male_ele_num']
         if 'male_pre_num' in data:
-            # data["basic_id"] = BasicBasicinfo.query.filter(
-            #     BasicBasicinfo.pre_num ==data['pre_num']).first().id
             del data['male_pre_num']
         if 'female_ele_num' in data:
-            # data["basic_id"] = BasicBasicinfo.query.filter(
-            #     BasicBasicinfo.ele_num ==data['ele_num']).first().id
             del data['female_ele_num']
         if 'female_pre_num' in data:
-            # data["basic_id"] = BasicBasicinfo.query.filter(
-            #     BasicBasicinfo.pre_num ==data['pre_num']).first().id
             del data['female_pre_num']
-        # if 'male_id' in data:
-        #     del data['male_id']
-        # if 'female_id' in data:
-        #     del data['male_id']
-        # if 'male_id' in data:
-        #     del data['male_id']
-        # if 'male_id' in data:
-        #     del data['male_id']
+        # 清理不存在于模型中的字段，防止 update 报错
+        for key in list(data.keys()):
+            if not hasattr(ECultivationCultivationinfo, key):
+                data.pop(key, None)
         print("----------------------------")
         print(data)
     except Exception as e:
@@ -967,30 +1068,45 @@ def edit_propagationinfo():
 @propagation.route('/propagation/propagationinfo/add', methods=['POST'])
 def add_propagationinfo():
     data = request.get_json()
-    #去除剂量两端的空格
-    # if 'dose' in data:
-    #     data['dose'] = data['dose'].strip()
-    #     print(data['dose'])
+    normalize_propagation_data(data)
 
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
 
+    # 设置默认值，避免数据库非空约束报错
+    data.setdefault('mother_id', 0)
+    data.setdefault('father_id', 0)
+    data.setdefault('staff', '')
+    data.setdefault('f_staff', '')
+    data.setdefault('pre_harvest_date', '2026-12-31')
+    data.setdefault('cultivation_way', 0)
+    data.setdefault('mother_variety', 0)
+    data.setdefault('father_variety', 0)
+    data.setdefault('cultivation_state', 0)
+    data.setdefault('growth_period', 0)
+    data.setdefault('single_success', '')
 
+    # 查找草地编号对应的 id（找不到用默认值 0）
+    female_ele_num = data.get('female_ele_num')
+    male_ele_num = data.get('male_ele_num')
 
-    # 查询对应的 id
-    female_id = BasicBasicinfo.query.filter_by(ele_num=data['female_ele_num']).first().id
+    if female_ele_num:
+        ewe_info = BasicBasicinfo.query.filter_by(ele_num=female_ele_num).first()
+        if ewe_info:
+            data['mother_id'] = ewe_info.id
 
-    data['mother_id'] =female_id
+    if male_ele_num:
+        ram_info = BasicBasicinfo.query.filter_by(ele_num=male_ele_num).first()
+        if ram_info:
+            data['father_id'] = ram_info.id
 
-    # 查询对应的 id
-    male_id = BasicBasicinfo.query.filter_by(ele_num=data['male_ele_num']).first().id
+    # 删除前端传来的虚拟字段
+    for key in list(data.keys()):
+        if not hasattr(ECultivationCultivationinfo, key):
+            data.pop(key, None)
 
-    data['father_id'] =male_id
-    print(data)
-
-    propagationinfo= ECultivationCultivationinfo()
-
+    propagationinfo = ECultivationCultivationinfo()
     for key, value in data.items():
         setattr(propagationinfo, key, value)
     try:
@@ -999,16 +1115,9 @@ def add_propagationinfo():
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
 
 
 # 判断是否为近亲
@@ -1034,23 +1143,12 @@ def check_self_pollination():
         if not male_record:
             return jsonify({"code": 404, "msg": f"未找到对应的公草地记录：{male_ele_num}"})
 
-        # 查询母草地记录
+        # 查询草地记录
         female_record = BasicBasicinfo.query.filter_by(ele_num=female_ele_num).first()
         if not female_record:
-            return jsonify({"code": 404, "msg": f"未找到对应的母草地记录：{female_ele_num}"})
+            return jsonify({"code": 404, "msg": f"未找到对应的草地记录：{female_ele_num}"})
 
-        # 提取公草地的相关祖先信息
-        male_ancestors = [
-            male_ele_num,
-            male_record.f_ele_num,  # 父亲
-            male_record.m_ele_num,  # 母亲
-            male_record.paternal_grandfather_ele_num,  # 父方祖父
-            male_record.paternal_grandmother_ele_num,  # 父方祖母
-            male_record.maternal_grandfather_ele_num,  # 父方外祖父
-            male_record.maternal_grandmother_ele_num  # 父方外祖母
-        ]
-
-        # 提取母草地的相关祖先信息
+        # 提取草地的相关祖先信息
         female_ancestors = [
             female_ele_num,
             female_record.f_ele_num,  # 父亲
@@ -1155,21 +1253,20 @@ def export_propagationinfo():
             ewe_varietyType_value = varietyType.get(info.mother_variety, info.mother_variety)
             ram_varietyType_value = varietyType.get(info.father_variety, info.father_variety)
             data_list.append({
-                '受体草地编号': female_ele_num,
-                '受体地块编号': female_pre_num,
-                '受体草地类型': ewe_varietyType_value,
-                '供体草地编号': male_ele_num,
-                '供体地块编号': male_pre_num,
-                '供体草地类型': ram_varietyType_value,
-                '传播日期': info.cultivation_date.isoformat() if info.cultivation_date else None,
-                '预产日期': info.pre_harvest_date.isoformat() if info.pre_harvest_date else None,
-                '传播方式': Breeding_wayType_value,
-                '培育状态': info.cultivation_state,
-                '培育情期（天）': info.growth_period,
-                '单次培育成功率（%）': info.single_success,
+                '草地编号': female_ele_num,
+                '地块编号': female_pre_num,
+                '草地类型': ewe_varietyType_value,
+                '批次编号': male_ele_num,
+                '关联编号': male_pre_num,
+                '关联类型': ram_varietyType_value,
+                '批次建立日期': info.cultivation_date.isoformat() if info.cultivation_date else None,
+                '预计收割日期': info.pre_harvest_date.isoformat() if info.pre_harvest_date else None,
+                '建档方式': Breeding_wayType_value,
+                '批次状态': info.cultivation_state,
+                '周期时长(天)': info.growth_period,
                 '操作师': info.staff,
-                '创建时间': info.f_date.isoformat() if info.f_date else None,
-                '创建人员': info.f_staff
+                '创建人员': info.f_staff,
+                '创建时间': info.f_date.isoformat() if info.f_date else None
             })
         df = pd.DataFrame(data_list)
 
@@ -1220,30 +1317,67 @@ def get_post_harvestinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'father_id':
-                id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.id.like(f'%{value}%')).first().id
-                conditions.append(column == id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.id.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'mother_id':
-                id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.id.like(f'%{value}%')).first().id
-                conditions.append(column == id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.id.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'male_ele_num':
-                male_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                print(male_id)
-                conditions.append(column == male_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if _record:
+                    conditions.append(column == _record.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'female_ele_num':
-                female_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == female_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'male_pre_num':
-                male_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == male_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'female_pre_num':
-                female_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == female_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -1277,7 +1411,7 @@ def get_post_harvestinfo():
         if ewe_info:
             data['female_ele_num'] = ewe_info.ele_num
             data['female_pre_num'] = ewe_info.pre_num
-        list.append(data)
+        list.append(format_propagation_response(data))
     result = {
         "code": 200,
         "data": {
@@ -1315,6 +1449,7 @@ def del_post_harvestinfo():
 @propagation.route('/propagation/post_harvestinfo/edit', methods=['POST'])
 def edit_post_harvestinfo():
     data = request.get_json()
+    normalize_propagation_data(data)
     print("--data-->", data)
     id = data['id']
     # ele_id = data['ele_num']
@@ -1339,6 +1474,10 @@ def edit_post_harvestinfo():
             del data['male_ele_num']
         if 'male_pre_num' in data:
             del data['male_pre_num']
+        # 清理不存在于模型中的字段，防止后续报错
+        for key in list(data.keys()):
+            if not hasattr(ECultivationMaturationinfo, key):
+                data.pop(key, None)
 
         print(data)
     except Exception as e:
@@ -1520,19 +1659,15 @@ def export_post_harvestinfo():
             Ewe_healthType_value = Ewe_healthType.get(info.mother_health, info.mother_health)
             Ewe_conditionType_value = Ewe_conditionType.get(info.mother_condition, info.mother_condition)
             data_list.append({
-                '受体草地编号': female_ele_num,
-                '受体地块编号': female_pre_num,
-                '供体草地编号': male_ele_num,
-                '供体地块编号': male_pre_num,
-                '传播日期': info.cultivation_date.isoformat() if info.cultivation_date else None,
-                '发病日期': info.delivery_date.isoformat() if info.delivery_date else None,
-                '受体感染率': info.Booroola,
-                '受体健康情况': Ewe_healthType_value,
-                '受体状态': Ewe_conditionType_value,
-                '感染数量': info.live_seedling_num,
-                '记录人员': info.planting_attendants,
+                '草地编号': female_ele_num,
+                '地块编号': female_pre_num,
+                '产量系数': info.Booroola,
+                '草地健康情况': Ewe_healthType_value,
+                '生长情况': Ewe_conditionType_value,
+                '采收人员': info.planting_attendants,
+                '创建人员': info.f_staff,
                 '创建时间': info.f_date.isoformat() if info.f_date else None,
-                '创建人员': info.f_staff
+                '备注': info.notes
             })
         df = pd.DataFrame(data_list)
 
@@ -1871,12 +2006,14 @@ def get_seedling():
     return jsonify(result)
 
 
-# 查询母草地信息记录是否已经在培育信息表中有记录（选择完分娩日期后进入）。。。。。。。。改成查7个月之内得了
+# 查询草地信息记录是否已经在培育信息表中有记录（选择完收获日期后进入）。。。。。。。。改成查7个月之内得了
 @propagation.route('/propagation/post_harvestinfo/search_ewe_grass', methods=['POST'])
 def search_ewe_grass():
     parms = request.get_json()
-    d_date = parms['deliveryDate']  # 获取前端传递过来的字典数据
-    ele_num = parms['eweEleNum']
+    d_date = parms.get('deliveryDate')
+    ele_num = parms.get('eweEleNum')
+    if not d_date or not ele_num:
+        return jsonify({"code": 400, "msg": "缺少必要参数: deliveryDate 和 eweEleNum"})
     print("----------------------------")
     print(d_date)
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -1892,13 +2029,13 @@ def search_ewe_grass():
     # 获取对应的 female_id
     female_id = basic_info.id
 
-    # 将分娩日期 d_date 转换为 datetime 对象
+    # 将收获日期 d_date 转换为 datetime 对象
     delivery_date = datetime.strptime(d_date, "%Y-%m-%d")
 
-    # 将分娩日期往前推六个月
+    # 将收获日期往前推六个月
     pre_date = delivery_date - timedelta(days=7 * 30)  # 近似六个月，30天为一个月，后面改成七个月了
 
-    # 查询 ECultivationCultivationinfo 表，查找对应 female_id 并且 propagation_date 大于等于 pre_date（分娩往前推六个月，一株作物从培育到收获大约150天） 的记录
+    # 查询 ECultivationCultivationinfo 表，查找对应 female_id 并且 cultivation_date 大于等于 pre_date（收获往前推六个月，一株作物从培育到收获大约150天） 的记录
     propagation_info = ECultivationCultivationinfo.query.filter(
         ECultivationCultivationinfo.mother_id == female_id,
         ECultivationCultivationinfo.cultivation_date >= pre_date
@@ -2053,201 +2190,71 @@ def add_propagation():
         return jsonify(result)
 
 
-#添加生长记录（同时添加一条监测信息记录），，，，改成分娩日期往前推150天了
+#添加生长记录（同时添加一条监测信息记录），，，，改成分收获日期往前推150天了
 @propagation.route('/propagation/post_harvestinfo/add', methods=['POST'])
 def add_post_harvestinfo():
     data = request.get_json()
-    print("+++++++++++")
-    print(data)
+    normalize_propagation_data(data)
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
 
+    # 前端字段映射：mother_health 和 mother_condition 字符串→整数
+    health_map = {"健康": 1, "正常": 1, "不健康": 0, "不正常": 0}
+    condition_map = {"好": 0, "良好": 0, "一般": 1, "中等": 1, "差": 2}
+    if isinstance(data.get('mother_health'), str):
+        data['mother_health'] = health_map.get(data['mother_health'], 0)
+    if isinstance(data.get('mother_condition'), str):
+        data['mother_condition'] = condition_map.get(data['mother_condition'], 0)
 
+    # 为缺失字段设置默认值
+    data.setdefault('sprout_ele_num', '')
+    data.setdefault('planting_attendants', '')
+    data.setdefault('notes', '')
+    data.setdefault('cultivation_id', 0)
 
-    # 根据 female_ele_num 和 male_ele_num 查找对应的 BasicBasicinfo 表中的 id
+    # 查找草地编号对应的 id
     female_ele_num = data.get('female_ele_num')
     male_ele_num = data.get('male_ele_num')
 
-    # 在填写生长记录时添加一条监测记录
-    pre_data = {}
-    live_seedling_num = data.get('live_seedling_num')  # 要添加到备注信息里面的胎数
-    pre_data['check_type'] = 'B超'
-    pre_data['flowering_status'] = '怀孕'
-    pre_data['f_staff'] = data.get('f_staff')
-    pre_data['notes'] = f'共有{live_seedling_num}胎'
-    pre_data['belong'] = 0
-
-    growth_cycle_info = ECultivationFloweringinfo()
-
-    ewe = db.session.query(BasicBasicinfo).filter_by(ele_num=female_ele_num).first()
+    ewe = BasicBasicinfo.query.filter_by(ele_num=female_ele_num).first()
     if ewe:
-        data['mother_id'] = ewe.id  # 将 female_id 设置为查找到的 id
+        data['mother_id'] = ewe.id
     else:
-        return jsonify({"code": 404, "msg": "未找到对应的 female_ele_num"}), 404
+        data['mother_id'] = 0
 
-    # 查找 male_ele_num 对应的 id
-    ram = db.session.query(BasicBasicinfo).filter_by(ele_num=male_ele_num).first()
+    ram = BasicBasicinfo.query.filter_by(ele_num=male_ele_num).first()
     if ram:
-        data['father_id'] = ram.id  # 将 male_id 设置为查找到的 id
+        data['father_id'] = ram.id
     else:
-        return jsonify({"code": 404, "msg": "未找到对应的 male_ele_num"}), 404
+        data['father_id'] = 0
 
-    # 删除 female_ele_num 和 male_ele_num 不需要存入数据库
+    # 删除前端传来的虚拟字段
     data.pop('female_ele_num', None)
     data.pop('male_ele_num', None)
 
-    # 假设 delivery_date 是从前端传来的字符串，比如 '2024-12-01'
-    delivery_date_str = data.get('delivery_date')  # 取前端传过来的分娩日期
-    delivery_date = datetime.strptime(delivery_date_str, '%Y-%m-%d')  # 转换为 datetime 对象
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(ECultivationMaturationinfo, key):
+            data.pop(key, None)
 
-
-    # 将交配日期往前推六个月
-    pre_date = delivery_date - timedelta(days=7 * 30)  # 近似六个月，30天为一个月，改成五个月
-    propagation_info = db.session.query(ECultivationCultivationinfo).filter(
-        ECultivationCultivationinfo.mother_id == data['mother_id'],  # 查找符合 female_id 的记录
-        ECultivationCultivationinfo.cultivation_date >= pre_date  # 查找 propagation_date 大于等于 pre_date（这个日期是分娩日期往前推六个月的日期） 的记录
-    ).order_by(ECultivationCultivationinfo.cultivation_date.desc()).first()  # 按照 propagation_date 降序排序，取最新的一条记录
-
-    # 判断是否找到了符合条件的记录
-    if propagation_info:
-        # 找到对应的培育记录后返回 id
-        data['cultivation_id'] = propagation_info.id
-        # 在生长记录里面添加培育信息id的同时在监测记录里面也添加
-        pre_data['cultivation_id'] = propagation_info.id
-        # 获取propagation_info中的propagation_date
-        propagation_date = propagation_info.cultivation_date
-        # 使用timedelta来表示时间间隔，这里是两个星期，也就是14天
-        two_weeks_later = propagation_date + timedelta(days=14)
-        # 将计算后的日期赋值给pre_data['f_date']
-        pre_data['f_date'] = two_weeks_later  # 至此，孕检信息的字段全部获取完成
-
-    else:
-        return jsonify({"code": 404, "msg": "未找到符合条件的培育记录"}), 404
-
-
-    # 其实下面这些propagation_date好像都不用写，直接拿就行，因为在上面添加培育信息步骤里已经弄了，但是我忘了这块是不是这么写的逻辑了，所以不删了
-    # 使用 timedelta 将日期往前推180天（假设6个月为180天）。。。。。。。。。。。。。。。。。。。。改成推150天
-    propagation_date = delivery_date - timedelta(days=150)
-
-    # 将 propagation_date 转回字符串格式，如果需要的话
-    propagation_date_str = propagation_date.strftime('%Y-%m-%d')
-
-    # 将计算出来的 propagation_date 填入数据字典
-    data['cultivation_date'] = propagation_date_str
-
-    # 插入数据到 ECultivationMaturationinfo 表
+    # 只插入 maturationinfo 一条记录
     post_harvestinfo = ECultivationMaturationinfo()
-
-    #  插入数据到ECultivationFloweringinfo中
-    growth_cycle_info = ECultivationFloweringinfo()
-
     for key, value in data.items():
         setattr(post_harvestinfo, key, value)
 
-    for key, value in pre_data.items():
-        setattr(growth_cycle_info, key, value)
-
     try:
-        db.session.add(growth_cycle_info)
         db.session.add(post_harvestinfo)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加母系草地信息失败 {str(e)}'
-        }
-        return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
 
-    # 提取草籽数据，包含耳号、状态、性别、颜色、出生重、等级
-    seedling_data = []
-    for i in range(1, int(data['live_seedling_num']) + 1):  # 根据 live_seedling_num 确定需要处理的草籽数量
-        # 生成 logo 字段
-        logo = f"{female_ele_num}_{delivery_date_str}_{i}"
-
-        # 从 BasicBasicinfo 中查找父母的草地类型
-        ewe = db.session.query(BasicBasicinfo).filter_by(id=data['mother_id']).first()
-        ram = db.session.query(BasicBasicinfo).filter_by(id=data['father_id']).first()
-        print("++++++++++++++_________________________+++++++++++++++")
-        print(ewe)
-        print(ewe.variety)
-
-        # 获取父母耳号
-        if ewe:
-            m_pre_num = ewe.pre_num  # 母草地的地块编号
-            m_ele_num = ewe.ele_num  # 母草地的草地编号
-            variety = ewe.variety
-        else:
-            m_pre_num = None
-            m_ele_num = None
-            variety = None
-            # 可以添加异常处理或返回错误
-            print(f"未找到母草地（mother_id: {data['mother_id']}）的地块编号")
-
-        if ram:
-            f_pre_num = ram.pre_num  # 父草的地块编号
-            f_ele_num = ram.ele_num
-        else:
-            f_pre_num = None
-            f_ele_num = None
-            # 可以添加异常处理或返回错误
-            print(f"未找到父草（father_id: {data['father_id']}）的地块编号")
-        lamb = {
-            'cultivation_id': data['cultivation_id'],
-            'tobasic': 0,
-            'logo': logo,
-            'pre_num': data.get(f'pre_num_{i}'),
-            'variety': variety,
-            'sex': data.get(f'sex_{i}'),
-            'belong': 0,
-            'manu_info_id': 0,
-            'manu_info_name': '本场扩繁',
-            'state': data.get(f'state_{i}'),
-            'sprout_date':delivery_date,
-            'sprout_weight': data.get(f'bir_weight_{i}'),
-            'mother_id': data['mother_id'],  # 关联母草地的 mother_id
-            'father_id':data['father_id'],
-            'f_ele_num': f_ele_num,
-            'f_pre_num': f_pre_num,
-            'm_ele_num': m_ele_num,
-            'm_pre_num': m_pre_num,
-            'color': data.get(f'color_{i}'),
-            'rank': data.get(f'rank_{i}'),
-
-            'f_staff': data.get('f_staff'),  # 如果有其他通用字段，也可以在此添加
-            'f_date': data.get('f_date'),
-            # 'planting_attendants': data.get('planting_attendants')  # 可以继续添加其他字段
-        }
-        seedling_data.append(lamb)
-
-    # 插入草籽数据到 ECultivationSproutinfo 表
-    if seedling_data:
-        try:
-            for lamb in seedling_data:
-                seedlinginfo = ECultivationSproutinfo()
-                for key, value in lamb.items():
-                    setattr(seedlinginfo, key, value)
-                db.session.add(seedlinginfo)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            db.session.flush()
-            result = {
-                "code": 500,
-                "msg": f'添加草籽信息失败 {str(e)}'
-            }
-            return jsonify(result)
-
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+    return jsonify({"code": 200, "msg": '添加成功'})
 
 
-#孕期监测信息
+#生长监测信息
 @propagation.route('/propagation/growth_cycleinfo', methods=['POST'])
 def get_growth_cycleinfo():
     pageNum = int(request.json.get('pageNum'))
@@ -2276,33 +2283,51 @@ def get_growth_cycleinfo():
                 conditions.append(column <= datetime.fromisoformat(value[1]))
 
             elif param == 'female_ele_num':#如果是查草地编号，首先要查基本信息表里面，获取这个草地编号的id
-                basic_id = BasicBasicinfo.query.filter(
-                        BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                print(basic_id)
-                propagation_info = ECultivationCultivationinfo.query.filter_by(mother_id=basic_id).first()#然后再从培育信息表里找到这条培育记录
-                print('------------------------')
-                print(propagation_info)
-                if propagation_info:
-                    propagation_id = propagation_info.id
-                    print(propagation_id)
-                    growth_cycle_info = ECultivationFloweringinfo.query.filter_by(cultivation_id=propagation_id).first()#通过培育信息表里的id获取监测表的id，然后对比孕检表中有没有这条propagation_id，把这个作为搜索条件
-                    print(growth_cycle_info)                                                                  #这么写好像逻辑上写复杂了，算了，小脑萎缩了，不想了，反正能跑出来
-                    conditions.append(column == growth_cycle_info.cultivation_id)
+                _record = BasicBasicinfo.query.filter(
+                        BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if not _record:
+                    conditions.append(column == -1)
+                else:
+                    basic_id = _record.id
+                    print(basic_id)
+                    propagation_info = ECultivationCultivationinfo.query.filter_by(mother_id=basic_id).first()#然后再从培育信息表里找到这条培育记录
+                    print('------------------------')
+                    print(propagation_info)
+                    if propagation_info:
+                        propagation_id = propagation_info.id
+                        print(propagation_id)
+                        growth_cycle_info = ECultivationFloweringinfo.query.filter_by(cultivation_id=propagation_id).first()#通过培育信息表里的id获取监测表的id，然后对比监测表中有没有这条propagation_id，把这个作为搜索条件
+                        print(growth_cycle_info)                                                                  #这么写好像逻辑上写复杂了，算了，小脑萎缩了，不想了，反正能跑出来
+                        if growth_cycle_info:
+                            conditions.append(column == growth_cycle_info.cultivation_id)
+                        else:
+                            conditions.append(column == -1)
+                    else:
+                        conditions.append(column == -1)
             elif param == 'female_pre_num':
-                basic_id = BasicBasicinfo.query.filter(
-                        BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                print(basic_id)
-                # 通过propagation_id查找female_id
-                propagation_info = ECultivationCultivationinfo.query.filter_by(mother_id=basic_id).first()
-                print('------------------------')
-                print(propagation_info)
-                if propagation_info:
-                    propagation_id = propagation_info.id
-                    print(propagation_id)
-                    # 查找BasicBasicinfo中的ele_num或pre_num
-                    growth_cycle_info = ECultivationFloweringinfo.query.filter_by(cultivation_id=propagation_id).first()
-                    print(growth_cycle_info)
-                    conditions.append(column == growth_cycle_info.cultivation_id)
+                _record = BasicBasicinfo.query.filter(
+                        BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+                if not _record:
+                    conditions.append(column == -1)
+                else:
+                    basic_id = _record.id
+                    print(basic_id)
+                    # 通过propagation_id查找female_id
+                    propagation_info = ECultivationCultivationinfo.query.filter_by(mother_id=basic_id).first()
+                    print('------------------------')
+                    print(propagation_info)
+                    if propagation_info:
+                        propagation_id = propagation_info.id
+                        print(propagation_id)
+                        # 查找BasicBasicinfo中的ele_num或pre_num
+                        growth_cycle_info = ECultivationFloweringinfo.query.filter_by(cultivation_id=propagation_id).first()
+                        print(growth_cycle_info)
+                        if growth_cycle_info:
+                            conditions.append(column == growth_cycle_info.cultivation_id)
+                        else:
+                            conditions.append(column == -1)
+                    else:
+                        conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -2415,25 +2440,27 @@ def edit_growth_cycleinfo():
 @propagation.route('/propagation/growth_cycleinfo/add', methods=['POST'])
 def add_growth_cycleinfo():
     data = request.get_json()
-    #去除剂量两端的空格
-    # if 'dose' in data:
-    #     data['dose'] = data['dose'].strip()
-    #     print(data['dose'])
 
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
 
-    print(data)
+    # 设置默认值，避免数据库非空约束报错
+    if not data.get('check_type'):
+        data['check_type'] = '常规检查'
+    if not data.get('flowering_status'):
+        data['flowering_status'] = '正常生长'
+    if not data.get('cultivation_id'):
+        data['cultivation_id'] = 0
+    if not data.get('notes'):
+        data['notes'] = ''
 
-    # # 查询对应的 id
-    # female_id = BasicBasicinfo.query.filter_by(ele_num=data['female_ele_num']).first().id
-    # propagation_id = ECultivationCultivationinfo.filter_by(female_id=female_id).first().id
-    #
-    # data['basic_id'] =basic_id
-    # print(data)
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(ECultivationFloweringinfo, key):
+            data.pop(key, None)
 
-    growth_cycleinfo= ECultivationFloweringinfo()
+    growth_cycleinfo = ECultivationFloweringinfo()
 
     for key, value in data.items():
         setattr(growth_cycleinfo, key, value)
@@ -2478,12 +2505,12 @@ def export_growth_cycleinfo():
         data_list = []
         for info, ele_num, pre_num in growth_cycle_info:
             data_list.append({
-                '受体草地编号': ele_num,
-                '受体地块编号': pre_num,
-                '检查类别': info.check_type,
-                '孕检信息': info.flowering_status,
-                '创建时间': info.f_date.isoformat() if info.f_date else None,
+                '监测类别': info.check_type,
+                '草地编号': ele_num,
+                '地块编号': pre_num,
+                '生长状态': info.flowering_status,
                 '创建人员': info.f_staff,
+                '创建时间': info.f_date.isoformat() if info.f_date else None,
                 '备注': info.notes,
             })
         df = pd.DataFrame(data_list)
@@ -2526,13 +2553,27 @@ def get_artificial_careinfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'ele_num':
-                lamb_id = ECultivationSproutinfo.query.filter(
-                    ECultivationSproutinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == lamb_id)
+                _record = ECultivationSproutinfo.query.filter(
+                    ECultivationSproutinfo.ele_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'pre_num':
-                lamb_id = ECultivationSproutinfo.query.filter(
-                    ECultivationSproutinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == lamb_id)
+                _record = ECultivationSproutinfo.query.filter(
+                    ECultivationSproutinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -2649,10 +2690,18 @@ def add_artificial_careinfo():
 
 
     # 查询对应的 id
-    lamb_id = ECultivationSproutinfo.query.filter_by(ele_num=data['ele_num']).first().id
+    _record = ECultivationSproutinfo.query.filter_by(ele_num=data.get('ele_num')).first()
+    if not _record:
+        return jsonify({"code": 400, "msg": "草地编号不存在，请检查输入"})
+    lamb_id = _record.id
 
-    data['sprout_id'] =lamb_id
+    data['sprout_id'] = lamb_id
     print(data)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(ECultivationIrrigationinfo, key):
+            data.pop(key, None)
 
     artificial_careinfo= ECultivationIrrigationinfo()
 
@@ -2697,13 +2746,13 @@ def export_artificial_careinfo():
         data_list = []
         for info, ele_num, pre_num in artificial_care_info:
             data_list.append({
-                '地块草地编号': ele_num,
-                '地块防疫编号': pre_num,
-                '繁殖日期': info.delivery_date.isoformat() if info.delivery_date else None,
-                '体重监测': info.BW,
-                '养护原因': info.reason,
+                '草地编号': ele_num,
+                '地块编号': pre_num,
+                '建立时间': info.delivery_date.isoformat() if info.delivery_date else None,
+                '生长监测': info.BW,
+                '人工看护原因': info.reason,
                 '养护物': info.feeding_material,
-                '食量': info.mcal,
+                '施肥量': info.mcal,
                 '健康情况': info.health,
                 '求助情况': info.help,
                 '用量': info.dose,
@@ -2749,17 +2798,38 @@ def get_hardeninginfo():
                 conditions.append(column >= datetime.fromisoformat(value[0]))
                 conditions.append(column <= datetime.fromisoformat(value[1]))
             elif param == 'sprout_ele_num':
-                lamb_id = ECultivationSproutinfo.query.filter(
-                    ECultivationSproutinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == lamb_id)
+                _record = ECultivationSproutinfo.query.filter(
+                    ECultivationSproutinfo.ele_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'lamb_pre_num':
-                lamb_id = ECultivationSproutinfo.query.filter(
-                    ECultivationSproutinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == lamb_id)
+                _record = ECultivationSproutinfo.query.filter(
+                    ECultivationSproutinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'logo':
-                lamb_id = ECultivationSproutinfo.query.filter(
-                    ECultivationSproutinfo.logo.like(f'%{value}%')).first().id
-                conditions.append(column == lamb_id)
+                _record = ECultivationSproutinfo.query.filter(
+                    ECultivationSproutinfo.logo.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -2895,17 +2965,27 @@ def add_hardeninginfo():
     data['belong'] = 0
     data['f_date'] = ctime
 
+    # 前端字段映射：feeding_way → cultivation_way
+    if 'feeding_way' in data:
+        data['cultivation_way'] = data.pop('feeding_way')
+
     print(data)
 
     # 查询对应的 id
-    # 查询对应的id
-    seedling_info = ECultivationSproutinfo.query.filter_by(pre_num=data['lamb_pre_num']).first()
-    lamb_id = ECultivationSproutinfo.query.filter_by(pre_num=data['lamb_pre_num']).first().id
+    seedling_info = ECultivationSproutinfo.query.filter_by(pre_num=data.get('lamb_pre_num')).first()
+    if not seedling_info:
+        return jsonify({"code": 400, "msg": "批次编号不存在，请检查输入"})
+    lamb_id = seedling_info.id
 
-    data['sprout_id'] =lamb_id
+    data['sprout_id'] = lamb_id
     print(data)
 
-    hardeninginfo= ECultivationGerminationinfo()
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(ECultivationGerminationinfo, key):
+            data.pop(key, None)
+
+    hardeninginfo = ECultivationGerminationinfo()
 
     for key, value in data.items():
         setattr(hardeninginfo, key, value)
@@ -2915,7 +2995,7 @@ def add_hardeninginfo():
         seedling_info.wea_date = data.get('Delivery_date')
         seedling_info.sprout_weight = data.get('Seedling_weight')
         # 更新BasicBasicinfo的wea_weight和wea_date字段
-        basic_info = BasicBasicinfo.query.filter_by(pre_num=data['lamb_pre_num']).first()
+        basic_info = BasicBasicinfo.query.filter_by(pre_num=data.get('lamb_pre_num')).first()
         if basic_info:
             basic_info.wea_weight = data.get('wea_weight')
             basic_info.wea_date = data.get('Delivery_date')
@@ -2973,11 +3053,11 @@ def export_hardeninginfo():
             data_list.append({
                 '草地编号': ele_num,
                 '地块编号': pre_num,
-                '成坪日期': info.Delivery_date.isoformat() if info.Delivery_date else None,
-                '养护方式': Feeding_wayType_value,
-                '出生重': info.Seedling_weight,
-                '成坪重（出栏体重）': info.wea_weight,
-                '成坪评级': HardeningRankType_value,
+                '阶段切换日期': info.Delivery_date.isoformat() if info.Delivery_date else None,
+                '管理方式': Feeding_wayType_value,
+                '初始生物量': info.Seedling_weight,
+                '阶段末生物量': info.wea_weight,
+                '阶段评级': HardeningRankType_value,
                 '创建人员': info.f_staff
             })
         df = pd.DataFrame(data_list)
@@ -3112,22 +3192,45 @@ def get_seedlinginfo():
                 # 修改为模糊查询
                 conditions.append(column.like(f'%{value}%'))
             elif param == 'f_ele_num':
-                father_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                print(father_id)
-                conditions.append(column == father_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if _record:
+                    conditions.append(column == _record.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'm_ele_num':
-                mother_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == mother_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'f_pre_num':
-                father_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == father_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'm_pre_num':
-                mother_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == mother_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -3229,22 +3332,45 @@ def get_None_weaning_seedlinginfo():
                 # 修改为模糊查询
                 conditions.append(column.like(f'%{value}%'))
             elif param == 'f_ele_num':
-                father_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                print(father_id)
-                conditions.append(column == father_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+                if _record:
+                    conditions.append(column == _record.id)
+                else:
+                    conditions.append(column == -1)
             elif param == 'm_ele_num':
-                mother_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.ele_num.like(f'%{value}%')).first().id
-                conditions.append(column == mother_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.ele_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'f_pre_num':
-                father_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == father_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             elif param == 'm_pre_num':
-                mother_id = BasicBasicinfo.query.filter(
-                    BasicBasicinfo.pre_num.like(f'%{value}%')).first().id
-                conditions.append(column == mother_id)
+                _record = BasicBasicinfo.query.filter(
+                    BasicBasicinfo.pre_num.like(f'%{value}%')).first()
+
+                if _record:
+
+                    conditions.append(column == _record.id)
+
+                else:
+
+                    conditions.append(column == -1)
             else:
                 conditions.append(column == value)
 
@@ -3394,31 +3520,28 @@ def export_seedlinginfo():
             rankType_value = rankType.get(info.rank, info.rank)
             gene_aType_value = gene_aType.get(info.gene_a, info.gene_a)
             data_list.append({
+                '是否入棚': tobasic_dict_value,
+                '批次标识': info.logo,
                 '草地编号': info.ele_num,
                 '地块编号': info.pre_num,
-                '是否入库': tobasic_dict_value,
-                '批次标识': info.logo,
                 '用途': purposeType_value,
                 '草地类型': varietyType_value,
                 '作物类型': sexTypee_value,
-                '原产地': info.manu_info_name,
                 '状态': Lamb_statTypee_value,
-                '出生体重(Kg)': info.sprout_weight,
-                '成坪重(Kg)': info.wea_weight,
-                '所属监测区域': info.house_name,
-                '监测地块': info.hurdle_name,
+                '播种日期': info.sprout_date.isoformat() if info.sprout_date else None,
+                '初始生物量(kg)': info.sprout_weight,
+                '阶段切换日期': info.wea_date.isoformat() if info.wea_date else None,
+                '阶段生物量(kg)': info.wea_weight,
                 '生长月数': info.mon_age,
                 '草地颜色': colorType_value,
-                '受灾等级': rankType_value,
-                '母草地编号': info.m_ele_num,
-                '母地块编号': info.m_pre_num,
-                '父草地编号': info.f_ele_num,
-                '父地块编号': info.f_pre_num,
-                '抗虫基因型': gene_aType_value,
-                '综合评分': info.score,
-                '创建时间': info.f_date.isoformat() if info.f_date else None,
+                '外貌等级': rankType_value,
+                '上级地块编号': info.f_ele_num,
+                '上级地块编号': info.f_pre_num,
+                '当前地块编号': info.m_ele_num,
+                '当前地块编号': info.m_pre_num,
                 '创建人员': info.f_staff,
-                '备注': info.note
+                '创建时间': info.f_date.isoformat() if info.f_date else None,
+                '备注信息': info.note
             })
         df = pd.DataFrame(data_list)
 

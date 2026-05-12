@@ -4,7 +4,7 @@ WORKDIR /vue-app
 
 COPY package.json pnpm-lock.yaml ./
 RUN npm install --registry=https://registry.npmmirror.com -g pnpm
-RUN pnpm install --registry=https://registry.npmmirror.com --frozen-lockfile
+RUN pnpm install --registry=https://registry.npmmirror.com --frozen-lockfile --ignore-scripts
 
 COPY . .
 RUN pnpm vite build --mode production

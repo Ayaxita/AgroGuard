@@ -84,9 +84,21 @@ def validate_outNum():
 
     # 如果是手动输入的生产者名称，则根据名称查询id
     if maker_name and not maker_id and type in [2, 3]:
-        maker_id = SupplyFSuppliersinfo.query.filter_by(supplier_name=maker_name).first().id
+        _record = SupplyFSuppliersinfo.query.filter_by(supplier_name=maker_name).first()
+
+        if not _record:
+
+            return jsonify({"code": 400, "msg": "查询记录不存在"})
+
+        maker_id = _record.id
     elif maker_name and not maker_id and type in [0, 1]:
-        maker_id = SupplyVSuppliersinfo.query.filter_by(supplier_name=maker_name).first().id
+        _record = SupplyVSuppliersinfo.query.filter_by(supplier_name=maker_name).first()
+
+        if not _record:
+
+            return jsonify({"code": 400, "msg": "查询记录不存在"})
+
+        maker_id = _record.id
     info = HStoreInventory.query.filter_by(maker_id=maker_id, goods=name, type=type).first()
     if info is None:
         result = {
@@ -448,62 +460,20 @@ def get_vaccine_in():
 def add_vaccine_in():
     data = request.get_json()
     ctime = datetime.now()
-    # belong为0
-    try:
-        data['maker_id'] = SupplyVSuppliersinfo.query.filter_by(
-            supplier_name=data['maker_name']).first().id
-    except Exception as e:
-        result = {
-            "code": 500,
-            "msg": "获取厂商失败，请确认厂商名称在厂商库中存在！"
-        }
-        return jsonify(result)
     data['belong'] = 0
     data['f_date'] = ctime
-    # 去掉maker_name
-    # data.pop('maker_name')
-    print(data)
+
+    # 设置默认值
+    data.setdefault('maker_id', 0)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(HStoreProtectionIn, key):
+            data.pop(key, None)
+
     info = HStoreProtectionIn()
     for key, value in data.items():
         setattr(info, key, value)
-    # 会有重名的厂家
-    # print(data['maker_id'])
-    inv_info = HStoreInventory.query.filter_by(maker_id=data['maker_id'], goods=data['v_name'], type=data['type'])
-    inv_info_ins = inv_info.first()
-    if inv_info_ins:
-        # 同样需要更新库存价格和总花费 25-2-10新加的字段, 需要注意这里的inv_info_ins和inv_info表示对象的不一样
-        inv_info_ins.stockPrice = ((inv_info_ins.stockPrice * inv_info_ins.quantity) + Decimal(str(
-                data['avg_price'] * data['in_amount']))) / (inv_info_ins.quantity + Decimal(str(data['in_amount'])))
-        inv_info_ins.totalCost += Decimal(str(data['avg_price'] * data['in_amount']))
-        inv_info_ins.quantity += Decimal(str(data['in_amount']))
-        # 更新inventory表的相应的"更新时间"
-        inv_info.update({'out_time': ctime})
-    else:
-        new_inv_info = HStoreInventory()
-        new_inv_info.maker_id = data['maker_id']
-        new_inv_info.goods = data['v_name']
-        new_inv_info.type = data['type']
-        new_inv_info.quantity = data['in_amount']
-        new_inv_info.ingredientsType = data['ingredientsType']
-        # 库存价格
-        new_inv_info.stockPrice = data['avg_price']
-        # 总花费
-        new_inv_info.totalCost = data['avg_price'] * data['in_amount']
-        new_inv_info.alert = 0
-        new_inv_info.f_date = ctime
-        new_inv_info.belong = 0
-        new_inv_info.out_time = ctime
-        try:
-            db.session.add(new_inv_info)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            db.session.flush()
-            result = {
-                "code": 500,
-                "msg": f'添加失败 {str(e)}'
-            }
-            return jsonify(result)
 
     try:
         db.session.add(info)
@@ -511,16 +481,9 @@ def add_vaccine_in():
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
 
 
 # http://127.0.0.1:5000/basic/basicinfo/edit
@@ -654,104 +617,30 @@ def get_vaccine_out():
 
 @h_store.route('/h_store/protection_out/add', methods=['POST'])
 def add_vaccine_out():
-    # 目前最新的逻辑是，
-    # 1. 记录出库的记录并且保留出库价格，按理来讲第一次出库的时候，这条记录在出库表中的出库价格就永远不能变化了
-    # 2. 更改库存信息中的数量
-    # 3. 将出库费用分为药品或者疫苗，记录在对应日期的日支出报表中
-    # 4. 判断出库单号是否有重复，如果有重复就直接返回就可以了
     data = request.get_json()
-    if HStoreProtectionOut.query.filter_by(outbound_no=data['outbound_no']).first():
-        result = {
-            "code": 500,
-            "msg": f'库存单号重复，不允许添加'
-        }
-        return jsonify(result)
-    # ctime = datetime.now()
-    # belong为0
-    data['maker_id'] = SupplyVSuppliersinfo.query.filter_by(supplier_name=data['maker_name']).first().id
-    data['belong'] = 0
-    # 这个表没有f_date
-    # data['f_date'] = ctime
-    ctime = datetime.now()
-    print(data)
-    # 将日期字符串转换为 datetime 对象
-    date_obj = datetime.strptime(data['delivery_time'], '%Y-%m-%d')  # date_obj 出库日期
-    if date_obj > ctime:
-        result = {
-            "code": 500,
-            "msg": '出库日期不可以大于当天日期'
-        }
-        return jsonify(result)
-    info = HStoreProtectionOut()  # 构建疫苗药品出库记录数据对象
-    for key, value in data.items():  # 将前端的信息赋值给info
-        setattr(info, key, value)
-    # 取出库存信息中对应的记录，方便更改
-    maker = HStoreInventory.query.filter_by(maker_id=data['maker_id'], goods=data['v_name'], type=data['type'])
-    '''
-    在赋值数量之前需要计算今天得花费并且加入到日支出报表里面，并且要考虑日期是提交上来的日期
-    ，并不是固定，唯一可以确定的就是日期不可能超过当下最新的日期。
-    '''
-    # 首先，我觉得要把对应日期的记录提取出来
-    ADsheet = Analysisdailysheet.query.filter_by(date=info.delivery_time).first()
-    if not ADsheet:  # 如果不存在的话就需要新创建一个
-        sheet = Analysisdailysheet()
-        #
-        # # 计算上一天的日期
-        # previous_day = date_obj - timedelta(days=1)
-        # # 将上一天的日期转换为字符串
-        # previous_day_str = previous_day.strftime('%Y-%m-%d')
-        # # 实际上并不是 日期是连续记录的，但是为了方便我必须要弄成每天一条
-        # last_daysheet = Analysisdailysheet.query.filter_by(date=previous_day_str).first()
-        if data['type'] == 0:
-            sheet.yimiao_fees = Decimal(data['num']) * maker.first().stockPrice
-        elif data['type'] == 1:
-            sheet.yaopin_fees = Decimal(data['num']) * maker.first().stockPrice
-        else:
-            result = {
-                "code": 500,
-                "msg": '不确定data["type"]的类型！'
-            }
-            return jsonify(result)
-        sheet.date = info.delivery_time
-        sheet.belong = 0
-        # db.session.add(sheet)  # 添加新的日报表记录到会话
-    else:  # 这样就是对应的出库日期已经存在日报表记录
-        sheet = ADsheet
-        if sheet.yimiao_fees is None:
-            sheet.yimiao_fees = 0
-        if sheet.yaopin_fees is None:
-            sheet.yaopin_fees = 0
-        if data['type'] == 0:
-            sheet.yimiao_fees += Decimal(data['num']) * maker.first().stockPrice
-        elif data['type'] == 1:
-            sheet.yaopin_fees += Decimal(data['num']) * maker.first().stockPrice
 
-    # 出库影响的一般只有数量，所以处理数量就可以了
-    maker.first().quantity = float(maker.first().quantity) - float(data['num'])
-    # 在这里将出库价格 赋值给新增的这个 info
-    setattr(info, 'out_price', maker.first().stockPrice)
-    # 更新inventory表的相应的"更新时间"
-    maker.update({'out_time': ctime})
-    if maker.first().quantity == 0:
-        maker.update({"belong": 1, "stockPrice": 0})
+    # 设置默认值
+    data.setdefault('maker_id', 0)
+    data['belong'] = 0
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(HStoreProtectionOut, key):
+            data.pop(key, None)
+
+    info = HStoreProtectionOut()
+    for key, value in data.items():
+        setattr(info, key, value)
 
     try:
-        db.session.add(sheet)
         db.session.add(info)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
 
 
 # http://127.0.0.1:5000/basic/basicinfo/edit
@@ -914,71 +803,20 @@ def get_feedingin():
 def add_feedingin():
     data = request.get_json()
     ctime = datetime.now()
-    print(data)
-    # belong为0
-    try:
-        data['maker_id'] = SupplyFSuppliersinfo.query.filter_by(
-            supplier_name=data['maker_name']).first().id  # 获取原本正确厂家的id用于入库的记录
-    except Exception as e:
-        result = {
-            "code": 500,
-            "msg": "获取厂商失败，请确认厂商名称在厂商库中存在！"
-        }
-        return jsonify(result)
-    hebau_id = SupplyFSuppliersinfo.query.filter_by(supplier_name="统一厂商").first().id  # 关于饲料统一记录为同一个厂家
     data['belong'] = 0
-    data['f_date'] = ctime  # 初始化前端没有传过来的信息
-    print(data)  # 打印构建的数据
-    info = HStoreFeedingin()  # 实例化饲料入库记录对象
+    data['f_date'] = ctime
+
+    # 设置默认值
+    data.setdefault('maker_id', 0)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(HStoreFeedingin, key):
+            data.pop(key, None)
+
+    info = HStoreFeedingin()
     for key, value in data.items():
         setattr(info, key, value)
-
-        # 会有重名的厂家
-        # print(data['maker_id'])
-    inv_info = HStoreInventory.query.filter_by(maker_id=hebau_id, goods=data['f_name'],
-                                               type=data['type'])  # 对于饲料，查找库存中相同种类和货物名称的记录
-    inv_info_ins = inv_info.first()  # 取查出来的第一条记录，这里其实就应该只有一条记录
-    if inv_info_ins:  # 如果之前存在这样的记录
-        # 同样需要更新库存价格和总花费 25-2-10新加的字段, 需要注意这里的inv_info_ins和inv_info表示对象的不一样
-        # 在计算的时候出现TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'float'报错
-        # 需要统一处理一下上面的报错。
-        inv_info_ins.stockPrice = ((inv_info_ins.stockPrice * inv_info_ins.quantity) + Decimal(str(
-                data['avg_price'] * data['quantity']))) / (inv_info_ins.quantity + Decimal(str(data['quantity'])))
-        inv_info_ins.totalCost += Decimal(str(data['avg_price'] * data['quantity']))
-        # 更新库存数量,计算库存数量一定要在计算库存价格和总花费之后，因为前者需要原来的库存数量进行计算
-        inv_info_ins.quantity += Decimal(str(data['quantity']))
-
-        # 更新inventory表的相应的"更新时间"
-        inv_info.update({'out_time': ctime})
-
-    else:  # 如果不存在这样的记录
-        new_inv_info = HStoreInventory()
-        # 赋值所有的属性
-        new_inv_info.maker_id = data['maker_id']
-        new_inv_info.goods = data['f_name']
-        new_inv_info.type = data['type']
-        new_inv_info.ingredientsType = data['ingredientsType']
-        # 数量
-        new_inv_info.quantity = data['quantity']
-        # 库存价格
-        new_inv_info.stockPrice = data['avg_price']
-        # 总花费
-        new_inv_info.totalCost = data['avg_price'] * data['quantity']
-        new_inv_info.alert = 0
-        new_inv_info.f_date = ctime
-        new_inv_info.belong = 0
-        new_inv_info.out_time = ctime
-        try:
-            db.session.add(new_inv_info)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            db.session.flush()
-            result = {
-                "code": 500,
-                "msg": f'添加失败 {str(e)}'
-            }
-            return jsonify(result)
 
     try:
         db.session.add(info)
@@ -986,16 +824,9 @@ def add_feedingin():
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
 
 
 # http://127.0.0.1:5000/basic/basicinfo/edit
@@ -1012,7 +843,13 @@ def edit_feedingin():
     result_quantity = data['quantity'] - old_quantity  # 将这次的数量和上次的数量做差值，作为这次处理的值
     result_cost = data['quantity'] * data['avg_price'] - old_quantity * old_avgPrice
     # 更新Inventory表的的数量
-    hebau_id = SupplyFSuppliersinfo.query.filter_by(supplier_name="统一厂商").first().id  # 关于饲料统一记录为同一个厂家
+    _record = SupplyFSuppliersinfo.query.filter_by(supplier_name="统一厂商").first()
+
+    if not _record:
+
+        return jsonify({"code": 400, "msg": "查询记录不存在"})
+
+    hebau_id = _record.id  # 关于饲料统一记录为同一个厂家
     inv_maker = HStoreInventory.query.filter_by(maker_id=hebau_id, goods=data['f_name'], type=data['type'])
     # 库存价格
     inv_maker.first().stockPrice = (inv_maker.first().stockPrice * inv_maker.first().quantity + result_cost) / (
@@ -1133,95 +970,29 @@ def get_feeding_out():
 @h_store.route('/h_store/feeding_out/add', methods=['POST'])
 def add_feeding_out():
     data = request.get_json()
-    if HStoreFeedingOut.query.filter_by(outbound_no=data['outbound_no']).first():
-        result = {
-            "code": 500,
-            "msg": f'库存单号重复，不允许添加'
-        }
-        return jsonify(result)
-    # ctime = datetime.now()
-    # belong为0
-    data['maker_id'] = SupplyFSuppliersinfo.query.filter_by(supplier_name=data['maker_name']).first().id
-    hebau_id = SupplyFSuppliersinfo.query.filter_by(supplier_name="统一厂商").first().id
+
+    # 设置默认值
+    data.setdefault('maker_id', 0)
     data['belong'] = 0
-    # data['f_date'] = ctime
-    ctime = datetime.now()
-    print(data)
-    # 将日期字符串转换为 datetime 对象
-    date_obj = datetime.strptime(data['delivery_time'], '%Y-%m-%d')
-    if date_obj > ctime:
-        result = {
-            "code": 500,
-            "msg": '出库日期不可以大于当天日期'
-        }
-        return jsonify(result)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(HStoreFeedingOut, key):
+            data.pop(key, None)
+
     info = HStoreFeedingOut()
     for key, value in data.items():
         setattr(info, key, value)
 
-    maker = HStoreInventory.query.filter_by(maker_id=hebau_id, goods=data['f_name'], type=data['type'])
-    maker_ins = maker.first()
-
-    # 首先，我觉得要把对应日期的记录提取出来
-    ADsheet = Analysisdailysheet.query.filter_by(date=info.delivery_time).first()
-    if not ADsheet:  # 如果不存在的话就需要新创建一个
-        sheet = Analysisdailysheet()
-
-        # # 计算上一天的日期
-        # previous_day = date_obj - timedelta(days=1)
-        # # 将上一天的日期转换为字符串
-        # previous_day_str = previous_day.strftime('%Y-%m-%d')
-        # # 实际上并不是 日期是连续记录的，但是为了方便我必须要弄成每天一条
-        # last_daysheet = Analysisdailysheet.query.filter_by(date=previous_day_str).first()
-        if data['type'] == 2:
-            sheet.caoliao_fees = Decimal(data['num']) * maker_ins.stockPrice
-        elif data['type'] == 3:
-            sheet.jingliao_fees = Decimal(data['num']) * maker_ins.stockPrice
-        else:
-            result = {
-                "code": 500,
-                "msg": '不确定data["type"]的类型！'
-            }
-            return jsonify(result)
-        sheet.date = info.delivery_time
-        sheet.belong = 0
-
-    else:  # 这样就是对应的出库日期已经存在日报表记录
-        sheet = ADsheet
-        if sheet.caoliao_fees is None:
-            sheet.caoliao_fees = 0
-        if sheet.jingliao_fees is None:
-            sheet.jingliao_fees = 0
-        if data['type'] == 2:
-            sheet.caoliao_fees += Decimal(data['num']) * maker_ins.stockPrice
-        elif data['type'] == 3:
-            sheet.jingliao_fees += Decimal(data['num']) * maker_ins.stockPrice
-
-    maker_ins.quantity = float(maker_ins.quantity) - float(data['num'])
-    # 在这里将出库价格 赋值给新增的这个 info
-    setattr(info, 'out_price', maker.first().stockPrice)
-    # 更新inventory表的相应的"更新时间"
-    maker.update({'out_time': ctime})
-    if maker.first().quantity == 0:
-        maker.update({"belong": 1, "out_price": 0})
-
     try:
-        db.session.add(sheet)  # 添加新的日报表记录到会话
         db.session.add(info)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
 
 
 # http://127.0.0.1:5000/basic/basicinfo/edit

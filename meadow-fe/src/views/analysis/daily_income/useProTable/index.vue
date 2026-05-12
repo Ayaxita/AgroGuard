@@ -78,7 +78,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   // { type: "expand", label: "Expand", width: 85 },
   {
     prop: "sell",
-    label: "草地记录销售",
+    label: "草地销售",
     _children: [
       {
         prop: "sell_0",
@@ -322,7 +322,7 @@ const updateData = async () => {
 // 导出列表
 const downloadFile = async () => {
   ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() =>
-    useDownload(exportGrassInfo, "日收入报表导出结果", proTable.value?.searchParam)
+    useDownload(exportGrassInfo, "日收益报表导出结果", proTable.value?.searchParam)
   );
 };
 // 打开 drawer(新增、查看、编辑)

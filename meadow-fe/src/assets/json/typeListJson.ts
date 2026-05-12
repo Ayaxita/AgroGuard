@@ -230,7 +230,7 @@ export const varietyType = [
     value: 0
   },
   {
-    label: "经济型草地",
+    label: "混合型草地",
     value: 1
   },
   {

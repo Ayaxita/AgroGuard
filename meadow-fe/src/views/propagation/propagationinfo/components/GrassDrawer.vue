@@ -56,7 +56,7 @@
           :hide-required-asterisk="drawerProps.isView"
         >
           <!-- 关联信息编号 -->
-          <el-form-item v-if="false" label="关联编号1" prop="ewe_ele_num">
+          <el-form-item label="关联编号1" prop="ewe_ele_num">
             <el-input v-model="drawerProps.row.ewe_ele_num" type="text" clearable :disabled="isEditMode"></el-input>
             <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-1" :disabled="isEditMode">
               <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
@@ -64,13 +64,13 @@
             </el-button>
           </el-form-item>
           <!-- 关联类型 -->
-          <el-form-item v-if="false" label="关联类型" prop="ewe_variety">
+          <el-form-item label="关联类型" prop="ewe_variety">
             <el-select v-model="drawerProps.row.ewe_variety" clearable :disabled="isEditMode">
               <el-option v-for="item in varietyType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <!-- 关联信息编号 -->
-          <el-form-item v-if="false" label="关联编号2" prop="ram_ele_num">
+          <el-form-item label="关联编号2" prop="ram_ele_num">
             <el-input v-model="drawerProps.row.ram_ele_num" type="text" clearable :disabled="isEditMode"></el-input>
             <el-button @click="toggleSearchRamTable" size="small" type="primary" class="ml-2" :disabled="isEditMode">
               <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
@@ -78,16 +78,16 @@
             </el-button>
           </el-form-item>
           <!-- 关联类型2 -->
-          <el-form-item v-if="false" label="关联类型2" prop="ram_variety">
+          <el-form-item label="关联类型2" prop="ram_variety">
             <el-select v-model="drawerProps.row.ram_variety" clearable :disabled="isEditMode">
               <el-option v-for="item in varietyType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
-          <el-form-item v-if="false">
+          <el-form-item>
             <el-button @click="judgeInbreed" size="small" type="primary" class="ml-3"> 近亲检测 </el-button>
           </el-form-item>
           <!-- 关联日期 -->
-          <el-form-item v-if="false" label="关联日期" prop="propagation_date">
+          <el-form-item label="关联日期" prop="propagation_date">
             <el-date-picker
               v-model="drawerProps.row.propagation_date"
               type="date"
@@ -101,7 +101,7 @@
           </el-form-item>
 
           <!-- 预产日期 -->
-          <el-form-item v-if="false" label="预产日期" prop="pre_production_date">
+          <el-form-item label="预产日期" prop="pre_production_date">
             <el-date-picker
               v-model="drawerProps.row.pre_production_date"
               type="date"
@@ -114,26 +114,26 @@
           </el-form-item>
 
           <!-- 关联方式 -->
-          <el-form-item v-if="false" label="关联方式" prop="breeding_way">
+          <el-form-item label="关联方式" prop="breeding_way">
             <el-select v-model="drawerProps.row.breeding_way" clearable>
               <el-option v-for="item in Propagation_wayType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
 
           <!-- 关联状态 -->
-          <el-form-item v-if="false" label="关联状态" prop="breeding_state">
+          <el-form-item label="关联状态" prop="breeding_state">
             <el-select v-model="drawerProps.row.breeding_state" clearable>
               <el-option v-for="item in Propagation_stateType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
 
           <!-- 关联周期(天) -->
-          <el-form-item v-if="false" label="关联周期(天)" prop="mat_period">
+          <el-form-item label="关联周期(天)" prop="mat_period">
             <el-input type="number" v-model="drawerProps.row.mat_period" clearable></el-input>
           </el-form-item>
 
           <!-- 成功率(%) -->
-          <el-form-item v-if="false" label="成功率(%)">
+          <el-form-item label="成功率(%)">
             <el-input v-model="drawerProps.row.single_ok" clearable></el-input>
           </el-form-item>
 

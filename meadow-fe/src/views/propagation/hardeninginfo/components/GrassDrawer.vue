@@ -62,7 +62,7 @@
           <el-form-item label="批次标识" prop="logo">
             <el-input v-model="drawerProps.row.logo" clearable></el-input>
           </el-form-item>
-          <el-form-item v-if="false" label="阶段切换日期" prop="Delivery_date">
+          <el-form-item label="阶段切换日期" prop="Delivery_date">
             <el-date-picker
               v-model="drawerProps.row.Delivery_date"
               type="date"
@@ -72,7 +72,7 @@
               clearable
             />
           </el-form-item>
-          <el-form-item v-if="false" label="养护方式" prop="feeding_way">
+          <el-form-item label="养护方式" prop="feeding_way">
             <el-select v-model="drawerProps.row.feeding_way" clearable>
               <el-option v-for="item in Feeding_wayType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
@@ -430,10 +430,9 @@ const dataCallback = (data: any) => {
 };
 
 const rules = reactive({
-  lamb_id: [],
-  Delivery_date: [],
-  feeding_way: [],
-  wea_weight: [{ required: true, message: "阶段生物量不能为空" }]
+  lamb_pre_num: [{ required: true, message: "请选择批次编号" }],
+  wea_weight: [{ required: true, message: "阶段生物量不能为空" }],
+  rank: [{ required: true, message: "请选择阶段评级" }]
 });
 
 interface DrawerProps {

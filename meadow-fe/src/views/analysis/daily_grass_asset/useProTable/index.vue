@@ -188,7 +188,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   },
   {
     prop: "xiaowei",
-    label: "经济型草地",
+    label: "混合型草地",
     _children: [
       {
         prop: "zhongyang",
@@ -344,7 +344,7 @@ const updateData = async () => {
 // 导出列表
 const downloadFile = async () => {
   ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() =>
-    useDownload(exportGrassInfo, "草地库存资产导出结果", proTable.value?.searchParam)
+    useDownload(exportGrassInfo, "防护物资资产导出结果", proTable.value?.searchParam)
   );
 };
 // 打开 drawer(新增、查看、编辑)

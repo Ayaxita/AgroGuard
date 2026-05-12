@@ -133,7 +133,7 @@
           </el-form-item>
 
           <!-- 形态指标 -->
-          <el-form-item v-if="false" label="形态指标" prop="testis_shape">
+          <el-form-item label="形态指标" prop="testis_shape">
             <el-select v-model="drawerProps.row.testis_shape" clearable>
               <el-option
                 v-for="item in fieldconditioninfo_TestisShapeType"
@@ -160,7 +160,7 @@
           </el-form-item>
 
           <!-- 同批次数 -->
-          <el-form-item v-if="false" label="同批次数" prop="with_births">
+          <el-form-item label="同批次数" prop="with_births">
             <el-input type="number" v-model="drawerProps.row.with_births" clearable :disabled="isEditMode"></el-input>
           </el-form-item>
 

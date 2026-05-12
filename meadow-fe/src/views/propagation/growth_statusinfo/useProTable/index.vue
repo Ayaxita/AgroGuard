@@ -167,7 +167,7 @@ const deleteData = datasinfo => {
 // 导出列表
 const downloadFile = async () => {
   ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() =>
-    useDownload(exportGrassInfo, "草地生长监测信息导出结果", proTable.value?.searchParam)
+    useDownload(exportGrassInfo, "草地生长状态导出结果", proTable.value?.searchParam)
   );
 };
 //导出所选数据
@@ -182,7 +182,7 @@ const downloadSelectFile = async selectedListIds => {
 
   ElMessageBox.confirm(`确认导出所选的${selectedGrassData.length}条数据?`, "温馨提示", { type: "warning" }).then(() => {
     // 调用useDownload函数进行导出，并传入所选记录数据、导出文件名以及其他可能需要的参数（这里假设暂时不需要其他参数）
-    useDownload(() => exportGrassInfo(selectedGrassData), `草地生长监测信息导出结果`, null);
+    useDownload(() => exportGrassInfo(selectedGrassData), `草地生长状态导出结果`, null);
   });
 };
 // 打开 drawer(新增、查看、编辑)

@@ -38,25 +38,31 @@
           :model="drawerProps.row"
           :hide-required-asterisk="drawerProps.isView"
         >
+          <el-form-item label="监测类别" prop="check_type">
+            <el-select v-model="drawerProps.row.check_type" clearable>
+              <el-option label="常规检查" value="常规检查"></el-option>
+              <el-option label="生长监测" value="生长监测"></el-option>
+              <el-option label="病虫害检查" value="病虫害检查"></el-option>
+              <el-option label="土壤检测" value="土壤检测"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="草地编号" prop="ewe_ele_num">
-            <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-2">
-              <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
-              添加关联信息
-            </el-button>
+            <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-2">添加关联信息</el-button>
             <el-input v-model="drawerProps.row.ewe_ele_num" clearable></el-input>
           </el-form-item>
           <el-form-item label="地块编号" prop="ewe_pre_num">
             <el-input v-model="drawerProps.row.ewe_pre_num" clearable></el-input>
           </el-form-item>
-          <el-form-item label="检查类别" prop="check_type">
-            <el-input v-model="drawerProps.row.check_type" clearable></el-input>
+          <el-form-item label="生长状态" prop="flowering_status">
+            <el-select v-model="drawerProps.row.flowering_status" clearable>
+              <el-option label="正常生长" value="正常生长"></el-option>
+              <el-option label="生长缓慢" value="生长缓慢"></el-option>
+              <el-option label="生长旺盛" value="生长旺盛"></el-option>
+              <el-option label="需要关注" value="需要关注"></el-option>
+            </el-select>
           </el-form-item>
-          <!-- <el-form-item label="培育信息id" prop="propagation_id">
-        <el-input type="number" v-model="drawerProps.row.propagation_id" clearable></el-input>
-      </el-form-item> -->
-
-          <el-form-item label="孕检信息" prop="In_growth_cycle">
-            <el-input v-model="drawerProps.row.In_growth_cycle" clearable></el-input>
+          <el-form-item label="创建人员" prop="f_staff">
+            <el-input v-model="drawerProps.row.f_staff" clearable></el-input>
           </el-form-item>
           <el-form-item label="创建时间" prop="f_date">
             <el-date-picker
@@ -68,9 +74,6 @@
               disabled
               clearable
             />
-          </el-form-item>
-          <el-form-item label="创建人员" prop="f_staff">
-            <el-input v-model="drawerProps.row.f_staff" clearable></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="notes">
             <el-input v-model="drawerProps.row.notes" type="textarea" clearable></el-input>
@@ -98,10 +101,8 @@ import { User } from "@/api/interface";
 import { Propagation_stateType, Propagation_wayType, varietyType } from "@/assets/json/typeListJson";
 
 const rules = reactive({
-  check_type: [{ required: true, message: "请填写检查类别" }],
-  // propagation_id: [{ required: true, message: "请填写培育信息id" }],
-  In_growth_cycle: [{ required: true, message: "请填写孕检信息" }]
-  // notes: [{ required: true, message: "请填写备注" }]
+  check_type: [{ required: true, message: "请选择检查类别" }],
+  flowering_status: [{ required: true, message: "请选择生长状态" }]
 });
 
 // 表格配置项

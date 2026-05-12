@@ -112,16 +112,16 @@
           clearable
         ></el-input>
       </el-form-item>
-      <el-form-item v-if="false" label="上级关联A编号" prop="f_ele_num">
+      <el-form-item label="上级关联A编号" prop="f_ele_num">
         <el-input v-model="drawerProps.row!.f_ele_num" placeholder="请填写上级关联A编号" clearable></el-input>
       </el-form-item>
-      <el-form-item v-if="false" label="上级关联A地块编号" prop="f_pre_num">
+      <el-form-item label="上级关联A地块编号" prop="f_pre_num">
         <el-input v-model="drawerProps.row!.f_pre_num" placeholder="请填写上级关联A地块编号" clearable></el-input>
       </el-form-item>
-      <el-form-item v-if="false" label="上级关联B编号" prop="m_ele_num">
+      <el-form-item label="上级关联B编号" prop="m_ele_num">
         <el-input v-model="drawerProps.row!.m_ele_num" placeholder="请填写上级关联B编号" clearable></el-input>
       </el-form-item>
-      <el-form-item v-if="false" label="上级关联B地块编号" prop="m_pre_num">
+      <el-form-item label="上级关联B地块编号" prop="m_pre_num">
         <el-input v-model="drawerProps.row!.m_pre_num" placeholder="请填写上级关联B地块编号" clearable></el-input>
       </el-form-item>
       <el-form-item label="多批基因" prop="gene_a">

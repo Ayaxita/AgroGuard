@@ -11,7 +11,7 @@ export const getManuList = params => {
 
 //获取没有阶段切换记录的列表
 export const getManuListNoneWeaning = params => {
-  const result = http.post(PORT1 + `/seedlinginfo/NoneWeaning`, params);
+  const result = http.post(PORT1 + `/seedlinginfo/NoneHardening`, params);
   result.then(resp => console.log("返回的列表数据", resp));
   return result;
 };

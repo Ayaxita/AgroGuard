@@ -58,7 +58,7 @@
           </el-form-item>
 
           <!-- 是否建立批次（高风险字段先隐藏） -->
-          <el-form-item v-if="false" label="是否建立批次" prop="breeding">
+          <el-form-item label="是否建立批次" prop="breeding">
             <el-select v-model="drawerProps.row.breeding" clearable>
               <el-option v-for="item in BooleanType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>

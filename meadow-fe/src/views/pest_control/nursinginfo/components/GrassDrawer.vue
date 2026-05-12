@@ -42,7 +42,7 @@
               <el-option v-for="item in d_plantcareTestis_shapeType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
-          <el-form-item v-if="false" label="生长前期萎蔫" prop="prenatal_paralysi">
+          <el-form-item label="生长前期萎蔫" prop="prenatal_paralysi">
             <el-select v-model="drawerProps.row.prenatal_paralysi" clearable>
               <el-option v-for="item in BooleanType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>

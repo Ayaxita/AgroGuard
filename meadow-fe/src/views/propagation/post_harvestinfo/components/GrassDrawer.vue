@@ -64,144 +64,39 @@
           :model="drawerProps.row"
           :hide-required-asterisk="drawerProps.isView"
         >
-          <!-- 批次关联信息id -->
-          <!-- <el-form-item label="批次关联信息id" prop="propagation_id">
-        <el-input v-model="drawerProps.row.propagation_id" type="number" clearable></el-input>
-      </el-form-item> -->
-
-          <!-- 批次关联日期 -->
-          <!-- <el-form-item label="批次关联日期" prop="propagation_date">
-        <el-date-picker
-          v-model="drawerProps.row.propagation_date"
-          type="date"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          placeholder="选择日期时间"
-          clearable
-        />
-      </el-form-item> -->
-          <!-- 关联信息编号 -->
-          <el-form-item v-if="false" label="关联编号" prop="ewe_ele_num">
+          <!-- 草地编号 -->
+          <el-form-item label="草地编号" prop="ewe_ele_num">
             <el-input v-model="drawerProps.row.ewe_ele_num" type="text" clearable :disabled="isEditMode"></el-input>
-            <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-2">
-              <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
-              添加关联信息
-            </el-button>
+            <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-2">添加关联信息</el-button>
           </el-form-item>
-          <!-- 收割日期 -->
-          <el-form-item label="收割日期" prop="delivery_date">
-            <el-date-picker
-              v-model="drawerProps.row.delivery_date"
-              type="date"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"
-              placeholder="选择日期时间"
-              clearable
-              @change="handleDeliveryDateChange"
-            />
+          <!-- 地块编号 -->
+          <el-form-item label="地块编号" prop="ewe_pre_num">
+            <el-input v-model="drawerProps.row.ewe_pre_num" type="text" clearable :disabled="isEditMode"></el-input>
           </el-form-item>
-
-          <!-- 关联信息编号2 -->
-          <el-form-item v-if="false" label="关联编号2" prop="ram_ele_num">
-            <el-input v-model="drawerProps.row.ram_ele_num" type="string" clearable :disabled="isEditMode"></el-input>
-          </el-form-item>
-
           <!-- 产量系数 -->
-          <el-form-item v-if="false" label="产量系数" prop="Booroola">
+          <el-form-item label="产量系数" prop="Booroola">
             <el-input v-model="drawerProps.row.Booroola" type="number" step="0.01" clearable></el-input>
           </el-form-item>
-
-          <!-- 健康情况 -->
-          <el-form-item v-if="false" label="健康情况" prop="ewe_health">
+          <!-- 草地健康情况 -->
+          <el-form-item label="草地健康情况" prop="ewe_health">
             <el-select v-model="drawerProps.row.ewe_health" clearable>
               <el-option v-for="item in Ewe_healthType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
-
-          <!-- 母性情况 -->
-          <el-form-item v-if="false" label="母性情况" prop="ewe_condition">
+          <!-- 生长情况 -->
+          <el-form-item label="生长情况" prop="ewe_condition">
             <el-select v-model="drawerProps.row.ewe_condition" clearable>
               <el-option v-for="item in Ewe_conditionType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
-
-          <!-- 批次编号 -->
-          <!-- <el-form-item label="批次编号" prop="lamb_ele_num">
-            <el-input v-model="drawerProps.row.lamb_ele_num" clearable></el-input>
-          </el-form-item> -->
-
-          <!-- 批次状态 -->
-          <!-- <el-form-item label="批次状态" prop="lamb_state">
-            <el-select v-model="drawerProps.row.lamb_state" clearable>
-              <el-option v-for="item in Lamb_statType" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </el-form-item> -->
-
-          <!-- 出生生物量 -->
-          <!-- <el-form-item label="出生生物量" prop="bir_weight">
-            <el-input v-model="drawerProps.row.bir_weight" type="number" step="0.01" clearable></el-input>
-          </el-form-item> -->
-
-          <!-- 批次数 -->
-          <el-form-item v-if="false" label="批次数" prop="live_num" @change="handleLiveNumChange">
-            <el-input v-model="drawerProps.row.live_num" type="number" clearable></el-input>
-          </el-form-item>
-          <!-- 动态生成的批次信息输入框 -->
-          <template v-if="false">
-            <div v-for="(lamb, index) in lambs" :key="index">
-              <el-card style="margin-right: 5%; margin-bottom: 2%; margin-left: 5%">
-                <!-- 批次状态 -->
-                <el-form-item :label="'批次 ' + (index + 1) + '状态'" :prop="'state_' + (index + 1)">
-                  <el-select v-model="drawerProps.row['state_' + (index + 1)]" clearable>
-                    <el-option v-for="item in Lamb_statType" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                </el-form-item>
-                <!-- 批次编号 -->
-                <el-form-item :label="'批次 ' + (index + 1) + '编号'" :prop="'pre_num_' + (index + 1)">
-                  <!-- <el-input v-model="lamb.lamb_ele_num" clearable></el-input> -->
-                  <!-- drawerProps.row.live_num，已经尝试了这样写后端能够接收到写在这些输入框中的数据 -->
-                  <el-input v-model="drawerProps.row['pre_num_' + (index + 1)]" clearable></el-input>
-                </el-form-item>
-
-                <!-- 批次分组 -->
-                <el-form-item :label="'批次 ' + (index + 1) + '分组'" :prop="'sex_' + (index + 1)">
-                  <el-select v-model="drawerProps.row['sex_' + (index + 1)]" clearable>
-                    <el-option v-for="item in sexType" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                </el-form-item>
-
-                <!-- 批次特征 -->
-                <el-form-item :label="'批次 ' + (index + 1) + '特征'" :prop="'color_' + (index + 1)">
-                  <el-select v-model="drawerProps.row['color_' + (index + 1)]" clearable>
-                    <el-option v-for="item in colorType" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                </el-form-item>
-
-                <!-- 批次初始量 -->
-                <el-form-item :label="'批次 ' + (index + 1) + '初始量'" :prop="'bir_weight_' + (index + 1)">
-                  <el-input v-model="drawerProps.row['bir_weight_' + (index + 1)]" type="number" step="0.01" clearable></el-input>
-                </el-form-item>
-
-                <!-- 批次等级 -->
-                <el-form-item :label="'批次 ' + (index + 1) + '等级'" :prop="'rank_' + (index + 1)">
-                  <el-select v-model="drawerProps.row['rank_' + (index + 1)]" clearable>
-                    <el-option v-for="item in rankType" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                </el-form-item>
-              </el-card>
-            </div>
-          </template>
-
-          <!-- 接生人员 -->
-          <el-form-item v-if="false" label="采收人员" prop="planting_attendants">
+          <!-- 采收人员 -->
+          <el-form-item label="采收人员" prop="planting_attendants">
             <el-input v-model="drawerProps.row.planting_attendants" clearable></el-input>
           </el-form-item>
-
           <!-- 创建人员 -->
           <el-form-item label="创建人员" prop="f_staff">
             <el-input v-model="drawerProps.row.f_staff" clearable></el-input>
           </el-form-item>
-
           <!-- 创建时间 -->
           <el-form-item label="创建时间" prop="f_date">
             <el-date-picker
@@ -214,7 +109,6 @@
               clearable
             />
           </el-form-item>
-
           <!-- 备注 -->
           <el-form-item label="备注" prop="notes">
             <el-input v-model="drawerProps.row.notes" type="textarea" clearable></el-input>
@@ -257,19 +151,9 @@ import { sexType, varietyType, colorType, gene_aType, stateType, purposeType } f
 import { getRam } from "../../post_harvestinfo/api/manu";
 
 const rules = reactive({
-  // lamb_ele_num: [
-  //   {
-  //     required: true,
-  //     message: "请填写批次编号"
-  //   }
-  // ],
-  planting_attendants: []
-  // notes: [
-  //   {
-  //     required: true,
-  //     message: "请填写备注"
-  //   }
-  // ]
+  ewe_ele_num: [{ required: true, message: "请填写草地编号" }],
+  ewe_health: [{ required: true, message: "请选择草地健康情况" }],
+  ewe_condition: [{ required: true, message: "请选择生长情况" }]
 });
 
 const new_ele = ref<any>(null);
@@ -294,6 +178,10 @@ interface GrassData {
 }
 const handleDeliveryDateChange = async (newDate: string) => {
   console.log("Selected delivery date:", newDate);
+  if (!drawerProps.value.row.ewe_ele_num) {
+    ElMessage.warning("请先选择草地编号（关联编号）");
+    return;
+  }
   // 在这里处理日期变更逻辑
   // 准备发送的数据
   const params = {

@@ -34,19 +34,16 @@
           <!-- <el-form-item label="批次id" prop="lamb_id">
         <el-input type="number" v-model="drawerProps.row.lamb_id" clearable></el-input>
       </el-form-item> -->
-          <el-form-item label="批次编号" prop="ele_num">
-            <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-2">
-              <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
-              添加批次信息
-            </el-button>
+          <el-form-item label="草地编号" prop="ele_num">
+            <el-button @click="toggleSearchTable" size="small" type="primary" class="ml-2">添加草地信息</el-button>
             <el-input v-model="drawerProps.row.ele_num" clearable></el-input>
           </el-form-item>
-          <el-form-item label="批次编号" prop="pre_num">
+          <el-form-item label="地块编号" prop="pre_num">
             <el-input v-model="drawerProps.row.pre_num" clearable></el-input>
           </el-form-item>
 
-          <!-- Delivery Date -->
-          <el-form-item label="批次建立日期" prop="delivery_date">
+          <!-- 建立日期 -->
+          <el-form-item label="建立日期" prop="delivery_date">
             <el-date-picker
               v-model="drawerProps.row.delivery_date"
               type="date"
@@ -57,44 +54,49 @@
             ></el-date-picker>
           </el-form-item>
 
-          <!-- Body Weight Monitoring -->
+          <!-- 生长监测 -->
           <el-form-item label="生长监测" prop="BW">
             <el-input v-model="drawerProps.row.BW" clearable></el-input>
           </el-form-item>
 
-          <!-- Feeding Reason -->
+          <!-- 人工看护原因 -->
           <el-form-item label="人工看护原因" prop="reason">
             <el-input v-model="drawerProps.row.reason" type="textarea" clearable></el-input>
           </el-form-item>
 
-          <!-- Feeding Material -->
+          <!-- 养护物 -->
           <el-form-item label="养护物" prop="feeding_material">
             <el-input v-model="drawerProps.row.feeding_material" clearable></el-input>
           </el-form-item>
 
-          <!-- Food Consumption -->
+          <!-- 施肥量 -->
           <el-form-item label="施肥量" prop="mcal">
             <el-input v-model="drawerProps.row.mcal" clearable></el-input>
           </el-form-item>
 
-          <!-- Health Status -->
+          <!-- 健康情况 -->
           <el-form-item label="健康情况" prop="health">
             <el-input v-model="drawerProps.row.health" clearable></el-input>
           </el-form-item>
 
-          <!-- Help Situation -->
+          <!-- 求助情况 -->
           <el-form-item label="求助情况" prop="help">
             <el-input v-model="drawerProps.row.help" type="textarea" clearable></el-input>
           </el-form-item>
 
-          <!-- Dose -->
+          <!-- 用量 -->
           <el-form-item label="用量" prop="dose">
             <el-input v-model="drawerProps.row.dose" clearable></el-input>
           </el-form-item>
 
-          <!-- Feeding Staff -->
+          <!-- 养护人员 -->
           <el-form-item label="养护人员" prop="feeding_staff">
             <el-input v-model="drawerProps.row.feeding_staff" clearable></el-input>
+          </el-form-item>
+
+          <!-- 创建人员 -->
+          <el-form-item label="创建人员" prop="f_staff">
+            <el-input v-model="drawerProps.row.f_staff" clearable></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -113,7 +115,7 @@ import { ref, reactive, computed } from "vue";
 import { ElMessage, ElMessageBox, FormInstance } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 import { CirclePlus, Delete, Download, EditPen, View } from "@element-plus/icons-vue";
-import { getManuList } from "../../seedlinginfo/api/manu";
+import { getManuList, getFemaleGrass } from "../api/manu";
 import {
   BooleanType,
   colorType,
@@ -156,18 +158,6 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   //   label: "入棚后草地基本id",
   //   search: { el: "input" }
   // },
-  {
-    prop: "tobasic",
-    label: "是否入棚",
-    enum: BooleanType,
-    search: { el: "switch" }
-  },
-  {
-    prop: "logo",
-    label: "批次标识",
-    width: 250,
-    search: { el: "input" }
-  },
   {
     prop: "ele_num",
     label: "草地编号",
@@ -424,8 +414,8 @@ const getTableList = (params: any) => {
   newParams.createTime && (newParams.startTime = newParams.createTime[0]);
   newParams.createTime && (newParams.endTime = newParams.createTime[1]);
   delete newParams.createTime;
-  console.log("getManuList", getManuList(newParams));
-  return getManuList(newParams);
+  console.log("getFemaleGrass", getFemaleGrass(newParams));
+  return getFemaleGrass(newParams);
 };
 
 // dataCallback 是对于返回的表格数据做处理，如果你后台返回的数据不是 list && total 这些字段，可以在这里进行处理成这些字段

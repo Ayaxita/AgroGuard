@@ -720,47 +720,31 @@ def get_damageinfo():
 @pest_control.route('/pest_control/immunizationinfo/add', methods=['POST'])  # 新增施药信息
 def add_immunizationinfo():
     data = request.get_json()
-    print(data)
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
-    ele_num = data['ele_num']
+
+    # 查找草地编号
+    ele_num = data.get('ele_num')
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
-        del data['ele_num']
-        if 'pre_num' in data:
-            del data['pre_num']
-        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
-        basic_info = json.loads(basic_info)
-        data['basic_id'] = basic_info['id']
+        data['basic_id'] = query.id
     else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
-    # 这里是正常查询到进行的添加
-    # 处理其他表中的id和信息
-    if 'cname' in data:
-        supplycommodityinfo = SupplyCommodityinfo.query.filter_by(cname=data['cname']).first()
-    if 'supplier_name' in data:
-        supplyvsuppliersinfo = SupplyVSuppliersinfo.query.filter_by(supplier_name=data['supplier_name']).first()
-    if supplycommodityinfo and supplyvsuppliersinfo:
-        data['vaccine_id'] = supplycommodityinfo.id
-        data['maker_id'] = supplyvsuppliersinfo.id
-    else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
-    # 在加入list之前要判断是否有数据冗余：同一个basic_id，疫苗类型，接种时间，
-    dup_imminfo = DPlantcareImmunizationinfo.query.filter_by(basic_id=data['basic_id'],
-                                                          vaccine_id=data['vaccine_id'],
-                                                          imm_date=data['imm_date']).first()
-    if dup_imminfo:
-        return jsonify({"code": 500, "msg": '存在数据冗余,添加失败'})
+        data['basic_id'] = 0
+
+    # 删除前端传来的虚拟字段
+    data.pop('ele_num', None)
+    data.pop('pre_num', None)
+
+    # 设置默认值
+    data.setdefault('vaccine_id', 0)
+    data.setdefault('maker_id', 0)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(DPlantcareImmunizationinfo, key):
+            data.pop(key, None)
+
     immunizationinfo = DPlantcareImmunizationinfo()
     for key, value in data.items():
         setattr(immunizationinfo, key, value)
@@ -770,16 +754,9 @@ def add_immunizationinfo():
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
 
 
 # 新增浸泡施药信息
@@ -788,40 +765,31 @@ def add_immunizationinfo():
 @pest_control.route('/pest_control/protectioninfo/add', methods=['POST'])  # 新增浸泡施药信息
 def add_protectioninfo():
     data = request.get_json()
-    print(data)
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证草地编号是否存在于数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
-    ele_num = data['ele_num']
+
+    # 查找草地编号
+    ele_num = data.get('ele_num')
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
-        del data['ele_num']
-        if 'pre_num' in data:
-            del data['pre_num']
-        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
-        basic_info = json.loads(basic_info)
-        data['basic_id'] = basic_info['id']
+        data['basic_id'] = query.id
     else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
-        # 处理其他表中的id和信息
-    if 'cname' in data:
-        supplycommodityinfo = SupplyCommodityinfo.query.filter_by(cname=data['cname']).first()
-    if 'supplier_name' in data:
-        supplyvsuppliersinfo = SupplyVSuppliersinfo.query.filter_by(supplier_name=data['supplier_name']).first()
-    if supplycommodityinfo and supplyvsuppliersinfo:
-        data['drug_id'] = supplycommodityinfo.id
-        data['vac_maker'] = supplyvsuppliersinfo.id
-    else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
+        data['basic_id'] = 0
+
+    # 删除前端传来的虚拟字段
+    data.pop('ele_num', None)
+    data.pop('pre_num', None)
+
+    # 设置默认值
+    data.setdefault('drug_id', 0)
+    data.setdefault('vac_maker', 0)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(DPlantcareProtectioninfo, key):
+            data.pop(key, None)
+
     protectioninfo = DPlantcareProtectioninfo()
     for key, value in data.items():
         setattr(protectioninfo, key, value)
@@ -831,41 +799,34 @@ def add_protectioninfo():
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
     # 新增病虫害检测信息
 
 
 @pest_control.route('/pest_control/quarantineinfo/add', methods=['POST'])  # 新增病虫害检测信息
 def add_quarantineinfo():
     data = request.get_json()
-    # ctime = datetime.now()
     data['belong'] = 0
-    # data['f_date'] = ctime
-    # 验证草地编号是否存在于数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
-    ele_num = data['ele_num']
+
+    # 查找草地编号
+    ele_num = data.get('ele_num')
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
-        del data['ele_num']
-        if 'pre_num' in data:
-            del data['pre_num']
-        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
-        basic_info = json.loads(basic_info)
-        data['basic_id'] = basic_info['id']
+        data['basic_id'] = query.id
     else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
+        data['basic_id'] = 0
+
+    # 删除前端传来的虚拟字段
+    data.pop('ele_num', None)
+    data.pop('pre_num', None)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(DPlantcareQuarantineinfo, key):
+            data.pop(key, None)
+
     quarantineinfo = DPlantcareQuarantineinfo()
     for key, value in data.items():
         setattr(quarantineinfo, key, value)
@@ -875,16 +836,9 @@ def add_quarantineinfo():
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
     # 新增护理信息
 
 
@@ -894,22 +848,24 @@ def add_nursinginfo():
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
-    ele_num = data['ele_num']
+
+    # 查找草地编号
+    ele_num = data.get('ele_num')
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
-        del data['ele_num']
-        if 'pre_num' in data:
-            del data['pre_num']
-        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
-        basic_info = json.loads(basic_info)
-        data['basic_id'] = basic_info['id']
+        data['basic_id'] = query.id
     else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
+        data['basic_id'] = 0
+
+    # 删除前端传来的虚拟字段
+    data.pop('ele_num', None)
+    data.pop('pre_num', None)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(DPlantcareNursinginfo, key):
+            data.pop(key, None)
+
     nursinginfo = DPlantcareNursinginfo()
     for key, value in data.items():
         setattr(nursinginfo, key, value)
@@ -919,41 +875,49 @@ def add_nursinginfo():
     except Exception as e:
         db.session.rollback()
         db.session.flush()
-        result = {
-            "code": 500,
-            "msg": f'添加失败 {str(e)}'
-        }
-        return jsonify(result)
-    result = {
-        "code": 200,
-        "msg": '添加成功'
-    }
-    return jsonify(result)
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
     # 新增疾病信息
 
 
 @pest_control.route('/pest_control/diseaseinfo/add', methods=['POST'])  # 新增疾病信息
 def add_diseaseinfo():
     data = request.get_json()
-    # ctime = datetime.now()
     data['belong'] = 0
-    # data['f_date'] = ctime
-    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
-    ele_num = data['ele_num']
+
+    # 查找草地编号
+    ele_num = data.get('ele_num')
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
-        del data['ele_num']
-        if 'pre_num' in data:
-            del data['pre_num']
-        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
-        basic_info = json.loads(basic_info)
-        data['basic_id'] = basic_info['id']
+        data['basic_id'] = query.id
     else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
+        data['basic_id'] = 0
+
+    # 删除前端传来的虚拟字段
+    data.pop('ele_num', None)
+    data.pop('pre_num', None)
+
+    # 设置默认值
+    data.setdefault('vaccine_id', 0)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(DPlantcareDiseaseinfo, key):
+            data.pop(key, None)
+
+    diseaseinfo = DPlantcareDiseaseinfo()
+    for key, value in data.items():
+        setattr(diseaseinfo, key, value)
+    try:
+        db.session.add(diseaseinfo)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
     if 'cname' in data:
         supplycommodityinfo = SupplyCommodityinfo.query.filter_by(cname=data['cname']).first()
     if supplycommodityinfo:
@@ -992,22 +956,36 @@ def add_damageinfo():
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
-    ele_num = data['ele_num']
+
+    # 查找草地编号
+    ele_num = data.get('ele_num')
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
-        del data['ele_num']
-        if 'pre_num' in data:
-            del data['pre_num']
-        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
-        basic_info = json.loads(basic_info)
-        data['basic_id'] = basic_info['id']
+        data['basic_id'] = query.id
     else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
+        data['basic_id'] = 0
+
+    # 删除前端传来的虚拟字段
+    data.pop('ele_num', None)
+    data.pop('pre_num', None)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(DPlantcareDamageinfo, key):
+            data.pop(key, None)
+
+    damageinfo = DPlantcareDamageinfo()
+    for key, value in data.items():
+        setattr(damageinfo, key, value)
+    try:
+        db.session.add(damageinfo)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
     damageinfo = DPlantcareDamageinfo()
     for key, value in data.items():
         setattr(damageinfo, key, value)
@@ -1073,22 +1051,36 @@ def add_witherinfo():
     ctime = datetime.now()
     data['belong'] = 0
     data['f_date'] = ctime
-    # 验证草地编号是否存在在数据库中，如果在就删除掉data中的elenum，若果不在，就返回失败的结果。,
-    ele_num = data['ele_num']
+
+    # 查找草地编号
+    ele_num = data.get('ele_num')
     query = BasicBasicinfo.query.filter_by(ele_num=ele_num).first()
     if query:
-        del data['ele_num']
-        if 'pre_num' in data:
-            del data['pre_num']
-        basic_info = json.dumps(query, cls=AlchemyEncoder, ensure_ascii=False)
-        basic_info = json.loads(basic_info)
-        data['basic_id'] = basic_info['id']
+        data['basic_id'] = query.id
     else:
-        result = {
-            "code": 500,
-            "msg": f'添加失败 '
-        }
-        return jsonify(result)
+        data['basic_id'] = 0
+
+    # 删除前端传来的虚拟字段
+    data.pop('ele_num', None)
+    data.pop('pre_num', None)
+
+    # 清理不存在于模型中的字段
+    for key in list(data.keys()):
+        if not hasattr(DPlantcareDeathinfo, key):
+            data.pop(key, None)
+
+    witherinfo = DPlantcareDeathinfo()
+    for key, value in data.items():
+        setattr(witherinfo, key, value)
+    try:
+        db.session.add(witherinfo)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        db.session.flush()
+        return jsonify({"code": 500, "msg": f'添加失败 {str(e)}'})
+
+    return jsonify({"code": 200, "msg": '添加成功'})
     witherinfo = DPlantcareDeathinfo()
     for key, value in data.items():
         setattr(witherinfo, key, value)
@@ -1148,12 +1140,16 @@ def edit_immunizationinfo():
         if 'pre_num' in data:
             del data['pre_num']
         if 'supplier_name' in data:
-            data["maker_id"] = SupplyVSuppliersinfo.query.filter(
-                SupplyVSuppliersinfo.supplier_name.like(f'%{data["supplier_name"]}%')).first().id
+            _record = SupplyVSuppliersinfo.query.filter(
+                SupplyVSuppliersinfo.supplier_name.like(f'%{data.get("supplier_name", "")}%')).first()
+            if _record:
+                data["maker_id"] = _record.id
             del data['supplier_name']
         if 'cname' in data:
-            data["vaccine_id"] = SupplyCommodityinfo.query.filter(
-                SupplyCommodityinfo.cname.like(f'%{data["cname"]}%')).first().id
+            _record = SupplyCommodityinfo.query.filter(
+                SupplyCommodityinfo.cname.like(f'%{data.get("cname", "")}%')).first()
+            if _record:
+                data["vaccine_id"] = _record.id
             del data['cname']
     except Exception as e:
         print("--data-->", data)
@@ -1191,12 +1187,16 @@ def edit_protectioninfo():
         if 'pre_num' in data:
             del data['pre_num']
         if 'supplier_name' in data:
-            data["vac_maker"] = SupplyVSuppliersinfo.query.filter(
-                SupplyVSuppliersinfo.supplier_name.like(f'%{data["supplier_name"]}%')).first().id
+            _record = SupplyVSuppliersinfo.query.filter(
+                SupplyVSuppliersinfo.supplier_name.like(f'%{data.get("supplier_name", "")}%')).first()
+            if _record:
+                data["vac_maker"] = _record.id
             del data['supplier_name']
         if 'cname' in data:
-            data["drug_id"] = SupplyCommodityinfo.query.filter(
-                SupplyCommodityinfo.cname.like(f'%{data["cname"]}%')).first().id
+            _record = SupplyCommodityinfo.query.filter(
+                SupplyCommodityinfo.cname.like(f'%{data.get("cname", "")}%')).first()
+            if _record:
+                data["drug_id"] = _record.id
             del data['cname']
     except Exception as e:
         print("--data-->", data)
@@ -1234,8 +1234,10 @@ def edit_diseaseinfo():
         if 'pre_num' in data:
             del data['pre_num']
         if 'cname' in data:
-            data["drug_id"] = SupplyCommodityinfo.query.filter(
-                SupplyCommodityinfo.cname.like(f'%{data["cname"]}%')).first().id
+            _record = SupplyCommodityinfo.query.filter(
+                SupplyCommodityinfo.cname.like(f'%{data.get("cname", "")}%')).first()
+            if _record:
+                data["drug_id"] = _record.id
             del data['cname']
     except Exception as e:
         print("--data-->", data)
@@ -1334,15 +1336,18 @@ def export_immunizationinfo():
         data_list = []
         for info in immunization_info:
             data_list.append({
-                '田块记录id': info.basic_id,
                 '草地编号': info.ele_num,
                 '地块编号': info.pre_num,
-                '施药生长月数': info.imm_age,
-                '施药日期': info.imm_date.isoformat() if info.imm_date else None,
-                '施药剂量': info.dose,
-                '农药/防治药物': info.cname,
-                '生产厂家': info.supplier_name,
+                '防护时间阶段': info.imm_age,
+                '防护日期': info.imm_date.isoformat() if info.imm_date else None,
+                '防护措施': info.cname,
+                '防护厂家': info.supplier_name,
+                '剂量': info.dose,
+                '草地健康指数': info.anti_level,
+                '阶段后监测': info.post_stage,
+                '出库时间': info.out_time,
                 '创建时间': info.f_date.isoformat() if info.f_date else None,
+                '操作': info.operators,
                 '创建人员': info.f_staff
             })
 
@@ -1408,12 +1413,16 @@ def export_protectioninfo():
         for info, ele_num, pre_num, cname, supplier_name in protection_info:
             data_list.append({
                 '草地编号': ele_num,
-                '草地类型': pre_num,
-                '药浴月龄': info.protection_age,
+                '地块编号': pre_num,
+                '用药生长月数': info.protection_age,
                 '用药时间': info.take_time.isoformat() if info.take_time else None,
                 '药品信息': cname,
-                '药品厂家': supplier_name,
-                '药效时间': info.timing,
+                '药物厂家': supplier_name,
+                '作用': info.effect,
+                '防护有效期': info.timing,
+                '防虫防护处理': info.IR_bath,
+                '出库时间': info.out_time,
+                '操作员': info.operators,
                 '创建时间': info.f_date.isoformat() if info.f_date else None,
                 '创建人员': info.f_staff
             })
@@ -1503,18 +1512,20 @@ def export_quarantineinfo():
             data_list.append({
                 '草地编号': ele_num,
                 '地块编号': pre_num,
-                '采样时间': info.date.isoformat() if info.date else None,
+                '采样日期': info.date.isoformat() if info.date else None,
                 '检测方式': detection_mode,
                 '检测项目': info.item,
                 '采样数量': info.num,
-                '病虫害抗性': info.antibody,
-                '检测机构': info.institutions,
-                '第三方机构': info.third_name,
+                '防护指数': info.antibody,
+                '检测单位': info.institutions,
+                '第三方名称': info.third_name,
                 '检测人员': info.inspector,
-                '害虫检出结果': result1,
-                '病害检出结果': result2,
-                '预警等级': result3,
+                '监测结果1': result1,
+                '监测结果2': result2,
+                '监测结果3': result3,
                 '处理情况': situation,
+                '附件': info.attachment,
+                '备注': info.notes,
                 '创建人员': info.f_staff
             })
         df = pd.DataFrame(data_list)
@@ -1608,15 +1619,15 @@ def export_nursinginfo():
             data_list.append({
                 '草地编号': ele_num,
                 '地块编号': pre_num,
-                '养护时生长月数': info.age,
-                '养护人员': info.nurse,
-                '养护时间': info.nur_time.isoformat() if info.nur_time else None,
-                '形态是否正常': dataroot_shape,
+                '护理时生长月数': info.age,
+                '护理人员': info.nurse,
+                '护理时间': info.nur_time.isoformat() if info.nur_time else None,
+                '生长形态': dataroot_shape,
                 '生长前期萎蔫': dataprenatal_paralysi,
-                '根系脱落': datauterus_fall,
-                '叶片肿胀': dataswelling,
-                '分泌物颜色': dataAb_color,
-                '分泌物气味': dataAb_smell,
+                '植株枯萎程度': datauterus_fall,
+                '叶片/茎秆异常膨大': dataswelling,
+                '病斑颜色': dataAb_color,
+                '病害气味特征': dataAb_smell,
                 '情况说明': info.information,
                 '创建时间': info.f_date.isoformat() if info.f_date else None,
                 '创建人员': info.f_staff
@@ -1685,15 +1696,15 @@ def export_diseaseinfo():
             datacur_effect = cur_effect.get(info.cur_effect, " ")
             data_list.append({
                 '草地编号': ele_num,
-                '草地类型': pre_num,
-                '发病时间': info.disease_time.isoformat() if info.disease_time else None,
-                '年龄': info.age,
-                '疾病名称': info.disease,
-                '诊疗时间': info.treatment_time.isoformat() if info.treatment_time else None,
-                '诊疗人员': info.m_staff,
-                '治疗药物': cname,
-                '是否国家允许的药物': info.drug_type,
-                '休药期': info.WDT,
+                '地块编号': pre_num,
+                '发生时间': info.disease_time.isoformat() if info.disease_time else None,
+                '生长年数': info.age,
+                '病害名称': info.disease,
+                '处理时间': info.treatment_time.isoformat() if info.treatment_time else None,
+                '处理人员': info.m_staff,
+                '防护药物': cname,
+                '是否合规药物': info.drug_type,
+                '安全间隔期': info.WDT,
                 '治愈效果': datacur_effect,
                 '治愈时间': info.cur_time.isoformat() if info.cur_time else None,
                 '出库时间': info.out_time.isoformat() if info.out_time else None,
@@ -1757,8 +1768,8 @@ def export_damageinfo():
             data_list.append({
                 '草地编号': ele_num,
                 '地块编号': pre_num,
-                '异常日期': info.date.isoformat() if info.date else None,
-                '异常原因': info.notes,
+                '异常枯萎日期': info.date.isoformat() if info.date else None,
+                '异常枯萎原因': info.notes,
                 '处理方式': info.method,
                 '处理人员': info.staff,
                 '处理时间': info.date.isoformat() if info.date else None,

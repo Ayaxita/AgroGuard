@@ -26,3 +26,9 @@ export const delManu = params => {
 export const exportGrassInfo = params => {
   return http.download(PORT1 + `/artificial_careinfo/export`, params);
 };
+//获取草地信息
+export const getFemaleGrass = params => {
+  const result = http.post(PORT1 + `/growth_statusinfo/get_femalegrass`, params);
+  result.then(resp => console.log("返回的列表数据", resp));
+  return result;
+};

@@ -273,12 +273,6 @@ import { getManuList as getHurdle } from "@/views/field/hurdleinfo/api/manu";
 import { getManuList } from "@/views/field/houseinfo/api/manu";
 
 const rules = reactive({
-  propagation_id: [
-    {
-      required: true,
-      message: "请填写培育信息id"
-    }
-  ],
   tobasic: [
     {
       required: true,
