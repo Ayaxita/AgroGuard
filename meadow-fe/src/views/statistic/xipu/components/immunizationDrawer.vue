@@ -174,7 +174,7 @@ import { getSupplyList } from "@/views/supply/v_suppliersinfo/api/manu";
 import { User } from "@/api/interface";
 
 const immunizationProps = ref<any>({
-  title: "新增免疫信息",
+  title: "新增防护信息",
   imm_date: null,
   cname: null,
   supplier_name: null,

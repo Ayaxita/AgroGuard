@@ -134,6 +134,8 @@ const viewWarnMessage = params => {
 .message-list {
   display: flex;
   flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
   .message-item {
     display: flex;
     align-items: center;

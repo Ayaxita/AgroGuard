@@ -41,31 +41,13 @@ onBeforeMount(async () => {
     <table>
       <thead>
         <tr>
-          <th colspan="3">草地记录基本信息</th>
+          <th colspan="2">草地记录基本信息</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>草地编号</td>
           <td>{{ result.ele_num }}</td>
-          <td rowspan="6">
-            <el-image
-              style="width: 200px; height: 185px"
-              :src="`${BASE_URL}/basic/file/download/img?filename=${result.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${result.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
-            <!-- <img :src="`${BASE_URL}/basic/file/download/img?filename=${result.img_positive}`" alt="正面照片" /></td> -->
-          </td>
         </tr>
         <tr>
           <td>地块编号</td>
@@ -101,24 +83,6 @@ onBeforeMount(async () => {
                 ? varietyType.find(item => item.value === result.variety).label
                 : "未定义"
             }}
-          </td>
-          <td rowspan="6">
-            <el-image
-              style="width: 200px; height: 185px"
-              :src="`${BASE_URL}/basic/file/download/img?filename=${result.img_left}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${result.img_left}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>左侧照片</div>
-            <!-- <img :src="`${BASE_URL}/basic/file/download/img?filename=${result.img_left}`" alt="左侧照片" /> -->
           </td>
         </tr>
         <tr>
@@ -156,24 +120,6 @@ onBeforeMount(async () => {
         <tr>
           <td>阶段生物量</td>
           <td>{{ result.wea_weight }}(kg)</td>
-          <td rowspan="6">
-            <el-image
-              style="width: 200px; height: 185px"
-              :src="`${BASE_URL}/basic/file/download/img?filename=${result.img_right}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${result.img_right}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>右侧照片</div>
-            <!-- <img :src="`${BASE_URL}/basic/file/download/img?filename=${result.img_right}`" alt="右侧照片" /> -->
-          </td>
         </tr>
         <tr>
           <td>上级地块编号</td>

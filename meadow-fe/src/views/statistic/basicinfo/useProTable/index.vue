@@ -39,11 +39,10 @@
           size="small"
           :icon="CirclePlus"
           plain
-          @click="openimmunizationDrawer('新增免疫信息', scope.selectedList)"
+          @click="openimmunizationDrawer('新增防护信息', scope.selectedList)"
         >
-          批量加免疫信息
+          批量加防护信息
         </el-button>
-        <el-button type="primary" size="small" :icon="Refresh" plain @click="updateGrand">更新关联信息</el-button>
       </template>
       <!-- Expand -->
       <template #expand="scope">
@@ -362,7 +361,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   },
   {
     prop: "gene_a",
-    label: "多批基因",
+    label: "抗性基因",
     enum: gene_aType,
     fieldNames: { label: "label", value: "value" },
     search: { el: "select" }

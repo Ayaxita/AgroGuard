@@ -424,7 +424,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   },
   {
     prop: "gene_a",
-    label: "多批基因",
+    label: "抗性基因",
     width: 100,
     enum: gene_aType,
     fieldNames: { label: "label", value: "value" },

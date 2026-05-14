@@ -21,9 +21,7 @@
         <el-button type="danger" size="small" :icon="CircleCloseFilled" plain @click="markDeath(scope.selectedListIds)">
           标记死亡
         </el-button>
-        <el-button type="danger" size="small" :icon="CircleCloseFilled" plain @click="markDieOut(scope.selectedList)">
-          标记淘汰
-        </el-button>
+
         <el-button type="primary" size="small" :icon="Refresh" plain @click="updateMon_age">更新生长月数</el-button>
         <el-button type="primary" size="small" :icon="Refresh" plain @click="updateHouse">更新监测区域</el-button>
         <el-button type="primary" size="small" :icon="Grid" plain @click="generateQRCode(scope.selectedList)">
@@ -39,11 +37,10 @@
           size="small"
           :icon="CirclePlus"
           plain
-          @click="openimmunizationDrawer('新增免疫信息', scope.selectedList)"
+          @click="openimmunizationDrawer('新增防护信息', scope.selectedList)"
         >
-          批量加免疫信息
+          批量加防护信息
         </el-button>
-        <el-button type="primary" size="small" :icon="Refresh" plain @click="updateGrand">更新关联信息</el-button>
       </template>
       <!-- Expand -->
       <template #expand="scope">
@@ -364,7 +361,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   },
   {
     prop: "gene_a",
-    label: "多批基因",
+    label: "抗疫基因",
     enum: gene_aType,
     fieldNames: { label: "label", value: "value" },
     search: { el: "select" }

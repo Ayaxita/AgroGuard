@@ -91,15 +91,15 @@
           -->
           <!-- 没有小数的输入框 -->
 
-          <el-form-item label="疫苗信息" prop="cname">
+          <el-form-item label="防护剂信息" prop="cname">
             <el-input v-model="immunizationProps.cname" type="string" clearable></el-input>
             <el-button size="small" type="primary" class="ml-2" @click="toggleCnameTable">
               <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
-              选择疫苗信息
+              选择防护剂信息
             </el-button>
           </el-form-item>
 
-          <el-form-item label="疫苗厂家" prop="supplier_name">
+          <el-form-item label="防护剂厂家" prop="supplier_name">
             <el-input v-model="immunizationProps.supplier_name" type="string" clearable></el-input>
             <el-button size="small" type="primary" class="ml-2" @click="toggleSupplyTable">
               <!-- {{ showSearch ? "隐藏搜索" : "显示搜索" }} -->
@@ -174,7 +174,7 @@ import { getSupplyList } from "@/views/supply/v_suppliersinfo/api/manu";
 import { User } from "@/api/interface";
 
 const immunizationProps = ref<any>({
-  title: "新增免疫信息",
+  title: "新增防护信息",
   imm_date: null,
   cname: null,
   supplier_name: null,
@@ -237,7 +237,7 @@ const columnsSupply = reactive<ColumnProps<User.ResUserList>[]>([
   },
   {
     prop: "sale_type",
-    label: "疫苗出售类型",
+    label: "防护剂出售类型",
     search: {
       el: "input",
       props: {
@@ -301,7 +301,7 @@ const toggleSupplyTable = () => {
 const selectCname = async selectedList => {
   console.log(selectedList);
   if (selectedList.length == 0) {
-    ElMessage.warning("请选择要添加的疫苗或药品信息");
+    ElMessage.warning("请选择要添加的防护剂或药品信息");
     return;
   } else if (selectedList.length > 1) {
     ElMessageBox.confirm("只能选择1条信息?", "温馨提示", { type: "warning" });
@@ -319,7 +319,7 @@ const selectCname = async selectedList => {
     // 将选中的 ele_num 值写入表单数据
     immunizationProps.value.cname = selectedCname;
     showCname.value = false;
-    ElMessage.success("疫苗信息已成功添加");
+    ElMessage.success("防护剂信息已成功添加");
   } catch (error) {
     console.log("操作取消");
   }

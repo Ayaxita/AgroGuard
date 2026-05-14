@@ -199,8 +199,8 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
         type: "textarea"
       }
     }
-  }
-  // { prop: "operation", label: "操作", fixed: "right", width: 150 }
+  },
+  { prop: "operation", label: "操作", fixed: "right", width: 150 }
 ]);
 
 // 表格拖拽排序

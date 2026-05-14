@@ -169,34 +169,6 @@
           <el-form-item label="综合长势评分" prop="score">
             <el-input v-model.number="drawerProps.row.score" clearable></el-input>
           </el-form-item>
-
-          <el-form-item label="正面照片" prop="img_positive">
-            <UploadImg v-model:image-url="drawerProps.row!.img_positive" width="135px" height="135px" :file-size="3">
-              <template #empty>
-                <el-icon><Picture /></el-icon>
-                <span>请上传图片</span>
-              </template>
-              <template #tip> 图片大小不能超过 3M </template>
-            </UploadImg>
-          </el-form-item>
-          <el-form-item label="左侧照片" prop="img_left">
-            <UploadImg v-model:image-url="drawerProps.row!.img_left" width="135px" height="135px" :file-size="3">
-              <template #empty>
-                <el-icon><Picture /></el-icon>
-                <span>请上传图片</span>
-              </template>
-              <template #tip> 图片大小不能超过 3M </template>
-            </UploadImg>
-          </el-form-item>
-          <el-form-item label="右侧照片" prop="img_right">
-            <UploadImg v-model:image-url="drawerProps.row!.img_right" width="135px" height="135px" :file-size="3">
-              <template #empty>
-                <el-icon><Picture /></el-icon>
-                <span>请上传图片</span>
-              </template>
-              <template #tip> 图片大小不能超过 3M </template>
-            </UploadImg>
-          </el-form-item>
           <el-form-item label="备注信息" prop="note">
             <el-input v-model="drawerProps.row.note" type="textarea" clearable></el-input>
           </el-form-item>

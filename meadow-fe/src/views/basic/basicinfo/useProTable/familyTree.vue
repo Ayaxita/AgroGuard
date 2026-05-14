@@ -10,21 +10,6 @@
             <div>祖父：{{ data.grandfather?.ele_num }}</div>
             <div>播种日期：{{ data.grandfather?.birth }}</div>
             <div>草地类型：{{ varietyType.find(item => item.value === data.grandfather?.variety)?.label }}</div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.grandfather?.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.grandfather?.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
           </div>
         </el-col>
         <el-col :span="6">
@@ -32,21 +17,6 @@
             <div>祖母：{{ data.grandmother?.ele_num }}</div>
             <div>播种日期：{{ data.grandmother?.birth }}</div>
             <div>草地类型：{{ varietyType.find(item => item.value === data.grandmother?.variety)?.label }}</div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.grandmother?.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.grandmother?.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
           </div>
         </el-col>
         <el-col :span="6">
@@ -54,21 +24,6 @@
             <div>外祖父：{{ data.maternal_grandfather?.ele_num }}</div>
             <div>播种日期：{{ data.maternal_grandfather?.birth }}</div>
             <div>草地类型：{{ varietyType.find(item => item.value === data.maternal_grandfather?.variety)?.label }}</div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.maternal_grandfather?.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.maternal_grandfather?.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
           </div>
         </el-col>
         <el-col :span="6">
@@ -76,21 +31,6 @@
             <div>外祖母：{{ data.maternal_grandmother?.ele_num }}</div>
             <div>播种日期：{{ data.maternal_grandmother?.birth }}</div>
             <div>草地类型：{{ varietyType.find(item => item.value === data.maternal_grandmother?.variety)?.label }}</div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.maternal_grandmother?.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.maternal_grandmother?.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
           </div>
         </el-col>
       </el-row>
@@ -100,21 +40,6 @@
             <div>父亲：{{ data.father?.ele_num }}</div>
             <div>播种日期：{{ data.father?.birth }}</div>
             <div>草地类型：{{ varietyType.find(item => item.value === data.father?.variety)?.label }}</div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.father?.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.father?.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
           </div>
         </el-col>
         <el-col :span="12">
@@ -122,21 +47,6 @@
             <div>母亲：{{ data.mother?.ele_num }}</div>
             <div>播种日期：{{ data.mother?.birth }}</div>
             <div>草地类型：{{ varietyType.find(item => item.value === data.mother?.variety)?.label }}</div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.mother?.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.mother?.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
           </div>
         </el-col>
       </el-row>
@@ -146,22 +56,6 @@
             <div>种植区：{{ data.selected_grass?.ele_num }}</div>
             <div>播种日期：{{ data.selected_grass?.birth }}</div>
             <div>草地类型：{{ varietyType.find(item => item.value === data.selected_grass?.variety)?.label }}</div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="BASE_URL + `/basic/file/download/img?filename=${data.selected_grass?.img_positive}`"
-              :zoom-rate="1.2"
-              :max-scale="7"
-              :min-scale="0.2"
-              :preview-src-list="[`${BASE_URL}/basic/file/download/img?filename=${data.selected_grass?.img_positive}`]"
-              :initial-index="4"
-              fit="contain"
-            >
-              <!-- 可通过slot = error可自定义加载失败内容 -->
-              <template #error>
-                <div class="image-slot">空</div>
-              </template>
-            </el-image>
-            <div>正面照片</div>
           </div>
         </el-col>
       </el-row>

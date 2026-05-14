@@ -61,11 +61,11 @@
           <el-form-item label="接种生长月数" prop="imm_age">
             <el-input v-model.number="drawerProps.row.imm_age" type="number" step="0.01" clearable />
           </el-form-item>
-          <el-form-item label="疫苗信息" prop="cname">
+          <el-form-item label="防护剂信息" prop="cname">
             <el-input v-model="drawerProps.row.cname" type="string" clearable />
-            <el-button size="small" type="primary" class="ml-2" @click="toggleCnameTable"> 选择疫苗信息 </el-button>
+            <el-button size="small" type="primary" class="ml-2" @click="toggleCnameTable"> 选择防护剂信息 </el-button>
           </el-form-item>
-          <el-form-item label="疫苗厂家" prop="supplier_name">
+          <el-form-item label="防护剂厂家" prop="supplier_name">
             <el-input v-model="drawerProps.row.supplier_name" type="string" clearable />
             <el-button size="small" type="primary" class="ml-2" @click="toggleSupplyTable"> 选择厂家信息 </el-button>
           </el-form-item>
@@ -177,7 +177,7 @@ const selectEwe = async (selectedList: any[]) => {
   showSearch.value = false;
 };
 const selectCname = async (selectedList: any[]) => {
-  if (!selectedList.length) return ElMessage.warning("请选择疫苗信息");
+  if (!selectedList.length) return ElMessage.warning("请选择防护剂信息");
   drawerProps.value.row.cname = selectedList[0].cname;
   showCname.value = false;
 };

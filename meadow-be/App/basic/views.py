@@ -1180,27 +1180,17 @@ def mark_grass_death():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
-    deathHurdle_info = FieldHouseinfo.query.filter_by(name="死亡栏").first()
-    deathHouse_info = FieldHouseinfo.query.filter_by(id=deathHurdle_info.pid).first()
     for info in basic_infos:
         print(info)
-        BasicBasicinfo.query.filter_by(id=info['basic_id']).update(
-            {'state': 0,'house_id':deathHouse_info.id,'house_name':deathHouse_info.name,
-             'hurdle_id':deathHurdle_info.id,'hurdle_name':deathHurdle_info.name})
-        # 查找并更新 BasicObsoleteGrassinfo 表的记录
-        obsolete_info = BasicObsoleteGrassinfo.query.filter_by(basic_id=info['basic_id']).first()
-        print(obsolete_info)
-        if obsolete_info:
-            obsolete_info.obsolete_type = 0
-            obsolete_info.dead_date = info['date']
-            # db.session.commit()
         wither_info = DPlantcareDeathinfo()
         for key, value in info.items():
             setattr(wither_info, key, value)
-            wither_info.belong = 0
-            wither_info.f_date = datetime.now()
-            wither_info.age = (datetime.now().year - BasicBasicinfo.query.filter_by(
-                id=info['basic_id']).first().birth.year)
+        wither_info.belong = 0
+        wither_info.f_date = datetime.now()
+        # 计算生长周期（当前年份 - 播种年份）
+        basic_info = BasicBasicinfo.query.filter_by(id=info['basic_id']).first()
+        if basic_info and basic_info.birth:
+            wither_info.age = datetime.now().year - basic_info.birth.year
         list.append(wither_info)
     try:
         db.session.add_all(list)
@@ -1228,7 +1218,11 @@ def mark_grass_sale():
     print(basic_infos)
     list = []
     saleHurdle_info = FieldHouseinfo.query.filter_by(name="销售栏").first()
+    if not saleHurdle_info:
+        return jsonify({"code": 500, "msg": "系统中未配置'销售栏'监测地块，请联系管理员在监测地块管理中创建名为'销售栏'的地块"})
     saleHouse_info = FieldHouseinfo.query.filter_by(id=saleHurdle_info.pid).first()
+    if not saleHouse_info:
+        return jsonify({"code": 500, "msg": "系统中未找到'销售栏'的上级监测区域，请检查监测区域配置"})
     today = datetime.today()
 
     for info in basic_infos:

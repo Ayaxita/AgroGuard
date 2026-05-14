@@ -1046,27 +1046,16 @@ def mark_grass_death():
     basic_infos = request.get_json()
     print(basic_infos)
     list = []
-    deathHurdle_info = FieldHouseinfo.query.filter_by(name="死亡栏").first()
-    deathHouse_info = FieldHouseinfo.query.filter_by(id=deathHurdle_info.pid).first()
     for info in basic_infos:
         print(info)
-        BasicBasicinfo.query.filter_by(id=info['basic_id']).update(
-            {'state': 0,'house_id':deathHouse_info.id,'house_name':deathHouse_info.name,
-             'hurdle_id':deathHurdle_info.id,'hurdle_name':deathHurdle_info.name})
-        # 查找并更新 BasicObsoleteGrassinfo 表的记录
-        obsolete_info = BasicObsoleteGrassinfo.query.filter_by(basic_id=info['basic_id']).first()
-        print(obsolete_info)
-        if obsolete_info:
-            obsolete_info.obsolete_type = 0
-            obsolete_info.dead_date = info['date']
-            # db.session.commit()
         wither_info = DPlantcareDeathinfo()
         for key, value in info.items():
             setattr(wither_info, key, value)
-            wither_info.belong = 0
-            wither_info.f_date = datetime.now()
-            wither_info.age = (datetime.now().year - BasicBasicinfo.query.filter_by(
-                id=info['basic_id']).first().birth.year)
+        wither_info.belong = 0
+        wither_info.f_date = datetime.now()
+        basic_info = BasicBasicinfo.query.filter_by(id=info['basic_id']).first()
+        if basic_info and basic_info.birth:
+            wither_info.age = datetime.now().year - basic_info.birth.year
         list.append(wither_info)
     try:
         db.session.add_all(list)
